@@ -7,9 +7,8 @@ author:     bright
 header-img: img/post-bg-coffee.jpeg
 catalog: true
 tags:
-    - 编程语言
-    - php
-    - Notes
+- 编程语言
+- php
 ---
 
 > 组件
