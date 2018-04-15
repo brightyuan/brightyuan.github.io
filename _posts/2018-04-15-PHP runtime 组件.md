@@ -4,7 +4,7 @@ title:      PHP runtime 组件
 subtitle:   PHP runtime 组件
 date:       2018-04-15
 author:     bright
-header-img: img/post-bg-universe.jpg
+header-img: img/post-bg-coffee.jpeg
 catalog: true
 tags:
     - 编程语言
@@ -31,7 +31,7 @@ tags:
     http://www.jianshu.com/p/2fb9a3bb12f6
     
     
-    apc
+    ### apc
     指APC把PHP文件源码的编译结果缓存起来，然后在每次调用时先对比时间标记。 
     如果未过期，则使用缓存的中间代码运行。 默认缓存3600s(一小时)。 
     但是这样仍会浪费大量CPU时间。
@@ -42,50 +42,50 @@ tags:
     apc 是单机Cache，使用共享内存保存数据
     memcache 实现多机共享，比如用于解决session共享问题
     
-    apcu
+    ### apcu
     apc的去掉opcode caching版本
     
-    bcmath
+    ### bcmath
     二级制计算器
     
-    bz2
+    ### bz2
     bzip2 压缩解压组件
     
-    calendar
+    ### calendar
     日历组件
     
-    Core
+    ### Core
     couchbase
     面向文档的数据库，是基于 Membase 与 CouchDB 开发
     Couchbase Server is an open source, distributed, NoSQL document-oriented engagement database
     https://developer.couchbase.com/documentation/server/5.0/
     introduction/intro.html
     
-    csprng
+    ### csprng
     密码学安全伪随机数生成器，常被作为密码学原件，用以搭建更复杂的密码学应用
     
-    ctype
+    ### ctype
     数据类型检测，比如字符，数字等
     
-    cubrid
+    ### cubrid
     数据库组件
     
-    curl
+    ### curl
     能够连接通讯各种服务器、使用各种协议，目前支持的协议有 http、https、ftp、gopher、telnet、dict、file等等
     
-    date
+    ### date
     日期组件
     
-    dba
+    ### dba
     数据库抽象层，如pdo，odbc等
     
-    dom（Document Object Model）
+    ### dom（Document Object Model）
     xml操作，libxml等
     
-    enchant
+    ### enchant
     国际化与字符编码支持
     
-    Ev
+    ### Ev
     pecl新增扩展，进程控制,提供libev接口，其接口和libevent基本类似，libev是libevent之后的一个事件驱动的编程框架
     事件循环，IO复用，处理高并发网络连接问题
     创建所需的网络监听套接字 -> 注册在执行期间要调用的事件 -> 启动主事件循环- > 让 libev 处理过程的其余部分
@@ -94,21 +94,21 @@ tags:
     https://www.ibm.com/developerworks/cn/aix/library/au-libev/index.html
     
     
-    exif
+    ### exif
      图像处理
     ffmpeg
      图像处理
     
-    fileinfo
+    ### fileinfo
     文件系统相关扩展
     
-    filter
+    ### filter
     变量与类型相关扩展，变量检查，过滤
     
-    ftp
+    ### ftp
     文件服务
     
-    gd
+    ### gd
     图像生成和处理
     gearman
     Gearman提供了一个通用的应用框架，将工作外包给其他更适合做这项工作的机器或过程。
