@@ -1,0 +1,1648 @@
+<div>
+<div>
+<div>                                                                                                                   组件架构</div>
+<div></div>
+<div><img src="http://img.blog.csdn.net/20140911152347968?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZ2FtZWtlbmxvdmU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="" /></div>
+<div></div>
+</div>
+<div></div>
+<div></div>
+<div>                                                                                                                                  基础知识</div>
+<div></div>
+<div>
+<h1>模型-视图-控制器 (MVC)</h1>
+</div>
+<div>Yii 使用了 Web 开发中广泛采用的模型-视图-控制器（MVC）设计模式。 MVC的目标是将业务逻辑从用户界面的考虑中分离，这样开发者就可以更容易地改变每一部分而不会影响其他。 在 MVC中，模型代表信息（数据）和业务规则；视图包含了用户界面元素，例如文本，表单等； 控制器管理模型和视图中的通信。</div>
+<div></div>
+<div>
+<h2>一个典型的工作流</h2>
+</div>
+<div>下图展示了一个 Yii 应用在处理用户请求时典型的工作流</div>
+<div><img src="http://img.blog.csdn.net/20140911152654277?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZ2FtZWtlbmxvdmU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="" /></div>
+<div></div>
+<div>
+<ol>
+ 	<li>用户发出了访问 URL http://www.example.com/index.php?r=post/show&amp;id=1 的请求， Web 服务器通过执行入口脚本 index.php 处理此请求。</li>
+ 	<li>入口脚本创建了一个 <a href="http://www.yiichina.com/guide/basics.application" target="_blank" rel="noopener">应用</a> 实例并执行。</li>
+ 	<li>应用从一个叫做 request 的 <a href="http://www.yiichina.com/guide/basics.application#application-component" target="_blank" rel="noopener">应用组件</a> 中获得了用户请求的详细信息。</li>
+ 	<li>应用在一个名叫 urlManager 的应用组件的帮助下，决定请求的 <a href="http://www.yiichina.com/guide/basics.controller" target="_blank" rel="noopener">控制器</a> 和 <a href="http://www.yiichina.com/guide/basics.controller#action" target="_blank" rel="noopener">动作</a> 。在这个例子中，控制器是 post，它代表 PostController 类； 动作是 show ，其实际含义由控制器决定。</li>
+ 	<li>应用创建了一个所请求控制器的实例以进一步处理用户请求。控制器决定了动作 show 指向控制器类中的一个名为actionShow 的方法。然后它创建并持行了与动作关联的过滤器（例如访问控制，基准测试）。 如果过滤器允许，动作将被执行。</li>
+ 	<li>动作从数据库中读取一个 ID 为 1 的 Post <a href="http://www.yiichina.com/guide/basics.model" target="_blank" rel="noopener">模型</a>。</li>
+ 	<li>动作通过 Post 模型渲染一个名为 show 的 <a href="http://www.yiichina.com/guide/basics.view" target="_blank" rel="noopener">视图</a>。</li>
+ 	<li>视图读取并显示 Post 模型的属性。</li>
+ 	<li>视图执行一些 <a href="http://www.yiichina.com/guide/basics.view#widget" target="_blank" rel="noopener">小物件</a>。</li>
+ 	<li>视图的渲染结果被插入一个 <a href="http://www.yiichina.com/guide/basics.view#layout" target="_blank" rel="noopener">布局</a>。</li>
+ 	<li>动作完成视图渲染并将其呈现给用户。</li>
+</ol>
+&nbsp;
+
+</div>
+<div>
+<h1>入口脚本</h1>
+入口脚本是处理用户的初始引导PHP脚本。它是唯一一个最终用户可直接请求执行的PHP脚本
+
+</div>
+<div>
+<pre>// 在生产环境中请删除此行defined('YII_DEBUG') or define('YII_DEBUG',true);
+// 包含Yii引导文件require_once('path/to/yii/framework/yii.php');
+// 创建一个应用实例并执行$configFile='path/to/config/file.php';
+Yii::createWebApplication($configFile)-&gt;run();</pre>
+</div>
+<div>脚本首先包含了 Yii 框架的引导文件 yii.php。然后他按指定的配置创建了一个Web 应用实例并执行。</div>
+<div>
+<h2>调试模式</h2>
+</div>
+<div>在包含 yii.php 文件之前定义此常量YII_DEBUG 为true</div>
+<div></div>
+<div>
+<h1>应用</h1>
+</div>
+<div>指请求处理中的执行上下文。</div>
+<div>1.主要任务是分析用户请求并将其分派到合适的控制器中以作进一步处理。</div>
+<div> 2.同时作为服务中心，维护应用级别的配置。鉴于此，应用也叫做前端控制器。</div>
+<div></div>
+<div>
+<h2>应用配置</h2>
+</div>
+<div>1.默认情况下，应用是一个 <a href="http://www.yiichina.com/api/CWebApplication" target="_blank" rel="noopener">CWebApplication</a> 的实例。要自定义它，我们通常需要提供一个配置文件 （或数组） 以创建应用实例时初始化其属性值。</div>
+<div>2.自定义应用的另一种方式是继承 <a href="http://www.yiichina.com/api/CWebApplication" target="_blank" rel="noopener">CWebApplication</a>。</div>
+<div></div>
+<div>
+
+配置是一个键值对数组。每个键和应用实例属性一一对应，每个值即相应属性的初始值。 例如，如下的配置设定了<a href="http://www.yiichina.com/api/CWebApplication" target="_blank" rel="noopener">CWebApplication</a>应用的<a href="http://www.yiichina.com/api/CApplication#name" target="_blank" rel="noopener">name</a> 和 <a href="http://www.yiichina.com/api/CWebApplication#defaultController" target="_blank" rel="noopener">defaultController</a> 属性的值。
+<div>
+<div>
+<pre>array(
+    'name'=&gt;'Yii Framework',
+    'defaultController'=&gt;'site',
+)</pre>
+</div>
+</div>
+</div>
+<div>通常在一个单独的PHP 脚本（e.g.protected/config/main.php）中保存这些配置</div>
+<div>要应用此配置，我们将配置文件的名字作为参数传递给应用的构造器</div>
+<div>
+<pre>$app=Yii::createWebApplication($webApplication,$configFile);</pre>
+</div>
+<div>
+<h2>应用基础目录</h2>
+</div>
+<div>指包含了所有安全敏感的PHP脚本和数据的根目录</div>
+<div>认状态下，它是一个位于同入口脚本同级目录的protected 的子目录</div>
+<div>应用基础目录下的内容应该保护起来防止网站访客直接访问</div>
+<div></div>
+<div>
+
+可以通过在基础目录中放置一个.htaccess 文件很简单的实现。 .htaccess 内容如下：
+<pre>deny from all
+</pre>
+</div>
+<div>
+<h2>应用组件</h2>
+</div>
+<div>应用管理了一系列应用组件，每个组件实现一特定功能。 例如，应用通过 <a href="http://www.yiichina.com/api/CUrlManager" target="_blank" rel="noopener">CUrlManager</a> 和 <a href="http://www.yiichina.com/api/CHttpRequest" target="_blank" rel="noopener">CHttpRequest</a> 的帮助解析来自用户的请求。</div>
+<div>
+
+通过配置config/main.php的 <a href="http://www.yiichina.com/api/CApplication#components" target="_blank" rel="noopener">components</a> 属性， 我们可以自定义应用中用到的任何组件类及其属性值。例如，我们可以配置应用的<a href="http://www.yiichina.com/api/CMemCache" target="_blank" rel="noopener">CMemCache</a> 组件， 这样它就可以使用多个 memcache 服务器实现缓存：
+<div>
+<div>
+<pre>array(
+    'components'=&gt;array(
+        'cache'=&gt;array(
+            'class'=&gt;'CMemCache',
+            'servers'=&gt;array(
+                array('host'=&gt;'server1', 'port'=&gt;11211, 'weight'=&gt;60),
+                array('host'=&gt;'server2', 'port'=&gt;11211, 'weight'=&gt;40),
+            ),
+        ),
+    ),
+)</pre>
+</div>
+</div>
+</div>
+<div>访问一个应用组件</div>
+<div>使用 Yii::app()-&gt;ComponentID ，其中的 ComponentID 是指组件的ID（例如Yii::app()-&gt;db）</div>
+<div>
+<h2>核心应用组件</h2>
+</div>
+<div>Yii 预定义了一系列核心应用组件，提供常见 Web 应用中所用的功能</div>
+<div>
+<ul>
+ 	<li><a href="http://www.yiichina.com/api/CWebApplication#assetManager" target="_blank" rel="noopener">assetManager</a>: <a href="http://www.yiichina.com/api/CAssetManager" target="_blank" rel="noopener">CAssetManager</a> - 管理私有资源文件的发布。</li>
+ 	<li><a href="http://www.yiichina.com/api/CWebApplication#authManager" target="_blank" rel="noopener">authManager</a>: <a href="http://www.yiichina.com/api/CAuthManager" target="_blank" rel="noopener">CAuthManager</a> - 管理基于角色的访问控制 (RBAC).</li>
+ 	<li><a href="http://www.yiichina.com/api/CApplication#cache" target="_blank" rel="noopener">cache</a>: <a href="http://www.yiichina.com/api/CCache" target="_blank" rel="noopener">CCache</a> - 提供数据缓存功能。注意，你必须指定实际的类（例如<a href="http://www.yiichina.com/api/CMemCache" target="_blank" rel="noopener">CMemCache</a>, <a href="http://www.yiichina.com/api/CDbCache" target="_blank" rel="noopener">CDbCache</a>）。 否则，当你访问此组件时将返回 NULL。</li>
+ 	<li><a href="http://www.yiichina.com/api/CWebApplication#clientScript" target="_blank" rel="noopener">clientScript</a>: <a href="http://www.yiichina.com/api/CClientScript" target="_blank" rel="noopener">CClientScript</a> - 管理客户端脚本 (javascripts 和 CSS).</li>
+ 	<li><a href="http://www.yiichina.com/api/CApplication#coreMessages" target="_blank" rel="noopener">coreMessages</a>: <a href="http://www.yiichina.com/api/CPhpMessageSource" target="_blank" rel="noopener">CPhpMessageSource</a> - 提供 Yii 框架用到的核心信息的翻译。</li>
+ 	<li><a href="http://www.yiichina.com/api/CApplication#db" target="_blank" rel="noopener">db</a>: <a href="http://www.yiichina.com/api/CDbConnection" target="_blank" rel="noopener">CDbConnection</a> - 提供数据库连接。注意，使用此组件你必须配置其 <a href="http://www.yiichina.com/api/CDbConnection#connectionString" target="_blank" rel="noopener">connectionString</a> 属性。</li>
+ 	<li><a href="http://www.yiichina.com/api/CApplication#errorHandler" target="_blank" rel="noopener">errorHandler</a>: <a href="http://www.yiichina.com/api/CErrorHandler" target="_blank" rel="noopener">CErrorHandler</a> - 处理未捕获的 PHP 错误和异常。</li>
+ 	<li><a href="http://www.yiichina.com/api/CApplication#format" target="_blank" rel="noopener">format</a>: <a href="http://www.yiichina.com/api/CFormatter" target="_blank" rel="noopener">CFormatter</a> - 格式化数值显示。此功能从版本 1.1.0 起开始提供。</li>
+ 	<li><a href="http://www.yiichina.com/api/CApplication#messages" target="_blank" rel="noopener">messages</a>: <a href="http://www.yiichina.com/api/CPhpMessageSource" target="_blank" rel="noopener">CPhpMessageSource</a> - 提供Yii应用中使用的信息翻译。</li>
+ 	<li><a href="http://www.yiichina.com/api/CWebApplication#request" target="_blank" rel="noopener">request</a>: <a href="http://www.yiichina.com/api/CHttpRequest" target="_blank" rel="noopener">CHttpRequest</a> - 提供关于用户请求的信息。</li>
+ 	<li><a href="http://www.yiichina.com/api/CApplication#securityManager" target="_blank" rel="noopener">securityManager</a>: <a href="http://www.yiichina.com/api/CSecurityManager" target="_blank" rel="noopener">CSecurityManager</a> - 提供安全相关的服务，例如散列，加密。</li>
+ 	<li><a href="http://www.yiichina.com/api/CWebApplication#session" target="_blank" rel="noopener">session</a>: <a href="http://www.yiichina.com/api/CHttpSession" target="_blank" rel="noopener">CHttpSession</a> - 提供session相关的功能。</li>
+ 	<li><a href="http://www.yiichina.com/api/CApplication#statePersister" target="_blank" rel="noopener">statePersister</a>: <a href="http://www.yiichina.com/api/CStatePersister" target="_blank" rel="noopener">CStatePersister</a> - 提供全局状态持久方法。</li>
+ 	<li><a href="http://www.yiichina.com/api/CWebApplication#urlManager" target="_blank" rel="noopener">urlManager</a>: <a href="http://www.yiichina.com/api/CUrlManager" target="_blank" rel="noopener">CUrlManager</a> - 提供 URL 解析和创建相关功能</li>
+ 	<li><a href="http://www.yiichina.com/api/CWebApplication#user" target="_blank" rel="noopener">user</a>: <a href="http://www.yiichina.com/api/CWebUser" target="_blank" rel="noopener">CWebUser</a> - 提供当前用户的识别信息。</li>
+ 	<li><a href="http://www.yiichina.com/api/CWebApplication#themeManager" target="_blank" rel="noopener">themeManager</a>: <a href="http://www.yiichina.com/api/CThemeManager" target="_blank" rel="noopener">CThemeManager</a> - 管理主题。</li>
+</ul>
+</div>
+<div>
+<h2>应用的生命周期</h2>
+</div>
+<div></div>
+<div>
+
+当处理用户请求时，应用将经历如下声明周期：
+<ol>
+ 	<li>通过 <a href="http://www.yiichina.com/api/CApplication#preinit" target="_blank" rel="noopener">CApplication::preinit()</a> 预初始化应用；</li>
+ 	<li>设置类的自动装载器和错误处理      ；</li>
+ 	<li>注册核心类组件；</li>
+ 	<li>加载应用配置；  (main.php 对应2,3,4步骤)</li>
+ 	<li>通过 <a href="http://www.yiichina.com/api/CApplication#init" target="_blank" rel="noopener">CApplication::init()</a> 初始化应用:
+<ul>
+ 	<li>注册应用行为；</li>
+ 	<li>载入静态应用组件；</li>
+</ul>
+</li>
+ 	<li>触发 <a href="http://www.yiichina.com/api/CApplication#onBeginRequest" target="_blank" rel="noopener">onBeginRequest</a> 事件；</li>
+ 	<li>处理用户请求:  (对应acitonCotroller)
+<ul>
+ 	<li>解析用户请求；</li>
+ 	<li>创建控制器；</li>
+ 	<li>运行控制器；</li>
+</ul>
+</li>
+ 	<li>触发 <a href="http://www.yiichina.com/api/CApplication#onEndRequest" target="_blank" rel="noopener">onEndRequest</a> 事件。</li>
+</ol>
+</div>
+<div>
+<h1>控制器</h1>
+</div>
+<div></div>
+<div>1.控制器 是 <a href="http://www.yiichina.com/api/CController" target="_blank" rel="noopener">CController</a> 或其子类的实例。它在当用户请求时由应用创建。</div>
+<div>2.当一个控制器运行时，它执行所请求的动作，动作通常会引入所必要的模型并渲染相应的视图。</div>
+<div> 3.动作 的最简形式，就是一个名字以 action 开头的控制器类方法。</div>
+<div>4.当用户的请求未指定要执行的动作时，默认动作将被执行,默认的动作名为index。它可以通过设置 <a href="http://www.yiichina.com/api/CController#defaultAction" target="_blank" rel="noopener">CController::defaultAction</a> 修改。</div>
+<div></div>
+<div>
+<h2>路由</h2>
+控制器和动作以 ID 识别。控制器 ID 是一种 'path/to/xyz' 的格式，对应相应的控制器类文件protected/controllers/path/to/XyzController.php, 其中的标志 xyz 应被替换为实际的名字 (例如 post对应 protected/controllers/PostController.php). 动作 ID 是除去 action 前缀的动作方法名。例如，如果一个控制器类含有一个名为 actionEdit 的方法，则相应的动作 ID 为 edit
+
+</div>
+<div>用户以路由的形式请求特定的控制器和动作。路由是由控制器 ID 和动作 ID 连接起来的，两者以斜线分割。 例如，路由post/edit 代表 PostController 及其 edit 动作。默认情况下，URL http://hostname/index.php?r=post/edit 即请求此控制器和动作</div>
+<div>从 1.0.3 版本开始，应用可以含有 <a href="http://www.yiichina.com/guide/basics.module" target="_blank" rel="noopener">模块（Module）</a>. 模块中，控制器动作的路由格式为moduleID/controllerID/actionID</div>
+<div></div>
+<div>
+<h2>控制器实例化</h2>
+</div>
+<div>如果在 <a href="http://www.yiichina.com/api/CWebApplication#controllerMap" target="_blank" rel="noopener">CWebApplication::controllerMap</a> 中找到了 ID, 相应的控制器配置将被用于创建控制器实例</div>
+<div>如果 ID 为 'path/to/xyz'的格式，控制器类的名字将判断为 XyzController， 相应的类文件则为protected/controllers/path/to/XyzController.php。</div>
+<div></div>
+<div>例如， 控制器 ID admin/user 将被解析为控制器类 UserController，类文件是 protected/controllers/admin/UserController.php。 如果类文件不存在，将触发一个 404 <a href="http://www.yiichina.com/api/CHttpException" target="_blank" rel="noopener">CHttpException</a> 异常</div>
+<div></div>
+<div>
+<h2>动作</h2>
+</div>
+<div>1.被定义为一个以 action 单词作为前缀命名的方法。</div>
+<div>2.更高级的方式是定义一个动作类并让控制器在收到请求时将其实例化。 这使得动作可以被复用，提高了可复用度。</div>
+<div></div>
+<div>
+
+定义一个新动作类，可用如下代码：
+<div>
+<div>
+<pre>class UpdateAction extends CAction{
+    public function run()
+    {
+        // place the action logic here
+    }}</pre>
+</div>
+</div>
+</div>
+<div>
+
+为了让控制器注意到这个动作，我们要用如下方式覆盖控制器类的<a href="http://www.yiichina.com/api/CController#actions" target="_blank" rel="noopener">actions()</a> 方法：
+<div>
+<div>
+<pre>class PostController extends CController{
+    public function actions()
+    {
+        return array(
+            'edit'=&gt;'application.controllers.post.UpdateAction',
+        );
+    }}</pre>
+</div>
+</div>
+</div>
+<div>我们使用了路径别名 application.controllers.post.UpdateAction 指定动作类文件为protected/controllers/post/UpdateAction.php.</div>
+<div>
+
+通过编写基于类的动作，我们可以将应用组织为模块的风格。例如， 如下目录结构可用于组织控制器相关代码：
+<pre>protected/
+    controllers/
+        PostController.php
+        UserController.php
+        post/
+            CreateAction.php
+            ReadAction.php
+            UpdateAction.php
+        user/
+            CreateAction.php
+            ListAction.php
+            ProfileAction.php
+            UpdateAction.php
+</pre>
+</div>
+<div>
+<h3>动作参数绑定</h3>
+</div>
+<div>从版本 1.1.4 开始，Yii 提供了对自动动作参数绑定的支持。 就是说，控制器动作可以定义命名的参数，参数的值将由 Yii 自动从$_GET 填充。</div>
+<div></div>
+<div>
+
+1.1.4之前，使用动作参数功能：从 $_GET 中提取参数时：
+<div>
+<div>
+<pre>class PostController extends CController{
+    public function actionCreate()
+    {
+        if(isset($_GET['category']))
+            $category=(int)$_GET['category'];
+        else
+            throw new CHttpException(404,'invalid request');
+ 
+        if(isset($_GET['language']))
+            $language=$_GET['language'];
+        else
+            $language='en';
+ 
+        // ... fun code starts here ...
+    }}</pre>
+</div>
+</div>
+1.1.4开始，使用动作参数功能：
+<div>
+<div>
+<pre>class PostController extends CController{
+    public function actionCreate($category, $language='en')
+    {
+        $category=(int)$category;
+ 
+        // ... fun code starts here ...
+    }}</pre>
+</div>
+</div>
+</div>
+<div>
+<pre>class PostController extends CController{
+    public function actionCreate(array $categories)   //参数强制转换为array类型
+    {
+        // Yii will make sure $categories be an array
+    }}</pre>
+</div>
+<div>
+<h2>过滤器</h2>
+</div>
+<div>1.过滤器是一段代码，可被配置在控制器动作执行之前或之后执行。</div>
+<div></div>
+<div>例如， 访问控制过滤器将被执行以确保在执行请求的动作之前用户已通过身份验证；</div>
+<div>               性能过滤器可用于测量控制器执行所用的时间。</div>
+<div>2.一个动作可以有多个过滤器。过滤器执行顺序为它们出现在过滤器列表中的顺序。</div>
+<div>过滤器可以阻止动作及后面其他过滤器的执行</div>
+<div>
+
+过滤器可以定义为一个控制器类的方法。方法名必须以 filter 开头。例如，现有的 filterAccessControl 方法定义了一个名为 accessControl 的过滤器。 过滤器方法必须为如下结构：
+<div>
+<div>
+<pre>public function filterAccessControl($filterChain){
+    // 调用 $filterChain-&gt;run() 以继续后续过滤器与动作的执行。}</pre>
+</div>
+</div>
+</div>
+<div>其中的 $filterChain (过滤器链)是一个 <a href="http://www.yiichina.com/api/CFilterChain" target="_blank" rel="noopener">CFilterChain</a> 的实例，代表与所请求动作相关的过滤器列表。</div>
+<div>在过滤器方法中， 可以调用 $filterChain-&gt;run() 以继续执行后续过滤器和动作。</div>
+<div>
+
+过滤器也可以是一个 <a href="http://www.yiichina.com/api/CFilter" target="_blank" rel="noopener">CFilter</a> 或其子类的实例。如下代码定义了一个新的过滤器类：
+<div>
+<div>
+<pre>class PerformanceFilter extends CFilter{
+    protected function preFilter($filterChain)
+    {
+        // 动作被执行之前应用的逻辑
+        return true; // 如果动作不应被执行，此处返回 false
+    }
+ 
+    protected function postFilter($filterChain)
+    {
+        // 动作执行之后应用的逻辑
+    }}</pre>
+</div>
+</div>
+</div>
+<div>
+
+要对动作应用过滤器，我们需要覆盖 CController::filters() 方法。此方法应返回一个过滤器配置数组。例如：
+<div>
+<div>
+<pre>class PostController extends CController{
+    ......
+    public function filters()
+    {
+        return array(
+            'postOnly + edit, create'),
+            array(
+                'application.filters.PerformanceFilter - edit, create',
+                'unit'=&gt;'second',
+            ),
+        );
+    } }</pre>
+</div>
+</div>
+</div>
+<div>
+
+上述代码指定了两个过滤器： postOnly 和 PerformanceFilter。 postOnly 过滤器是基于方法的（相应的过滤器方法已在 <a href="http://www.yiichina.com/api/CController" target="_blank" rel="noopener">CController</a> 中定义）； 而 performanceFilter 过滤器是基于对象的。路径别名application.filters.PerformanceFilter 指定过滤器类文件是protected/filters/PerformanceFilter。我们使用一个数组配置 PerformanceFilter ，这样它就可被用于初始化过滤器对象的属性值。此处 PerformanceFilter 的 unit 属性值将被初始为 second。
+
+使用加减号，我们可指定哪些动作应该或不应该应用过滤器。上述代码中， postOnly 应只被应用于 edit 和 create 动作，而 PerformanceFilter 应被应用于 除了 edit 和 create 之外的动作。 如果过滤器配置中没有使用加减号，则此过滤器将被应用于所有动作。
+
+</div>
+<div>
+<h1>模型</h1>
+</div>
+<div>1.模型是 <a href="http://www.yiichina.com/api/CModel" target="_blank" rel="noopener">CModel</a> 或其子类的实例。模型用于保持数据以及与其相关的业务逻辑。</div>
+<div>2.模型是单独的数据对象。它可以是数据表中的一行，或者一个用户输入的表单。</div>
+<div>  数据对象的每个字段对应模型中的一个属性。每个属性有一个标签（label）， 并且可以通过一系列规则进行验证。</div>
+<div>3.Yii 实现了两种类型的模型：表单模型和 Active Record。二者均继承于相同的基类 <a href="http://www.yiichina.com/api/CModel" target="_blank" rel="noopener">CModel</a></div>
+<div>  1&gt;表单模型是 <a href="http://www.yiichina.com/api/CFormModel" target="_blank" rel="noopener">CFormModel</a> 的实例。表单模型用于保持从用户的输入获取的数据。 这些数据经常被获取，使用，然后丢弃。例如，在一个登录页面中， 我们可以使用表单模型用于表示由最终用户提供的用户名和密码信息。更多详情，请参考 <a href="http://www.yiichina.com/guide/form.model" target="_blank" rel="noopener">使用表单</a>。</div>
+2&gt;Active Record (AR) 是一种用于通过面向对象的风格抽象化数据库访问的设计模式。 每个 AR 对象是一个 <a href="http://www.yiichina.com/api/CActiveRecord" target="_blank" rel="noopener">CActiveRecord</a> 或其子类的实例。 数据对象的每个字段代表数据表中的一行。 行中的字段对应 AR 对象中的属性。更多关于 AR 的细节请阅读 <a href="http://www.yiichina.com/guide/database.ar" target="_blank" rel="noopener">Active Record</a>.
+<div>
+<h1>视图</h1>
+</div>
+<div>视图是一个包含了主要的用户交互元素的PHP脚本.建议这些语句不要去改变数据模型,且最好能够保持其单纯性(单纯作为视图)</div>
+<div>实现逻辑和界面分离,大段的逻辑应该被放置于控制器或模型中,而不是视图中</div>
+<div></div>
+<div>视图有一个名字，当渲染(render)时，名字会被用于识别视图脚本文件。视图的名称与其视图脚本名称是一样的.例如:视图edit 的名称出自一个名为 edit.php 的脚本文件.要渲染时如，需通过传递视图的名称调用 <a href="http://www.yiichina.com/api/CController#render" target="_blank" rel="noopener">CController::render()</a>。这个方法将在 protected/views/ControllerID 目录下寻找对应的视图文件.如controller路径为：\protected\controllers\contract\applyController.php  对应 视图目录：protected\views\contract\apply\</div>
+<div>在视图脚本内部,我们可以通过 $this 来访问当前控制器实例</div>
+<div>
+
+用以下 推送 的方式传递数据到视图里:
+<div>
+<div>
+<pre>$this-&gt;render('edit', array(
+    'varName1'=&gt;$value1,
+    'varName2'=&gt;$value2,
+));</pre>
+</div>
+</div>
+</div>
+<div>在以上的方式中, <a href="http://www.yiichina.com/api/CController#render" target="_blank" rel="noopener">render()</a> 方法将提取数组的第二个参数到变量里.其产生的结果是,在视图脚本里,我们可以直接访问变量 $varName1和 $varName2.</div>
+<div></div>
+<div>
+<h2>布局</h2>
+</div>
+<div>1.布局是一种用来修饰视图的特殊的视图文件.它通常包含了用户界面中通用的一部分视图.例如:布局可以包含header和footer的部分,然后把内容嵌入其间.</div>
+<div>其中的 $content 则储存了内容视图的渲染结果.</div>
+<div>2.当使用 <a href="http://www.yiichina.com/api/CController#render" target="_blank" rel="noopener">render()</a> 时,布局被隐式应用.视图脚本 protected/views/layouts/main.php 是默认的布局文件.这可以通过改变 <a href="http://www.yiichina.com/api/CWebApplication#layout" target="_blank" rel="noopener">CWebApplication::layout</a> 或者 <a href="http://www.yiichina.com/api/CWebApplication#layout" target="_blank" rel="noopener">CWebApplication::layout</a> 进行自定义。</div>
+<div>3.渲染一个不带布局的视图，则需调用 <a href="http://www.yiichina.com/api/CController#renderPartial" target="_blank" rel="noopener">renderPartial()</a></div>
+<div>
+<h2>小物件</h2>
+</div>
+<div>小物件是 <a href="http://www.yiichina.com/api/CWidget" target="_blank" rel="noopener">CWidget</a> 或其子类的实例.它是一个主要用于表现数据的组件.小物件通常内嵌于一个视图来产生一些复杂而独立的用户界面.例如,一个日历小物件可用于渲染一个复杂的日历界面.</div>
+<div>小物件使用户界面更加可复用</div>
+<div>
+
+按如下视图脚本来使用一个小物件:
+<div>
+<div>
+<pre>&lt;?php $this-&gt;beginWidget('path.to.WidgetClass'); ?&gt;
+...可能会由小物件获取的内容主体...
+&lt;?php $this-&gt;endWidget(); ?&gt;</pre>
+</div>
+</div>
+或者
+<div>
+<div>
+<pre>&lt;?php $this-&gt;widget('path.to.WidgetClass'); ?&gt;</pre>
+</div>
+</div>
+</div>
+<div>
+
+后者用于不需要任何 body 内容的组件.
+
+小物件可通过配置来定制它的表现.这是通过调用 <a href="http://www.yiichina.com/api/CBaseController#beginWidget" target="_blank" rel="noopener">CBaseController::beginWidget</a> 或 <a href="http://www.yiichina.com/api/CBaseController#widget" target="_blank" rel="noopener">CBaseController::widget</a> 设置其初始化属性值来完成的.例如,当使用 <a href="http://www.yiichina.com/api/CMaskedTextField" target="_blank" rel="noopener">CMaskedTextField</a> 小物件时,我们想指定被使用的 mask （可理解为一种输出格式，译者注）.我们通过传递一个携带这些属性初始化值的数组来实现.这里的数组的键是属性的名称,而数组的值则是小物件属性所对应的值.正如以下所示 :
+<div>
+<div>
+<pre>&lt;?php$this-&gt;widget('CMaskedTextField',array(
+    'mask'=&gt;'99/99/9999'));
+?&gt;</pre>
+</div>
+</div>
+继承 <a href="http://www.yiichina.com/api/CWidget" target="_blank" rel="noopener">CWidget</a> 并覆盖其<a href="http://www.yiichina.com/api/CWidget#init" target="_blank" rel="noopener">init()</a> 和 <a href="http://www.yiichina.com/api/CWidget#run" target="_blank" rel="noopener">run()</a> 方法,可以定义一个新的小物件:
+<div>
+<div>
+<pre>class MyWidget extends CWidget{
+    public function init()
+    {
+        // 此方法会被 CController::beginWidget() 调用
+    }
+ 
+    public function run()
+    {
+        // 此方法会被 CController::endWidget() 调用
+    }}</pre>
+</div>
+</div>
+小物件可以像一个控制器一样拥有它自己的视图.默认情况下,小物件的视图文件位于包含了小物件类文件目录的 views 子目录之下.这些视图可以通过调用 <a href="http://www.yiichina.com/api/CWidget#render" target="_blank" rel="noopener">CWidget::render()</a> 渲染,这一点和控制器很相似.唯一不同的是,小物件的视图没有布局文件支持。另外，小物件视图中的$this指向小物件实例而不是控制器实例。
+
+</div>
+<div>
+<h2>系统视图</h2>
+</div>
+<div>系统视图的渲染通常用于展示 Yii 的错误和日志信息.例如,当用户请求来自一个不存在的控制器或动作时,Yii 会抛出一个异常来解释这个错误. 这时,Yii 就会使用一个特殊的系统视图来显示此错误</div>
+<div>在 framework/views 下, Yii 提供了一系列默认的系统视图. 他们可以通过在 protected/views/system 下创建同名视图文件进行自定义</div>
+<div>
+<h1>组件</h1>
+</div>
+<div>Yii 应用建立于组件之上。</div>
+<div>组件是 <a href="http://www.yiichina.com/api/CComponent" target="_blank" rel="noopener">CComponent</a> 或其子类的实例。</div>
+<div>使用组件主要涉及访问它的属性以及触发或处理它的时间</div>
+<div>基类 <a href="http://www.yiichina.com/api/CComponent" target="_blank" rel="noopener">CComponent</a> 指定了如何定义属性和事件</div>
+<div>
+<h2>组件属性</h2>
+组件的属性就像对象的公共成员变量。它是可读写的。例如：
+<div>
+<div>
+<pre>$width=$component-&gt;textWidth;     // 获取 textWidth 属性$component-&gt;enableCaching=true;   // 设置 enableCaching 属性</pre>
+</div>
+</div>
+</div>
+<div>
+
+定义一个组件属性: 只需在组件类中定义一个公共成员变量即可。更灵活的方式是定义其 getter 和 setter 方法，例如：
+<div>
+<div>
+<pre>public function getTextWidth(){
+    return $this-&gt;_textWidth;
+}
+ 
+public function setTextWidth($value){
+    $this-&gt;_textWidth=$value;
+}</pre>
+</div>
+</div>
+</div>
+<div>上述代码定义了一个可写的属性名为 textWidth （名字是大小写不敏感的）。 当读取属性时，getTextWidth() 就会被调用，其返回值则成为属性值；相似的， 当写入属性时，setTextWidth() 被调用。如果 setter 方法没有定义，则属性将是只读的， 如果对其写入则会抛出一个异常。使用 getter 和 setter 方法定义一个属性有一个好处：即当读取或写入属性时， 可以执行额外的逻辑（例如，执行验证，触发事件）。</div>
+<div>
+<h2></h2>
+组件事件组件事件是一些特殊的属性，它们使用一些称作 事件句柄 （event handlers）的方法作为其值。 分配一个方法到一个事件将会引起方法在事件被唤起处自动被调用。因此， 一个组件的行为可能会被一种在部件开发过程中不可预见的方式修改。
+
+组件事件以 on 开头的命名方式定义。和属性通过 getter/setter 方法来定义的命名方式一样， 事件的名称是大小写不敏感的。以下代码定义了一个 onClicked 事件:
+<div>
+<div>
+<pre>public function onClicked($event){
+    $this-&gt;raiseEvent('onClicked', $event);
+}</pre>
+</div>
+</div>
+这里作为事件参数的 $event 是 <a href="http://www.yiichina.com/api/CEvent" target="_blank" rel="noopener">CEvent</a> 或其子类的实例。
+
+我们可以附加一个方法到此 event，如下所示:
+<div>
+<div>
+<pre>$component-&gt;onClicked=$callback;</pre>
+</div>
+</div>
+这里的 $callback 指向了一个有效的 PHP 回调。它可以是一个全局函数也可以是类中的一个方法。 如果是后者，它必须以一个数组的方式提供: array($object,'methodName').
+
+事件句柄的结构如下：
+<div>
+<div>
+<pre>function methodName($event){
+    ......
+}</pre>
+</div>
+</div>
+这里的 $event 即描述事件的参数（它来源于 raiseEvent() 调用）。$event 参数是 <a href="http://www.yiichina.com/api/CEvent" target="_blank" rel="noopener">CEvent</a> 或其子类的实例。 至少，它包含了关于谁触发了此事件的信息。
+
+从版本 1.0.10 开始，事件句柄也可以是一个PHP 5.3以后支持的匿名函数。例如，
+<div>
+<div>
+<pre>$component-&gt;onClicked=function($event) {
+    ......
+}</pre>
+</div>
+</div>
+如果我们现在调用 onClicked()，onClicked 事件将被触发（在 onClicked() 中）， 附属的事件句柄将被自动调用。
+
+一个事件可以绑定多个句柄。当事件触发时， 这些句柄将被按照它们绑定到事件时的顺序依次执行。如果句柄决定组织后续句柄被执行，它可以设置 <a href="http://www.yiichina.com/api/CEvent#handled" target="_blank" rel="noopener">$event-&gt;handled</a> 为 true
+
+</div>
+<div>
+<h2>组件行为</h2>
+<div></div>
+<div>从版本 1.0.2 开始，组件已添加了对 <a href="http://en.wikipedia.org/wiki/Mixin" target="_blank" rel="noopener">mixin</a> 的支持，并可以绑定一个或多个行为。</div>
+<div>行为 是一个对象，其方法可以被它绑定的部件通过收集功能的方式来实现 继承（inherited）， 而不是专有化继承(即普通的类继承).</div>
+<div>一个部件可以以'多重继承'的方式实现多个行为的绑定.</div>
+<div></div>
+<div>行为类必须实现 <a href="http://www.yiichina.com/api/IBehavior" target="_blank" rel="noopener">IBehavior</a> 接口。 大多数行为可以继承自 <a href="http://www.yiichina.com/api/CBehavior" target="_blank" rel="noopener">CBehavior</a></div>
+<div>如果一个行为需要绑定到一个 <a href="http://www.yiichina.com/guide/basics.model" target="_blank" rel="noopener">模型</a>, 它也可以从专为模型实现绑定特性的 <a href="http://www.yiichina.com/api/CModelBehavior" target="_blank" rel="noopener">CModelBehavior</a> 或 <a href="http://www.yiichina.com/api/CActiveRecordBehavior" target="_blank" rel="noopener">CActiveRecordBehavior</a> 继承。</div>
+要使用一个行为，它必须首先通过调用此行为的 <a href="http://www.yiichina.com/api/IBehavior#attach" target="_blank" rel="noopener">attach()</a> 方法绑定到一个组件。然后我们就可以通过组件调用此行为方法：
+<div>
+<div>
+<pre>// $name 在组件中实现了对行为的唯一识别$component-&gt;attachBehavior($name,$behavior);
+// test() 是行为中的方法。$component-&gt;test();</pre>
+</div>
+</div>
+已绑定的行为可以像一个组件中的普通属性一样访问。 例如，如果一个名为 tree 的行为绑定到了一个组件，我们就可以通过如下代码获得指向此行为的引用。
+<div>
+<div>
+<pre>$behavior=$component-&gt;tree;
+// 等于下行代码：// $behavior=$component-&gt;asa('tree');</pre>
+</div>
+</div>
+行为是可以被临时禁止的,此时它的方法开就会在组件中失效.例如:
+<div>
+<div>
+<pre>$component-&gt;disableBehavior($name);
+// 下面的代码将抛出一个异常$component-&gt;test();
+$component-&gt;enableBehavior($name);
+// 现在就可以使用了$component-&gt;test();</pre>
+</div>
+</div>
+两个同名行为绑定到同一个组件下是有可能的.在这种情况下,先绑定的行为则拥有优先权.
+
+当和 <a href="http://www.yiichina.com/guide/basics.component#component-event" target="_blank" rel="noopener">events</a>, 一起使用时,行为会更加强大. 当行为被绑定到组件时,行为里的一些方法就可以绑定到组件的一些事件上了. 这样一来,行为就有机观察或者改变组件的常规执行流程.
+
+自版本 1.1.0 开始，一个行为的属性也可以通过绑定到的组件来访问。 这些属性包含公共成员变量以及通过 getters 和/或 setters 方式设置的属性。 例如， 若一个行为有一个 xyz 的属性，此行为被绑定到组件 $a，然后我们可以使用表达式 $a-&gt;xyz 访问此行为的属性。
+
+</div>
+<div>
+<h1>模块</h1>
+</div>
+<div>模块是一个独立的软件单元，它包含 <a href="http://www.yiichina.com/guide/basics.model" target="_blank" rel="noopener">模型</a>, <a href="http://www.yiichina.com/guide/basics.view" target="_blank" rel="noopener">视图</a>, <a href="http://www.yiichina.com/guide/basics.controller" target="_blank" rel="noopener">控制器</a> 和其他支持的组件。</div>
+<div>模块在一些场景里很有用。对大型应用来说，我们可能需要把它划分为几个模块，每个模块可以单独维护和部署。一些通用的功能，例如用户管理， 评论管理，可以以模块的形式开发，这样他们就可以容易地在以后的项目中被复用。</div>
+<div>
+<h2>创建模块</h2>
+</div>
+<div>
+
+模块组织在一个目录中，目录的名字即模块的唯一 <a href="http://www.yiichina.com/api/CWebModule#id" target="_blank" rel="noopener">ID</a>
+
+</div>
+<div>
+
+模块的典型的目录结构：
+<pre>forum/
+   ForumModule.php            模块类文件
+   components/                包含可复用的用户组件
+      views/                  包含小物件的视图文件
+   controllers/               包含控制器类文件
+      DefaultController.php   默认的控制器类文件
+   extensions/                包含第三方扩展
+   models/                    包含模块类文件
+   views/                     包含控制器视图和布局文件
+      layouts/                包含布局文件
+      default/                包含 DefaultController 的视图文件
+         index.php            首页视图文件
+</pre>
+</div>
+<div>.............</div>
+<div></div>
+<div>
+<h1>路径别名与名字空间</h1>
+</div>
+<div>Yii 中广泛的使用了路径别名。路径别名关联于一个目录或文件的路径。它以点号语法指定</div>
+<div>通过使用 <a href="http://www.yiichina.com/api/YiiBase#getPathOfAlias" target="_blank" rel="noopener">YiiBase::getPathOfAlias()</a>， 别名可以被翻译为其相应的路径。 例如， system.web.CController 会被翻译为yii/framework/web/CController</div>
+<div>通过调用 <a href="http://www.yiichina.com/api/YiiBase#setPathOfAlias" target="_blank" rel="noopener">YiiBase::setPathOfAlias()</a>，我们可以定义新的根路径别名。</div>
+<div></div>
+<div>
+<h2>Root Alias</h2>
+</div>
+<div>为方便起见，Yii 预定义了以下几个根别名：</div>
+<div>
+<ul>
+ 	<li>system: 表示 Yii 框架目录；</li>
+ 	<li>zii: 表示 <a href="http://www.yiichina.com/guide/extension.use#zii-extensions" target="_blank" rel="noopener">Zii 库</a> 目录；</li>
+ 	<li>application: 表示应用的 <a href="http://www.yiichina.com/guide/basics.application#application-base-directory" target="_blank" rel="noopener">基础目录</a>；</li>
+ 	<li>webroot: 表示 <a href="http://www.yiichina.com/guide/basics.entry" target="_blank" rel="noopener">入口脚本</a> 文件所在的目录。此别名从版本 1.0.3 开始有效</li>
+ 	<li>ext: 表示包含了所有第三方 <a href="http://www.yiichina.com/guide/extension.overview" target="_blank" rel="noopener">扩展</a> 的目录。此别名从版本 1.0.8 开始有效</li>
+</ul>
+</div>
+<div>通过使用 <a href="http://www.yiichina.com/api/YiiBase#getPathOfAlias" target="_blank" rel="noopener">YiiBase::getPathOfAlias()</a>, 别名可以被翻译为其相应的路径。 例如， system.web.CController 会被翻译为yii/framework/web/CController</div>
+<div>
+<h2>Importing Classes</h2>
+使用别名可以很方便的导入类的定义。 例如，如果我们想包含 <a href="http://www.yiichina.com/api/CController" target="_blank" rel="noopener">CController</a> 类的定义，我们可以调用如下代码
+<div>
+<div>
+<pre>Yii::import('system.web.CController');</pre>
+</div>
+</div>
+</div>
+<div><a href="http://www.yiichina.com/api/YiiBase#import" target="_blank" rel="noopener">import</a> 方法跟 include 和 require 不同，它更加高效。 导入（import）的类定义并不会真正被包含进来，直到它第一次被引用。 多次导入同样的名字空间也会比 include_once 和 require_once 快得多</div>
+<div>
+<h3>使用Class Map</h3>
+</div>
+<div>
+<h3>使用Class Map</h3>
+<div></div>
+<div>从1.1.5版本开始，Yii允许用户定义的类通过使Class Map机制来预先导入，这也是Yii内置类使用的方法。 预先引入机制可以在Yii应用的任何地方使用，无需显式地导入或者包含文件。</div>
+</div>
+<div>
+
+若要使用预导入功能，要在<a href="http://www.yiichina.com/api/CWebApplication#run" target="_blank" rel="noopener">CWebApplication::run()</a>执行前执行下面的代码：
+<div>
+<div>
+<pre>Yii::$classMap=array(
+    'ClassName1' =&gt; 'path/to/ClassName1.php',
+    'ClassName2' =&gt; 'path/to/ClassName2.php',
+    ......
+);</pre>
+</div>
+</div>
+</div>
+<div>
+<h2>导入目录</h2>
+</div>
+<div>
+
+使用如下语法导入整个目录，这样此目录下的类文件就会在需要时被自动包含。
+<div>
+<div>
+<pre>Yii::import('system.web.*');</pre>
+</div>
+</div>
+</div>
+<div>
+<h2>Namespace</h2>
+</div>
+<div>不要将路径别名和名字空间混淆了，名字空间是指对一些类名的一个逻辑组合，这样它们就可以相互区分开，即使有相同的名字</div>
+<div>
+<h2>使用命名空间的类</h2>
+</div>
+<div>若要自动导入使用命名空间的类，命名空间的格式必须和路径别名相似。</div>
+<div>比如说，类application\components\GoogleMap 所对应的路径必须和别名:</div>
+<div>application.components.GoogleMap一致。</div>
+<div></div>
+<div>
+<h1>开发规范</h1>
+</div>
+<div>1.Yii 偏爱规范胜于配置。遵循规范可使你能够创建成熟的Yii应用而不需要编写、维护复杂的配置。</div>
+<div>2.Yii 仍然可以在几乎所有的方面通过配置实现自定义</div>
+<div>
+
+Yii 编程中推荐的开发规范。 为简单起见，我们假设 WebRoot 是 Yii 应用安装的目录。
+<h2>URL</h2>
+默认情况下，Yii 识别如下格式的 URL：
+
+</div>
+<div>
+<pre>http://hostname/index.php?r=ControllerID/ActionID
+</pre>
+<div>1.r GET 变量意为 <a href="http://www.yiichina.com/guide/basics.controller#route" target="_blank" rel="noopener">路由（route）</a> ，它可以被Yii解析为 控制器和动作。</div>
+<div>2.如果 ActionID 被省略，控制器将使用默认的动作（在<a href="http://www.yiichina.com/api/CController#defaultAction" target="_blank" rel="noopener">CController::defaultAction</a>中定义）；</div>
+<div>3.如果 ControllerID 也被省略（或者 r 变量不存在），应用将使用默认的控制器 （在<a href="http://www.yiichina.com/api/CWebApplication#defaultController" target="_blank" rel="noopener">CWebApplication::defaultController</a>中定义）。</div>
+<div>4.通过 <a href="http://www.yiichina.com/api/CUrlManager" target="_blank" rel="noopener">CUrlManager</a> 的帮助，可以创建更加可识别，更加 SEO 友好的 URL，</div>
+<div>   例如http://hostname/ControllerID/ActionID.html</div>
+</div>
+<div>
+<h2>代码</h2>
+1.命名变量、函数和类时使用 驼峰风格，即每个单词的首字母大写并连在一起，中间无空格。 变量名和函数名应该使它们的第一个单词全部小写，以使其区别于类名（例如：$basePath, runController(), LinkPager）。对私有类成员变量来说，我们推荐以下划线作为其名字前缀（例如： $_actionList）
+
+</div>
+<div>2. 一个针对控制器名字的特殊规则是它们必须以单词 Controller 结尾。那么控制器 ID 即类名的首字母小写并去掉单词Controller。 例如，PageController 类的 ID 就是 page</div>
+<div></div>
+<div>
+<h2>配置</h2>
+</div>
+<div>配置是一个键值对数组。每个键代表了所配置的对象中的属性名，每个值则为相应属性的初始值。 例如，array('name'=&gt;'My application', 'basePath'=&gt;'./protected') 初始化了 name 和 basePath 属性为它们相应的数组值</div>
+<div></div>
+<div>
+<h2>文件</h2>
+命名和使用文件的规范取决于它们的类型。
+
+</div>
+<div>类文件应以它们包含的公有类命名。例如， <a href="http://www.yiichina.com/api/CController" target="_blank" rel="noopener">CController</a> 类位于 CController.php 文件中</div>
+<div>视图文件应以视图的名字命名。例如， index 视图位于 index.php 文件中。 视图文件是一个PHP脚本文件，它包含了用于呈现内容的 HTML和PHP代码</div>
+<div>配置文件可以任意命名。 配置文件是一个PHP脚本，它的主要目的是返回一个体现配置的关联数组</div>
+<div></div>
+<div>
+<h2>目录</h2>
+</div>
+<div>Yii 假定了一系列默认的目录用于不同的场合。如果需要，每个目录都可以自定义</div>
+<div></div>
+<div>
+<ul>
+ 	<li>WebRoot/protected: 这是 <a href="http://www.yiichina.com/guide/basics.application#application-base-directory" target="_blank" rel="noopener">应用基础目录</a>， 是放置所有安全敏感的PHP脚本和数据文件的地方。Yii 有一个默认的application 别名指向此目录。 此目录及目录中的文件应该保护起来防止Web用户访问。它可以通过<a href="http://www.yiichina.com/api/CWebApplication#basePath" target="_blank" rel="noopener">CWebApplication::basePath</a> 自定义。</li>
+ 	<li>WebRoot/protected/runtime: 此目录放置应用在运行时产生的私有临时文件。 此目录必须对 Web 服务器进程可写。它可以通过 <a href="http://www.yiichina.com/api/CApplication#runtimePath" target="_blank" rel="noopener">CApplication::runtimePath</a>自定义。</li>
+ 	<li>WebRoot/protected/extensions: 此目录放置所有第三方扩展。 它可以通过 <a href="http://www.yiichina.com/api/CApplication#extensionPath" target="_blank" rel="noopener">CApplication::extensionPath</a> 自定义。</li>
+ 	<li>WebRoot/protected/modules: 此目录放置所有的应用 <a href="http://www.yiichina.com/guide/basics.module" target="_blank" rel="noopener">模块</a>，每个模块使用一个子目录。</li>
+ 	<li>WebRoot/protected/controllers: 此目录放置所有控制器类文件。 它可以通过<a href="http://www.yiichina.com/api/CWebApplication#controllerPath" target="_blank" rel="noopener">CWebApplication::controllerPath</a> 自定义。</li>
+ 	<li>WebRoot/protected/views: 此目录放置所有试图文件， 包含控制器视图，布局视图和系统视图。 它可以通过<a href="http://www.yiichina.com/api/CWebApplication#viewPath" target="_blank" rel="noopener">CWebApplication::viewPath</a> 自定义。</li>
+ 	<li>WebRoot/protected/views/ControllerID: 此目录放置单个控制器类中使用的所有视图文件。 此处的ControllerID 是指控制器的 ID 。它可以通过 <a href="http://www.yiichina.com/api/CController#viewPath" target="_blank" rel="noopener">CController::viewPath</a> 自定义。</li>
+ 	<li>WebRoot/protected/views/layouts: 此目录放置所有布局视图文件。它可以通过<a href="http://www.yiichina.com/api/CWebApplication#layoutPath" target="_blank" rel="noopener">CWebApplication::layoutPath</a> 自定义。</li>
+ 	<li>WebRoot/protected/views/system: 此目录放置所有系统视图文件。 系统视图文件是用于显示异常和错误的模板。它可以通过 <a href="http://www.yiichina.com/api/CWebApplication#systemViewPath" target="_blank" rel="noopener">CWebApplication::systemViewPath</a> 自定义。</li>
+ 	<li>WebRoot/assets: 此目录放置公共资源文件。 资源文件是可以被发布的，可由Web用户访问的私有文件。此目录必须对 Web 服务器进程可写。 它可以通过 <a href="http://www.yiichina.com/api/CAssetManager#basePath" target="_blank" rel="noopener">CAssetManager::basePath</a> 自定义</li>
+ 	<li>WebRoot/themes: 此目录放置应用使用的不同的主题。每个子目录即一个主题，主题的名字即目录的名字。 它可以通过 <a href="http://www.yiichina.com/api/CThemeManager#basePath" target="_blank" rel="noopener">CThemeManager::basePath</a> 自定义。</li>
+</ul>
+</div>
+<div>
+<h2>数据库</h2>
+</div>
+<div>
+
+多数Web 应用是由数据库驱动的。 推荐在对表和列命名时使用如下命名规范。
+<ul>
+ 	<li>数据库表名和列名都使用小写命名。</li>
+ 	<li>名字中的单词应使用下划线分割 (例如 product_order)。</li>
+ 	<li>对于表名，推荐使用单数名字。</li>
+ 	<li>表名可以使用一个通用前缀，例如 tbl_ 。这样当应用所使用的表和另一个应用说使用的表共存于同一个数据库中时就特别有用。 这两个应用的表可以通过使用不同的表前缀很容易地区别开。</li>
+</ul>
+</div>
+<div>
+<h1>开发流程</h1>
+</div>
+<div>
+<ol>
+ 	<li>创建目录结构骨架。</li>
+ 	<li>配置此 <a href="http://www.yiichina.com/guide/basics.application" target="_blank" rel="noopener">应用</a>。通过修改应用配置文件实现的。 此步骤可能也需要编写一些应用组件（例如用户组件）。</li>
+ 	<li>为每个类型的数据(表)创建一个 <a href="http://www.yiichina.com/guide/basics.model" target="_blank" rel="noopener">模型</a> 类。Gii 工具可以用于快速为每个数据表创建 <a href="http://www.yiichina.com/guide/database.ar" target="_blank" rel="noopener">active record</a> 类
+<div>为每个类型的用户请求 创建一个 <a href="http://www.yiichina.com/guide/basics.controller" target="_blank" rel="noopener">控制器</a> 类。 具体如何对用户请求归类要看实际需求。</div>
+<div>总体来说，如果一个模型类需要被用户访问，就应该有一个相应的控制器类。 Gii 工具也可以自动实现这一步骤。</div></li>
+ 	<li>实现 <a href="http://www.yiichina.com/guide/basics.controller#action" target="_blank" rel="noopener">动作</a> 和他们相应的 <a href="http://www.yiichina.com/guide/basics.view" target="_blank" rel="noopener">视图</a>。 这是真正所需要做的工作。</li>
+ 	<li>在控制器类中配置必要的动作 <a href="http://www.yiichina.com/guide/basics.controller#filter" target="_blank" rel="noopener">过滤器</a>。</li>
+ 	<li>如果需要主题功能，创建 <a href="http://www.yiichina.com/guide/topics.theming" target="_blank" rel="noopener">主题</a> 。</li>
+ 	<li>如果需要 <a href="http://www.yiichina.com/guide/topics.i18n" target="_blank" rel="noopener">国际化（I18N）</a> ，创建翻译信息。</li>
+ 	<li>对可缓存的数据点和视图点应用适当的 <a href="http://www.yiichina.com/guide/caching.overview" target="_blank" rel="noopener">缓存</a> 技术。</li>
+ 	<li>最终 <a href="http://www.yiichina.com/guide/topics.performance" target="_blank" rel="noopener">调整</a> 与部署。</li>
+</ol>
+上述的每个步骤中，可能需要创建并执行测试用例。
+
+</div>
+<div></div>
+<div>==========================================================================================================================</div>
+<div>                                                                                                                                  使用表单</div>
+<div>==========================================================================================================================</div>
+<div></div>
+<div>
+
+通过HTML表单收集用户数据是Web程序开发的主要工作之一。除了表单设计外， 开发者还需要将现存的或默认的数据填充到表单，验证用户输入， 对无效的输入显示适当的错误信息，保存输入到持久性存储器。通过其 MVC 结构极大地简化了此工作流程。
+
+处理表单时，通常需要以下步骤：
+<ol>
+ 	<li>创建用于表现所要收集数据字段的模型类。</li>
+ 	<li>创建一个控制器动作，响应表单提交。</li>
+ 	<li>在视图脚本中创建与控制器动作相关的表单。</li>
+</ol>
+</div>
+<div>
+<h1>创建模型</h1>
+</div>
+<div>在编写表单所需的 HTML 代码之前,先确定来自最终用户输入的数据的类型,以及这些数据应符合什么样的规则。</div>
+<div>模型类可用于记录这些信息,保存用户输入和验证这些输入的中心位置</div>
+<div></div>
+<div>根据用户所输入数据的方式创建不同类型的模型。</div>
+<div>1. 如果用户输入被收集、使用然后丢弃，我们应该创建一个 <a href="http://www.yiichina.com/guide/basics.model" target="_blank" rel="noopener">表单模型</a>;</div>
+<div>2.如果用户的输入被收集后要保存到数据库，我们应使用一个 <a href="http://www.yiichina.com/guide/database.ar" target="_blank" rel="noopener">Active Record</a> 。 两种类型的模型共享同样的基类 <a href="http://www.yiichina.com/api/CModel" target="_blank" rel="noopener">CModel</a> ，它定义了表单所需的通用接口</div>
+<div></div>
+<div>
+<h2>定义模型类</h2>
+创建了一个 LoginForm 模型类用于在一个登录页中收集用户的输入。 由于登录信息只被用于验证用户，并不需要保存，因此我们将 LoginForm 创建为一个 表单模型。
+<div>
+<div>
+<pre>class LoginForm extends CFormModel{
+    public $username;
+    public $password;
+    public $rememberMe=false;
+}</pre>
+</div>
+</div>
+LoginForm 中定义了三个属性: $username, $password 和 $rememberMe。用于保存用户输入的用户名和密码，还有用户是否想记住他的登录的选项。 由于 $rememberMe 有一个默认的值 false，相应的选项在初始化显示在登录表单中时将是未勾选状态。
+
+</div>
+<div>
+<h2>声明验证规则</h2>
+</div>
+<div>用户提交了他的输入，模型被填充，需要在使用前确保用户的输入是有效的。 通过将用户的输入和一系列规则执行验证实现的。</div>
+<div>我们在 rules() 方法中指定这些验证规则， 此方法应返回一个规则配置数组。</div>
+<div>
+<pre>class LoginForm extends CFormModel{
+    public $username;
+    public $password;
+    public $rememberMe=false;
+ 
+    private $_identity;
+ 
+    public function rules()
+    {
+        return array(
+            array('username, password', 'required'),
+            array('rememberMe', 'boolean'),
+            array('password', 'authenticate'),
+        );
+    }
+ 
+    public function authenticate($attribute,$params)
+    {
+        $this-&gt;_identity=new UserIdentity($this-&gt;username,$this-&gt;password);
+        if(!$this-&gt;_identity-&gt;authenticate())
+            $this-&gt;addError('password','错误的用户名或密码。');
+    }}</pre>
+</div>
+<div>
+
+上述代码指定：username 和 password 为必填项， password 应被验证（authenticated），rememberMe 应该是一个布尔值。
+
+rules() 返回的每个规则必须是以下格式：
+<div>
+<div>
+<pre>array('AttributeList', 'Validator', 'on'=&gt;'ScenarioList', ...附加选项)</pre>
+</div>
+</div>
+其中 AttributeList（特性列表） 是需要通过此规则验证的特性列表字符串，每个特性名字由逗号分隔;Validator（验证器） 指定要执行验证的种类；on 参数是可选的，它指定此规则应被应用到的场景列表； 附加选项是一个名值对数组，用于初始化相应验证器的属性值。
+
+有三种方式可在验证规则中指定 Validator 。第一， Validator 可以是模型类中一个方法的名字，就像上面示例中的authenticate 。验证方法必须是下面的结构：
+<div>
+<div>
+<pre>/**
+ * @param string 所要验证的特性的名字
+ * @param array 验证规则中指定的选项
+ */public function ValidatorName($attribute,$params) { ... }</pre>
+</div>
+</div>
+第二，Validator 可以是一个验证器类的名字，当此规则被应用时， 一个验证器类的实例将被创建以执行实际验证。规则中的附加选项用于初始化实例的属性值。 验证器类必须继承自 <a href="http://www.yiichina.com/api/CValidator" target="_blank" rel="noopener">CValidator</a>。
+
+第三，Validator 可以是一个预定义的验证器类的别名。在上面的例子中， required 名字是 <a href="http://www.yiichina.com/api/CRequiredValidator" target="_blank" rel="noopener">CRequiredValidator</a> 的别名，它用于确保所验证的特性值不为空。 下面是预定义的验证器别名的完整列表：
+
+</div>
+<div></div>
+<div>==========================================================================================================================</div>
+<div>                                                                                                                                 使用数据库</div>
+<div>==========================================================================================================================</div>
+<div>
+<ul>
+ 	<li><a href="http://www.yiichina.com/guide/database.overview" target="_blank" rel="noopener">概览</a></li>
+</ul>
+</div>
+<div>Yii数据访问对象(DAO)建立在PHP的数据对象(PDO)extension上</div>
+<div>使得在一个单一的统一的接口可以访问不同的数据库管理系统(DBMS)</div>
+<div>Yii 的Active Record（ AR ），实现了被广泛采用的对象关系映射(ORM)办法，简化数据库编程。按约定，一个类代表一个表，一个实例代表一行数据。</div>
+<div>Yii AR消除了大部分用于处理CRUD（创建，读取，更新和删除）数据操作的sql语句的重复任务</div>
+<div>
+<h1>1.数据访问对象 (DAO)</h1>
+</div>
+<div>数据访问对象（DAO） 对访问存储在不同数据库管理系统（DBMS）中的数据提供了一个通用的API。 因此，在将底层 DBMS 更换为另一个时，无需修改使用了 DAO 访问数据的代码。</div>
+<div>Yii DAO 基于 <a href="http://php.net/manual/en/book.pdo.php" target="_blank" rel="noopener">PHP Data Objects (PDO)</a> 构建。</div>
+<div>
+
+Yii DAO 主要包含如下四个类：
+<ul>
+ 	<li><a href="http://www.yiichina.com/api/CDbConnection" target="_blank" rel="noopener">CDbConnection</a>: 代表一个数据库连接。</li>
+ 	<li><a href="http://www.yiichina.com/api/CDbCommand" target="_blank" rel="noopener">CDbCommand</a>: 代表一条执行的 SQL 语句。</li>
+ 	<li><a href="http://www.yiichina.com/api/CDbDataReader" target="_blank" rel="noopener">CDbDataReader</a>: 代表一个只向前移动的，来自一个查询结果集中的行的流。</li>
+ 	<li><a href="http://www.yiichina.com/api/CDbTransaction" target="_blank" rel="noopener">CDbTransaction</a>: 代表一个数据库事务。</li>
+</ul>
+</div>
+<div>
+<h2>建立数据库连接</h2>
+</div>
+<div>1.建立一个数据库连接，创建一个 <a href="http://www.yiichina.com/api/CDbConnection" target="_blank" rel="noopener">CDbConnection</a> 实例并将其激活。 连接到数据库需要一个数据源的名字（DSN）以指定连接信息。</div>
+<div>2.用户名和密码也可能会用到。 当连接到数据库的过程中发生错误时 (例如，错误的 DSN 或无效的用户名/密码)，将会抛出一个异常</div>
+<div></div>
+<div>
+
+3.DSN 的格式取决于所使用的 PDO 数据库驱动。总体来说， DSN 要含有 PDO 驱动的名字，跟上一个冒号，再跟上驱动特定的连接语法。下面是一个常用DSN格式的列表。
+<ul>
+ 	<li>SQLite: sqlite:/path/to/dbfile</li>
+ 	<li>MySQL: mysql:host=localhost;dbname=testdb</li>
+ 	<li>PostgreSQL: pgsql:host=localhost;port=5432;dbname=testdb</li>
+ 	<li>SQL Server: mssql:host=localhost;dbname=testdb</li>
+ 	<li>Oracle: oci:dbname=//localhost:1521/testdb</li>
+</ul>
+</div>
+<div>
+
+由于 <a href="http://www.yiichina.com/api/CDbConnection" target="_blank" rel="noopener">CDbConnection</a> 继承自 <a href="http://www.yiichina.com/api/CApplicationComponent" target="_blank" rel="noopener">CApplicationComponent</a>，我们也可以将其作为一个 <a href="http://www.yiichina.com/guide/basics.application#application-component" target="_blank" rel="noopener">应用组件</a> 使用。要这样做的话， 请在 <a href="http://www.yiichina.com/guide/basics.application#application-configuration" target="_blank" rel="noopener">应用配置</a> 中配置一个 db （或其他名字）应用组件如下：
+<div>
+<div>
+<pre>array(
+    ......
+    'components'=&gt;array(
+        ......
+        'db'=&gt;array(
+            'class'=&gt;'CDbConnection',
+            'connectionString'=&gt;'mysql:host=localhost;dbname=testdb',
+            'username'=&gt;'root',
+            'password'=&gt;'password',
+            'emulatePrepare'=&gt;true,  // needed by some MySQL installations
+        ),
+    ),
+)</pre>
+</div>
+</div>
+</div>
+<div>可以通过 Yii::app()-&gt;db 访问数据库连接了。它已经被自动激活了</div>
+<div>通过这种方式，这个单独的DB连接就可以在我们代码中的很多地方共享</div>
+<div></div>
+<div>
+<h2>执行 SQL 语句</h2>
+</div>
+<div>
+
+数据库连接建立后，SQL 语句就可以通过使用 <a href="http://www.yiichina.com/api/CDbCommand" target="_blank" rel="noopener">CDbCommand</a> 执行了。你可以通过使用指定的SQL语句作为参数调用<a href="http://www.yiichina.com/api/CDbConnection#createCommand" target="_blank" rel="noopener">CDbConnection::createCommand()</a> 创建一个 <a href="http://www.yiichina.com/api/CDbCommand" target="_blank" rel="noopener">CDbCommand</a> 实例。
+<div>
+<div>
+<pre>$connection=Yii::app()-&gt;db;   // 假设你已经建立了一个 "db" 连接// 如果没有，你可能需要显式建立一个连接：// $connection=new CDbConnection($dsn,$username,$password);$command=$connection-&gt;createCommand($sql);
+// 如果需要，此 SQL 语句可通过如下方式修改：// $command-&gt;text=$newSQL;</pre>
+</div>
+</div>
+</div>
+<div>
+
+一条 SQL 语句会通过 <a href="http://www.yiichina.com/api/CDbCommand" target="_blank" rel="noopener">CDbCommand</a> 以如下两种方式被执行：
+<ul>
+ 	<li><a href="http://www.yiichina.com/api/CDbCommand#execute" target="_blank" rel="noopener">execute()</a>: 执行一个无查询 （non-query）SQL语句， 例如 INSERT, UPDATE 和 DELETE 。如果成功，将返回此执行所影响的行数。</li>
+ 	<li><a href="http://www.yiichina.com/api/CDbCommand#query" target="_blank" rel="noopener">query()</a>: 执行一条会返回若干行数据的 SQL 语句，例如 SELECT。 如果成功，它将返回一个 <a href="http://www.yiichina.com/api/CDbDataReader" target="_blank" rel="noopener">CDbDataReader</a> 实例，通过此实例可以遍历数据的结果行。为简便起见， （Yii）还实现了一系列 queryXXX() 方法以直接返回查询结果。</li>
+</ul>
+</div>
+<div>
+<pre>$rowCount=$command-&gt;execute();   // 执行无查询 SQL$dataReader=$command-&gt;query();   // 执行一个 SQL 查询$rows=$command-&gt;queryAll();      // 查询并返回结果中的所有行$row=$command-&gt;queryRow();       // 查询并返回结果中的第一行$column=$command-&gt;queryColumn(); // 查询并返回结果中的第一列$value=$command-&gt;queryScalar();  // 查询并返回结果中第一行的第一个字段</pre>
+</div>
+<div>
+<h2>获取查询结果</h2>
+在 <a href="http://www.yiichina.com/api/CDbCommand#query" target="_blank" rel="noopener">CDbCommand::query()</a> 生成 <a href="http://www.yiichina.com/api/CDbDataReader" target="_blank" rel="noopener">CDbDataReader</a> 实例之后，可以通过重复调用 <a href="http://www.yiichina.com/api/CDbDataReader#read" target="_blank" rel="noopener">CDbDataReader::read()</a> 获取结果中的行。你也可以在 PHP 的 foreach 语言结构中使用 <a href="http://www.yiichina.com/api/CDbDataReader" target="_blank" rel="noopener">CDbDataReader</a> 一行行检索数据。
+<div>
+<div>
+<pre>$dataReader=$command-&gt;query();
+// 重复调用 read() 直到它返回 falsewhile(($row=$dataReader-&gt;read())!==false) { ... }// 使用 foreach 遍历数据中的每一行foreach($dataReader as $row) { ... }// 一次性提取所有行到一个数组$rows=$dataReader-&gt;readAll();</pre>
+</div>
+</div>
+</div>
+<div>注意: 不同于 <a href="http://www.yiichina.com/api/CDbCommand#query" target="_blank" rel="noopener">query()</a>, 所有的 queryXXX() 方法会直接返回数据。 例如， <a href="http://www.yiichina.com/api/CDbCommand#queryRow" target="_blank" rel="noopener">queryRow()</a> 会返回代表查询结果第一行的一个数组。</div>
+<div></div>
+<div>
+<h2>使用事务</h2>
+当一个应用要执行几条查询，（每条查询要从数据库中读取/或向数据库中写入信息时） 保证所有sql语句都执行很重要。 事务，在 Yii 中表现为 <a href="http://www.yiichina.com/api/CDbTransaction" target="_blank" rel="noopener">CDbTransaction</a> 实例，可能会在下面的情况中启动：
+<ul>
+ 	<li>开始事务.</li>
+ 	<li>一个个执行查询。任何对数据库的更新对外界不可见。</li>
+ 	<li>提交事务。如果事务成功，更新变为可见。</li>
+ 	<li>如果查询中的一个失败，整个事务回滚。</li>
+</ul>
+上述工作流可以通过如下代码实现：
+<div>
+<div>
+<pre>$transaction=$connection-&gt;beginTransaction();
+try{
+    $connection-&gt;createCommand($sql1)-&gt;execute();
+    $connection-&gt;createCommand($sql2)-&gt;execute();
+    //.... other SQL executions
+    $transaction-&gt;commit(); //提交事务}catch(Exception $e){
+    $transaction-&gt;rollBack();//回滚事务}</pre>
+</div>
+</div>
+<h2>绑定参数(即是变量)</h2>
+要避免 <a href="http://en.wikipedia.org/wiki/SQL_injection" target="_blank" rel="noopener">SQL 注入攻击</a> 并提高重复执行的 SQL 语句的效率， 你可以 "准备（prepare）"一条含有可选参数占位符的 SQL 语句，在参数绑定时，这些占位符将被替换为实际的参数。
+
+参数占位符可以是命名的 (表现为一个唯一的标记) 或未命名的 (表现为一个问号)。调用 <a href="http://www.yiichina.com/api/CDbCommand#bindParam" target="_blank" rel="noopener">CDbCommand::bindParam()</a> 或<a href="http://www.yiichina.com/api/CDbCommand#bindValue" target="_blank" rel="noopener">CDbCommand::bindValue()</a> 以使用实际参数替换这些占位符。 这些参数不需要使用引号引起来：底层的数据库驱动会为你搞定这个。 参数绑定必须在 SQL 语句执行之前完成。
+<div>
+<div>
+<pre></pre>
+<pre>// 一条带有两个占位符 ":username" 和 ":email"的 SQL</pre>
+<pre>$sql="INSERT INTO tbl_user (username, email) VALUES(:username,:email)";
+                                         $command=$connection-&gt;createCommand($sql);
+// 用实际的用户名替换占位符 ":username"      $command-&gt;bindParam(":username",$username,PDO::PARAM_STR);
+// 用实际的 Email 替换占位符 ":email"       $command-&gt;bindParam(":email",$email,PDO::PARAM_STR);
+                                          $command-&gt;execute();
+// 使用新的参数集插入另一行                  $command-&gt;bindParam(":username",$username2,PDO::PARAM_STR);
+$command-&gt;bindParam(":email",$email2,PDO::PARAM_STR);
+$command-&gt;execute();</pre>
+</div>
+</div>
+方法 <a href="http://www.yiichina.com/api/CDbCommand#bindParam" target="_blank" rel="noopener">bindParam()</a> 和 <a href="http://www.yiichina.com/api/CDbCommand#bindValue" target="_blank" rel="noopener">bindValue()</a> 非常相似。唯一的区别就是前者使用一个 PHP 变量绑定参数， 而后者使用一个值。对于那些内存中的大数据块参数，处于性能的考虑，应优先使用前者。
+<h2>绑定列</h2>
+当获取查询结果时，你也可以使用 PHP 变量绑定列。 这样在每次获取查询结果中的一行时就会自动使用最新的值填充。
+<div>
+<div>
+<pre>$sql="SELECT username, email FROM tbl_user";
+$dataReader=$connection-&gt;createCommand($sql)-&gt;query();
+// 使用 $username 变量绑定第一列 (username)   $dataReader-&gt;bindColumn(1,$username);// 使用 $email 变量绑定第二列 (email) $dataReader-&gt;bindColumn(2,$email);
+while($dataReader-&gt;read()!==false){
+    // $username 和 $email 含有当前行中的 username 和 email }</pre>
+</div>
+</div>
+<h2>使用表前缀（区分作用）</h2>
+从版本 1.1.0 起， Yii 提供了集成了对使用表前缀的支持。 表前缀是指在当前连接的数据库中的数据表的名字前面添加的一个字符串。 它常用于共享的服务器环境，这种环境中多个应用可能会共享同一个数据库，要使用不同的表前缀以相互区分。 例如，一个应用可以使用 tbl_ 作为表前缀而另一个可以使用 yii_
+
+要使用表前缀，配置 <a href="http://www.yiichina.com/api/CDbConnection#tablePrefix" target="_blank" rel="noopener">CDbConnection::tablePrefix</a> 属性为所希望的表前缀。 然后，在 SQL 语句中使用 {{TableName}} 代表表的名字，其中的 TableName 是指不带前缀的表名。 例如，如果数据库含有一个名为 tbl_user 的表，而 tbl_ 被配置为表前缀，那我们就可以使用如下代码执行用户相关的查询：
+<div>
+<div>
+<pre>$sql='SELECT * FROM {{user}}';  //对应表tbl_user $users=$connection-&gt;createCommand($sql)-&gt;queryAll();</pre>
+</div>
+</div>
+</div>
+<div></div>
+<div></div>
+<div>
+<h1>2.Active Record</h1>
+</div>
+<div>1.Active Record (AR) 是一个流行的 对象-关系映射 (ORM) 技术。</div>
+<div>2.每个 AR 类代表一个数据表（或视图），数据表（或视图）的列在 AR 类中体现为类的属性，一个 AR 实例则表示表中的一行。</div>
+<div>3.常见的 CRUD 操作作为 AR 的方法实现。更加面向对象的方式访问数据。</div>
+<div></div>
+<div>
+
+简单起见，我们使用下面的数据表作为此节中的例子。注意，如果你使用 MySQL 数据库，你应该将下面的 SQL 中的 AUTOINCREMENT 替换为 AUTO_INCREMENT。
+<div>
+<div>
+<pre>CREATE TABLE tbl_post (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    title VARCHAR(128) NOT NULL,
+    content TEXT NOT NULL,
+    create_time INTEGER NOT NULL);</pre>
+</div>
+</div>
+</div>
+<div>如果你想使用一个不是 db 的应用组件，或者如果你想使用 AR 处理多个数据库，你应该覆盖<a href="http://www.yiichina.com/api/CActiveRecord#getDbConnection" target="_blank" rel="noopener">CActiveRecord::getDbConnection()</a>。 <a href="http://www.yiichina.com/api/CActiveRecord" target="_blank" rel="noopener">CActiveRecord</a> 类是所有 AR 类的基类。</div>
+<div>
+<h2>定义 AR 类</h2>
+要访问一个数据表，我们首先需要通过集成 <a href="http://www.yiichina.com/api/CActiveRecord" target="_blank" rel="noopener">CActiveRecord</a> 定义一个 AR 类。 每个 AR 类代表一个单独的数据表，一个 AR 实例则代表那个表中的一行。 如下例子演示了代表 tbl_post 表的 AR 类的最简代码：
+<div>
+<div>
+<pre>class Post extends CActiveRecord{
+    public static function model($className=__CLASS__)
+    {
+        return parent::model($className);
+    }
+ //认情况下，AR 类的名字和数据表的名字相同。如果不同，请覆盖 <a href="http://www.yiichina.com/api/CActiveRecord#tableName" target="_blank" rel="noopener">tableName()</a> 方法。 <a href="http://www.yiichina.com/api/CActiveRecord#model" target="_blank" rel="noopener">model()</a> 方法为每个 AR 类声明为如此（稍后解释）
+    public function tableName()
+    {
+        return 'tbl_post';
+    }}</pre>
+</div>
+</div>
+</div>
+<div> 例如，我们可以使用以下代码向 tbl_post 表中插入一个新行</div>
+<div>
+<pre>$post=new Post;</pre>
+<pre>//从未在 Post 类中显式定义属性 title，但通过上述代码访问。 因为 title 是 tbl_post 表中的一个列，CActiveRecord 通过PHP的 __get() 魔术方法使其成为一个可访问的属性$post-&gt;title='sample post'; //如果我们尝试以同样的方式访问一个不存在的列，将会抛出一个异常$post-&gt;content='post body content'; $post-&gt;save();</pre>
+</div>
+<div>
+
+AR 依靠表中良好定义的主键。如果一个表没有主键，则必须在相应的 AR 类中通过如下方式覆盖 primaryKey() 方法指定哪一列或哪几列作为主键。
+<div>
+<div>
+<pre>public function primaryKey(){
+    return 'id';
+    // 对于复合主键，要返回一个类似如下的数组
+    // return array('pk1', 'pk2');}</pre>
+</div>
+</div>
+<h2>创建记录</h2>
+要向数据表中插入新行，我们要创建一个相应 AR 类的实例，设置其与表的列相关的属性，然后调用 <a href="http://www.yiichina.com/api/CActiveRecord#save" target="_blank" rel="noopener">save()</a> 方法完成插入：
+<div>
+<div>
+<pre>$post=new Post;
+$post-&gt;title='sample post';
+$post-&gt;content='content for the sample post';
+$post-&gt;create_time=time();
+$post-&gt;save();</pre>
+</div>
+</div>
+如果表的主键是自增的，在插入完成后，AR 实例将包含一个更新的主键。在上面的例子中， id 属性将反映出新插入帖子的主键值，即使我们从未显式地改变它。
+
+如果一个列在表结构中使用了静态默认值（例如一个字符串，一个数字）定义。则 AR 实例中相应的属性将在此实例创建时自动含有此默认值。改变此默认值的一个方式就是在 AR 类中显示定义此属性：
+<div>
+<div>
+<pre>class Post extends CActiveRecord{
+    public $title='please enter a title';
+    ......
+}
+ 
+$post=new Post;
+echo $post-&gt;title;  // 这儿将显示: please enter a title</pre>
+</div>
+</div>
+从版本 1.0.2 起，记录在保存（插入或更新）到数据库之前，其属性可以赋值为 <a href="http://www.yiichina.com/api/CDbExpression" target="_blank" rel="noopener">CDbExpression</a> 类型。 例如，为保存一个由 MySQL 的 NOW() 函数返回的时间戳，我们可以使用如下代码：
+<div>
+<div>
+<pre>$post=new Post;
+$post-&gt;create_time=new CDbExpression('NOW()');
+// $post-&gt;create_time='NOW()'; 不会起作用，因为// 'NOW()' 将会被作为一个字符串处理。$post-&gt;save();</pre>
+</div>
+</div>
+<blockquote>提示: 由于 AR 允许我们无需写一大堆 SQL 语句就能执行数据库操作， 我们经常会想知道 AR 在背后到底执行了什么 SQL 语句。这可以通过开启 Yii 的 <a href="http://www.yiichina.com/guide/topics.logging" target="_blank" rel="noopener">日志功能</a> 实现。例如，我们在应用配置中开启了 <a href="http://www.yiichina.com/api/CWebLogRoute" target="_blank" rel="noopener">CWebLogRoute</a> ，我们将会在每个网页的最后看到执行过的 SQL 语句。 从 1.0.5 版本起，我们可以在应用配置中设置<a href="http://www.yiichina.com/api/CDbConnection#enableParamLogging" target="_blank" rel="noopener">CDbConnection::enableParamLogging</a> 为 true ，这样绑定在 SQL 语句中的参数值也会被记录。</blockquote>
+<h2>读取记录</h2>
+条件的结果中的第一行$post=Post::model()-&gt;find($condition,$params);
+<div>
+<div>
+<pre>// 查找具有指定主键值的那一行                      $post=Post::model()-&gt;findByPk($postID,$condition,$params);
+// 查找具有指定属性值的行                          $post=Post::model()-&gt;findByAttributes($attributes,$condition,$params);
+// 通过指定的 SQL 语句查找结果中的第一行            $post=Post::model()-&gt;findBySql($sql,$params);</pre>
+</div>
+</div>
+如上所示，通过 Post::model() 调用 find 方法。 静态方法 model() 是每个 AR 类所必须的。 此方法返回在对象上下文中的一个用于访问类级别方法（类似于静态类方法的东西）的 AR 实例。
+
+如果 find 方法找到了一个满足查询条件的行，它将返回一个 Post 实例，实例的属性含有数据表行中相应列的值。 然后就可以像读取普通对象的属性那样读取载入的值，例如 echo $post-&gt;title;。
+
+如果使用给定的查询条件在数据库中没有找到任何东西， find 方法将返回 null 。
+
+调用 find 时，我们使用 $condition 和 $params 指定查询条件。此处 $condition 可以是 SQL 语句中的 WHERE 字符串，$params 则是一个参数数组，其中的值应绑定到 $condation 中的占位符。例如：
+<div>
+<div>
+<pre>// 查找 postID=10 的那一行          $post=Post::model()-&gt;find('postID=:postID', array(':postID'=&gt;10));</pre>
+</div>
+</div>
+<blockquote>注意: 在上面的例子中，我们可能需要在特定的 DBMS 中将 postID 列的引用进行转义。 例如，如果我们使用 PostgreSQL，我们必须将此表达式写为 "postID"=:postID，因为 PostgreSQL 在默认情况下对列名大小写不敏感。</blockquote>
+我们也可以使用 $condition 指定更复杂的查询条件。 不使用字符串，我们可以让 $condition 成为一个 <a href="http://www.yiichina.com/api/CDbCriteria" target="_blank" rel="noopener">CDbCriteria</a> 的实例，它允许我们指定不限于 WHERE 的条件。 例如：
+<div>
+<div>
+<pre>$criteria=new CDbCriteria;
+$criteria-&gt;select='title';  // 只选择 'title' 列$criteria-&gt;condition='postID=:postID';
+$criteria-&gt;params=array(':postID'=&gt;10);
+$post=Post::model()-&gt;find($criteria); // $params 不需要了</pre>
+</div>
+</div>
+注意，当使用 <a href="http://www.yiichina.com/api/CDbCriteria" target="_blank" rel="noopener">CDbCriteria</a> 作为查询条件时，$params 参数不再需要了，因为它可以在 <a href="http://www.yiichina.com/api/CDbCriteria" target="_blank" rel="noopener">CDbCriteria</a> 中指定，就像上面那样。
+
+一种替代 <a href="http://www.yiichina.com/api/CDbCriteria" target="_blank" rel="noopener">CDbCriteria</a> 的方法是给 find 方法传递一个数组。 数组的键和值各自对应标准（criterion）的属性名和值，上面的例子可以重写为如下：
+<div>
+<div>
+<pre>$post=Post::model()-&gt;find(array(
+    'select'=&gt;'title',
+    'condition'=&gt;'postID=:postID',
+    'params'=&gt;array(':postID'=&gt;10),
+));</pre>
+</div>
+</div>
+<blockquote>信息: 当一个查询条件是关于按指定的值匹配几个列时，我们可以使用 <a href="http://www.yiichina.com/api/CActiveRecord#findByAttributes" target="_blank" rel="noopener">findByAttributes()</a>。我们使 $attributes参数是一个以列名做索引的值的数组。在一些框架中，此任务可以通过调用类似 findByNameAndTitle 的方法实现。虽然此方法看起来很诱人， 但它常常引起混淆，冲突和比如列名大小写敏感的问题。</blockquote>
+当有多行数据匹配指定的查询条件时，我们可以通过下面的 findAll 方法将他们全部带回。 每个都有其各自的 find 方法，就像我们已经讲过的那样。
+<div>
+<div>
+<pre>// 查找满足指定条件的所有行$posts=Post::model()-&gt;findAll($condition,$params);
+// 查找带有指定主键的所有行$posts=Post::model()-&gt;findAllByPk($postIDs,$condition,$params);
+// 查找带有指定属性值的所有行$posts=Post::model()-&gt;findAllByAttributes($attributes,$condition,$params);
+// 通过指定的SQL语句查找所有行$posts=Post::model()-&gt;findAllBySql($sql,$params);</pre>
+</div>
+</div>
+如果没有任何东西符合查询条件，findAll 将返回一个空数组。这跟 find 不同，find 会在没有找到什么东西时返回 null。
+
+除了上面讲述的 find 和 findAll 方法，为了方便，（Yii）还提供了如下方法：
+<div>
+<div>
+<pre>// 获取满足指定条件的行数$n=Post::model()-&gt;count($condition,$params);
+// 通过指定的 SQL 获取结果行数$n=Post::model()-&gt;countBySql($sql,$params);
+// 检查是否至少有一行复合指定的条件$exists=Post::model()-&gt;exists($condition,$params);</pre>
+</div>
+</div>
+<h2>更新记录</h2>
+在 AR 实例填充了列的值之后，我们可以改变它们并把它们存回数据表。
+<div>
+<div>
+<pre>$post=Post::model()-&gt;findByPk(10);
+$post-&gt;title='new post title';
+$post-&gt;save(); // 将更改保存到数据库</pre>
+</div>
+</div>
+正如我们可以看到的，我们使用同样的 <a href="http://www.yiichina.com/api/CActiveRecord#save" target="_blank" rel="noopener">save()</a> 方法执行插入和更新操作。 如果一个 AR 实例是使用 new 操作符创建的，调用<a href="http://www.yiichina.com/api/CActiveRecord#save" target="_blank" rel="noopener">save()</a> 将会向数据表中插入一行新数据； 如果 AR 实例是某个 find 或 findAll 方法的结果，调用 <a href="http://www.yiichina.com/api/CActiveRecord#save" target="_blank" rel="noopener">save()</a> 将更新表中现有的行。 实际上，我们是使用 <a href="http://www.yiichina.com/api/CActiveRecord#isNewRecord" target="_blank" rel="noopener">CActiveRecord::isNewRecord</a> 说明一个 AR 实例是不是新的。
+
+直接更新数据表中的一行或多行而不首先载入也是可行的。 AR 提供了如下方便的类级别方法实现此目的：
+<div>
+<div>
+<pre>// 更新符合指定条件的行Post::model()-&gt;updateAll($attributes,$condition,$params);
+// 更新符合指定条件和主键的行Post::model()-&gt;updateByPk($pk,$attributes,$condition,$params);
+// 更新满足指定条件的行的计数列Post::model()-&gt;updateCounters($counters,$condition,$params);</pre>
+</div>
+</div>
+在上面的代码中， $attributes 是一个含有以 列名作索引的列值的数组； $counters 是一个由列名索引的可增加的值的数组；$condition 和 $params 在前面的段落中已有描述。
+<h2>删除记录</h2>
+如果一个 AR 实例被一行数据填充,我们也可以删除此行数据。
+<div>
+<div>
+<pre>$post=Post::model()-&gt;findByPk(10); // 假设有一个帖子，其 ID 为 10$post-&gt;delete(); // 从数据表中删除此行</pre>
+</div>
+</div>
+注意，删除之后， AR 实例仍然不变，但数据表中相应的行已经没了。
+
+使用下面的类级别代码，可以无需首先加载行就可以删除它。
+<div>
+<div>
+<pre>// 删除符合指定条件的行Post::model()-&gt;deleteAll($condition,$params);
+// 删除符合指定条件和主键的行Post::model()-&gt;deleteByPk($pk,$condition,$params);</pre>
+</div>
+</div>
+<h2>数据验证</h2>
+当插入或更新一行时，我们常常需要检查列的值是否符合相应的规则。 如果列的值是由最终用户提供的，这一点就更加重要。总体来说，我们永远不能相信任何来自客户端的数据。
+
+当调用 <a href="http://www.yiichina.com/api/CActiveRecord#save" target="_blank" rel="noopener">save()</a> 时， AR 会自动执行数据验证。 验证是基于在 AR 类的 <a href="http://www.yiichina.com/api/CModel#rules" target="_blank" rel="noopener">rules()</a> 方法中指定的规则进行的。 关于验证规则的更多详情，请参考 <a href="http://www.yiichina.com/guide/form.model#declaring-validation-rules" target="_blank" rel="noopener">声明验证规则</a> 一节。 下面是保存记录时所需的典型的工作流。
+<div>
+<div>
+<pre>if($post-&gt;save()){
+    // 数据有效且成功插入/更新}else{
+    // 数据无效，调用  getErrors() 提取错误信息}</pre>
+</div>
+</div>
+当要插入或更新的数据由最终用户在一个 HTML 表单中提交时，我们需要将其赋给相应的 AR 属性。 我们可以通过类似如下的方式实现：
+<div>
+<div>
+<pre>$post-&gt;title=$_POST['title'];
+$post-&gt;content=$_POST['content'];
+$post-&gt;save();</pre>
+</div>
+</div>
+如果有很多列，我们可以看到一个用于这种复制的很长的列表。 这可以通过使用如下所示的 <a href="http://www.yiichina.com/api/CActiveRecord#attributes" target="_blank" rel="noopener">attributes</a> 属性简化操作。 更多信息可以在 <a href="http://www.yiichina.com/guide/form.model#securing-attribute-assignments" target="_blank" rel="noopener">安全的特性赋值</a> 一节和 <a href="http://www.yiichina.com/guide/form.action" target="_blank" rel="noopener">创建动作</a> 一节找到。
+<div>
+<div>
+<pre>// 假设 $_POST['Post'] 是一个以列名索引列值为值的数组$post-&gt;attributes=$_POST['Post'];
+$post-&gt;save();</pre>
+</div>
+</div>
+<h2>对比记录</h2>
+类似于表记录，AR 实例由其主键值来识别。 因此，要对比两个 AR 实例，假设它们属于相同的 AR 类， 我们只需要对比它们的主键值。 然而,一个更简单的方式是调用 <a href="http://www.yiichina.com/api/CActiveRecord#equals" target="_blank" rel="noopener">CActiveRecord::equals()</a>。
+<blockquote>信息: 不同于 AR 在其他框架的执行, Yii 在其 AR 中支持多个主键. 一个复合主键由两个或更多字段构成。相应地， 主键值在 Yii 中表现为一个数组. <a href="http://www.yiichina.com/api/CActiveRecord#primaryKey" target="_blank" rel="noopener">primaryKey</a> 属性给出了一个 AR 实例的主键值。</blockquote>
+<h2>自定义</h2>
+<a href="http://www.yiichina.com/api/CActiveRecord" target="_blank" rel="noopener">CActiveRecord</a> 提供了几个占位符方法，它们可以在子类中被覆盖以自定义其工作流。
+<ul>
+ 	<li><a href="http://www.yiichina.com/api/CModel#beforeValidate" target="_blank" rel="noopener">beforeValidate</a> 和</li>
+ 	<li><a href="http://www.yiichina.com/api/CActiveRecord#beforeSave" target="_blank" rel="noopener">beforeSave</a> 和 <a href="http://www.yiichina.com/api/CActiveRecord#afterSave" target="_blank" rel="noopener">afterSave</a>: 这两个将在保存 AR 实例之前和之后被调用。</li>
+ 	<li><a href="http://www.yiichina.com/api/CActiveRecord#beforeDelete" target="_blank" rel="noopener">beforeDelete</a> 和 <a href="http://www.yiichina.com/api/CActiveRecord#afterDelete" target="_blank" rel="noopener">afterDelete</a>: 这两个将在一个 AR 实例被删除之前和之后被调用。</li>
+ 	<li><a href="http://www.yiichina.com/api/CActiveRecord#afterConstruct" target="_blank" rel="noopener">afterConstruct</a>: 这个将在每个使用 new 操作符创建 AR 实例后被调用。</li>
+ 	<li><a href="http://www.yiichina.com/api/CActiveRecord#beforeFind" target="_blank" rel="noopener">beforeFind</a>: 这个将在一个 AR 查找器被用于执行查询（例如 find(), findAll()）之前被调用。 1.0.9 版本开始可用。</li>
+ 	<li><a href="http://www.yiichina.com/api/CActiveRecord#afterFind" target="_blank" rel="noopener">afterFind</a>: 这个将在每个 AR 实例作为一个查询结果创建时被调用。</li>
+</ul>
+<h2>使用 AR 处理事务</h2>
+每个 AR 实例都含有一个属性名叫 <a href="http://www.yiichina.com/api/CActiveRecord#dbConnection" target="_blank" rel="noopener">dbConnection</a> ，是一个 <a href="http://www.yiichina.com/api/CDbConnection" target="_blank" rel="noopener">CDbConnection</a> 的实例，这样我们可以在需要时配合 AR 使用由 Yii DAO 提供的 <a href="http://www.yiichina.com/guide/database.dao#using-transactions" target="_blank" rel="noopener">事务</a> 功能:
+<div>
+<div>
+<pre>$model=Post::model();
+$transaction=$model-&gt;dbConnection-&gt;beginTransaction();
+try{
+    // 查找和保存是可能由另一个请求干预的两个步骤
+    // 这样我们使用一个事务以确保其一致性和完整性
+    $post=$model-&gt;findByPk(10);
+    $post-&gt;title='new post title';
+    $post-&gt;save();
+    $transaction-&gt;commit();
+}catch(Exception $e){
+    $transaction-&gt;rollBack();
+}</pre>
+</div>
+</div>
+<h2>命名范围</h2>
+<blockquote>Note: 对命名范围的支持从版本 1.0.5 开始。 命名范围的最初想法来源于 Ruby on Rails.</blockquote>
+命名范围(named scope) 表示一个 命名的（named） 查询规则，它可以和其他命名范围联合使用并应用于 Active Record 查询。
+
+命名范围主要是在 <a href="http://www.yiichina.com/api/CActiveRecord#scopes" target="_blank" rel="noopener">CActiveRecord::scopes()</a> 方法中以名字-规则对的方式声明。 如下代码在 Post 模型类中声明了两个命名范围, published 和 recently。
+<div>
+<div>
+<pre>class Post extends CActiveRecord{
+    ......
+    public function scopes()
+    {
+        return array(
+            'published'=&gt;array(
+                'condition'=&gt;'status=1',
+            ),
+            'recently'=&gt;array(
+                'order'=&gt;'create_time DESC',
+                'limit'=&gt;5,
+            ),
+        );
+    }}</pre>
+</div>
+</div>
+每个命名范围声明为一个可用于初始化 <a href="http://www.yiichina.com/api/CDbCriteria" target="_blank" rel="noopener">CDbCriteria</a> 实例的数组。 例如，recently 命名范围指定 order 属性为create_time DESC ， limit 属性为 5。他们翻译为查询规则后就会返回最近的5篇帖子。
+
+命名范围多用作 find 方法调用的修改器。 几个命名范围可以链到一起形成一个更有约束性的查询结果集。例如， 要找到最近发布的帖子， 我们可以使用如下代码：
+<div>
+<div>
+<pre>$posts=Post::model()-&gt;published()-&gt;recently()-&gt;findAll();</pre>
+</div>
+</div>
+总体来说，命名范围必须出现在一个 find 方法调用的左边。 它们中的每一个都提供一个查询规则，并联合到其他规则， 包括传递给 find 方法调用的那一个。 最终结果就像给一个查询添加了一系列过滤器。
+
+从版本 1.0.6 开始，命名范围也可用于 update 和 delete 方法。 例如，如下代码将删除所有最近发布的帖子：
+<div>
+<div>
+<pre>Post::model()-&gt;published()-&gt;recently()-&gt;delete();</pre>
+</div>
+</div>
+<blockquote>注意: 命名范围只能用于类级别方法。也就是说，此方法必须使用 ClassName::model() 调用。</blockquote>
+<h3>参数化的命名范围</h3>
+命名范围可以参数化。例如， 我们想自定义 recently 命名范围中指定的帖子数量，要实现此目的，不是在<a href="http://www.yiichina.com/api/CActiveRecord#scopes" target="_blank" rel="noopener">CActiveRecord::scopes</a> 方法中声明命名范围， 而是需要定义一个名字和此命名范围的名字相同的方法：
+<div>
+<div>
+<pre>public function recently($limit=5){
+    $this-&gt;getDbCriteria()-&gt;mergeWith(array(
+        'order'=&gt;'create_time DESC',
+        'limit'=&gt;$limit,
+    ));
+    return $this;
+}</pre>
+</div>
+</div>
+然后，我们就可以使用如下语句获取3条最近发布的帖子。
+<div>
+<div>
+<pre>$posts=Post::model()-&gt;published()-&gt;recently(3)-&gt;findAll();</pre>
+</div>
+</div>
+上面的代码中，如果我们没有提供参数 3，我们将默认获取 5 条最近发布的帖子。
+<h3>默认的命名范围</h3>
+模型类可以有一个默认命名范围，它将应用于所有 (包括相关的那些) 关于此模型的查询。例如，一个支持多种语言的网站可能只想显示当前用户所指定的语言的内容。 因为可能会有很多关于此网站内容的查询， 我们可以定义一个默认的命名范围以解决此问题。 为实现此目的，我们覆盖 <a href="http://www.yiichina.com/api/CActiveRecord#defaultScope" target="_blank" rel="noopener">CActiveRecord::defaultScope</a> 方法如下：
+<div>
+<div>
+<pre>class Content extends CActiveRecord{
+    public function defaultScope()
+    {
+        return array(
+            'condition'=&gt;"language='".Yii::app()-&gt;language."'",
+        );
+    }}</pre>
+</div>
+</div>
+现在，如果下面的方法被调用，将会自动使用上面定义的查询规则：
+<div>
+<div>
+<pre>$contents=Content::model()-&gt;findAll();</pre>
+</div>
+</div>
+注意，默认的命名范围只会应用于 SELECT 查询。INSERT, UPDATE 和 DELETE 查询将被忽略。
+
+</div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div>==========================================================================================================================</div>
+<div>                                                                                                                                          缓存</div>
+<div>==========================================================================================================================</div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div>==========================================================================================================================</div>
+<div>                                                                                                                                        扩展 Yii</div>
+<div>==========================================================================================================================</div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div>==========================================================================================================================</div>
+<div>                                                                                                                                        测试</div>
+<div>==========================================================================================================================</div>
+<div></div>
+<div></div>
+<div></div>
+<div>==========================================================================================================================</div>
+<div>                                                                                                                                      专题</div>
+<div>==========================================================================================================================</div>
+<div>
+<h1>验证和授权</h1>
+</div>
+<div> 验证是指核查一个人是否真的是他自己所声称的那个人。这通常需要一个用户名和密码， 但也包括任何其他可以表明身份的方式，例如一个智能卡，指纹等等。</div>
+<div> 授权则是找出已通过验证的用户是否允许操作特定的资源。 这一般是通过查询此用户是否属于一个有权访问该资源的角色来判断的。</div>
+<div></div>
+<div>Yii 有一个内置的验证/授权（auth）框架，用起来很方便，还能对其进行自定义，使其符合特殊的需求</div>
+<div></div>
+<div>auth 框架的核心是一个预定义的 用户（user）应用组件 它是一个实现了 <a href="http://www.yiichina.com/api/IWebUser" target="_blank" rel="noopener">IWebUser</a> 接口的对象。 此用户组件代表当前用户的持久性认证信息</div>
+<div>可以通过Yii::app()-&gt;user在任何地方访问</div>
+<div>使用此用户组件，我们可以通过 <a href="http://www.yiichina.com/api/CWebUser#isGuest" target="_blank" rel="noopener">CWebUser::isGuest</a> 检查检查一个用户是否登陆</div>
+<div>可以 <a href="http://www.yiichina.com/api/CWebUser#login" target="_blank" rel="noopener">登录（login）</a> 或 <a href="http://www.yiichina.com/api/CWebUser#logout" target="_blank" rel="noopener">注销（logout）</a> 一个用户</div>
+<div>可以通过<a href="http://www.yiichina.com/api/CWebUser#checkAccess" target="_blank" rel="noopener">CWebUser::checkAccess</a>检查此用户是否可以执行特定的操作</div>
+<div>可以获取此用户的<a href="http://www.yiichina.com/api/CWebUser#name" target="_blank" rel="noopener">唯一标识（unique identifier）</a>及其他持久性身份信息</div>
+<div></div>
+<div>
+<h2>定义身份类</h2>
+</div>
+<div>为了验证一个用户，我们定义一个有验证逻辑的身份类。这个身份类实现<a href="http://www.yiichina.com/api/IUserIdentity" target="_blank" rel="noopener">IUserIdentity</a> 接口</div>
+<div>
+
+不同的类可能实现不同的验证方式（例如：OpenID，LDAP）。最好是继承 <a href="http://www.yiichina.com/api/CUserIdentity" target="_blank" rel="noopener">CUserIdentity</a>，此类是居于用户名和密码的验证方式。定义身份类的主要工作是实现<a href="http://www.yiichina.com/api/IUserIdentity#authenticate" target="_blank" rel="noopener">IUserIdentity::authenticate</a>方法。在用户会话中根据需要，身份类可能需要定义别的身份信息
+
+</div>
+<div>使用<a href="http://www.yiichina.com/guide/database.ar" target="_blank" rel="noopener">Active Record</a>来验证提供的用户名、密码和数据库的用户表是否吻合。</div>
+<div>通过重写getId函数来返回验证过程中获得的_id变量（缺省的实现则是返回用户名）。</div>
+<div>在验证过程中，我们还借助<a href="http://www.yiichina.com/api/CBaseUserIdentity#setState" target="_blank" rel="noopener">CBaseUserIdentity::setState</a>函数把获得的title信息存成一个状态</div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div>
+<h2>登录和注销</h2>
+</div>
+<div>
+
+使用身份类和用户部件，我们方便的实现登录和注销。
+<div>
+<div>
+<pre>// 使用提供的用户名和密码登录用户$identity=new UserIdentity($username,$password);
+if($identity-&gt;authenticate())
+    Yii::app()-&gt;user-&gt;login($identity);
+else
+    echo $identity-&gt;errorMessage;
+......
+// 注销当前用户Yii::app()-&gt;user-&gt;logout();</pre>
+</div>
+</div>
+</div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div>
+<h3>基于Cookie 的登录</h3>
+</div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div>
+<h3>授权处理结果</h3>
+</div>
+<div></div>
+<div></div>
+<div></div>
+<div>
+<h2>访问控制过滤器</h2>
+</div>
+<div></div>
+<div></div>
+<div></div>
+<div>
+<h3>概览（Overview）</h3>
+</div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div>
+<h2>配置授权管理器</h2>
+</div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div>
+<h2>定义授权等级体系</h2>
+</div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div>
+<h2>使用业务规则</h2>
+</div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div>
+<h3>权限检查</h3>
+</div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div>
+<h3>使用默认角色</h3>
+</div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div>========================================================================================================================</div>
+<div>                                                                                                                        关键word</div>
+<div>========================================================================================================================</div>
+<div>Yii::app()
+Yii::app()  返回在index.php中创建的CWebApplication实例
+主要负责一些全局性的功能模块
+比如Yii::app()-&gt;getUser()返回的是CWebUser实例（用于表达当前用户的验证信息）
+在index.php使用的配置文件，其实质就是对Yii::app()进行属性的初始化
+关于CComponent的说明，这是Yii的基石</div>
+要访问一个应用组件:
+
+</div>
+<!--more-->
+
+<!--more-->
+
+<!--more-->
+
+<!--more-->
+
+<!--more-->
+
+<!--more-->
+
+<!--more-->
+
+<!--more-->
+
+<!--more-->
+
+<!--more-->
+
+<!--more-->
+
+<!--more-->
+<div>
+
+使用 Yii::app()-&gt;ComponentID ，其中的 ComponentID 是指组件的ID（例如Yii::app()-&gt;cache）。
+<div></div>
+</div>
+<div>========================================================================================================================</div>
+<div>                                                                                                                      专题总结</div>
+<div>========================================================================================================================</div>
+<div></div>
+<div></div>
+<div>事务机制：</div>
+<div>
+<ol start="1">
+ 	<li>$trans = Yii::app()-&gt;db-&gt;beginTransaction();</li>
+ 	<li>try {</li>
+ 	<li>    $manufacturer = new Manufacturer();</li>
+ 	<li>    $manufacturer-&gt;name = $name;</li>
+ 	<li>    $manufacturer-&gt;email = $email;</li>
+ 	<li>    $manufacturer-&gt;save();</li>
+ 	<li>    $trans-&gt;commit();</li>
+ 	<li>} catch (Exception $e) {</li>
+ 	<li>    $trans-&gt;rollback();</li>
+ 	<li>    $this-&gt;response(array('status' =&gt; 1, 'msg' =&gt; $e-&gt;getMessage()));</li>
+ 	<li>}</li>
+</ol>
+</div>
+<div></div>
+<div></div>
+<div>
+<pre>$transaction=$connection-&gt;beginTransaction();
+try{
+    $connection-&gt;createCommand($sql1)-&gt;execute();
+    $connection-&gt;createCommand($sql2)-&gt;execute();
+    //.... other SQL executions
+    $transaction-&gt;commit();
+}catch(Exception $e) // 如果有一条查询失败，则会抛出异常{
+    $transaction-&gt;rollBack();
+}</pre>
+</div>
+<div>Yii思想关键字：</div>
+<div>1.做项目</div>
+<div>2.yii源代码</div>
+<div>3.UML图 --&gt;理解框架</div>
+<div>
+
+4.MVC  ，组件，事件
+
+杂谈：
+IAuthManager-&gt;createAuthItem
+\
+CApplicationComponent
+\
+CAuthManager-&gt;createRole  call createAuthItem
+\
+CDbAuthManager  -&gt;implents createAuthItem
+
+</div>
+&nbsp;
