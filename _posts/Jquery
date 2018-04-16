@@ -1,0 +1,677 @@
+<div>$('#parent_id').find("option:selected").val()</div>
+<div></div>
+<span class="Apple-style-span">$(document).ready():</span>
+<div><span class="Apple-style-span">想要一个事件运行在你的页面上，须在$(document).ready()里调用这个事件。</span></div>
+<div><span class="Apple-style-span">所有包括在$(document).ready()里面的元素或事件都将会在DOM完成加载之后立即加载，并且在页面内容加载之前</span></div>
+<div><span class="Apple-style-span">实例：</span></div>
+<div>
+<pre><span class="Apple-style-span">&lt;head&gt;
+&lt;script type="text/javascript" src="jquery.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript"&gt;
+     $(document).ready(function(){
+            $("p").click(function(){
+            $(this).hide();
+     });
+});
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;p&gt;If you click on me, I will disappear.&lt;/p&gt;
+&lt;/body
+</span></pre>
+</div>
+<!--more--><span style="color: #000000; font-size: 2.4em;">jQuery HTML</span>
+<div>
+<h2><span class="Apple-style-span">jQuery DOM 操作</span></h2>
+<div><span class="Apple-style-span">DOM = Document Object Model（文档对象模型）</span></div>
+<div>
+<h2><span class="Apple-style-span">获得内容 - text()、html() 以及 val()</span></h2>
+</div>
+<div>
+<ul>
+ 	<li><span class="Apple-style-span">text() - 设置或返回所选元素的文本内容</span></li>
+ 	<li><span class="Apple-style-span">html() - 设置或返回所选元素的内容（包括 HTML 标记）</span></li>
+ 	<li><span class="Apple-style-span">val() - 设置或返回表单字段的值</span></li>
+</ul>
+</div>
+<div>
+
+<span class="Apple-style-span">通过 jQuery text() 和 html() 方法来获得内容：</span>
+<h3><span class="Apple-style-span">实例</span></h3>
+<pre><span class="Apple-style-span">$("#btn1").click(function(){
+  alert("Text: " + $("#test").text());
+});
+$("#btn2").click(function(){
+  alert("HTML: " + $("#test").html());
+});</span></pre>
+</div>
+<div>
+<h2></h2>
+<span class="Apple-style-span">通过 text()、html() 以及 val() 方法来设置内容：</span>
+<h3><span class="Apple-style-span">实例</span></h3>
+<pre><span class="Apple-style-span">$("#btn1").click(function(){
+     $("#test1").text("Hello world!");
+});
+$("#btn2").click(function(){
+     $("#test2").html("&lt;b&gt;Hello world!&lt;/b&gt;");
+});
+$("#btn3").click(function(){
+     $("#test3").val("Dolly Duck");
+});
+</span></pre>
+<h2><span class="Apple-style-span"> </span></h2>
+<div>
+<h2><span class="Apple-style-span">text()、html() 以及 val() 的回调函数</span></h2>
+</div>
+<div>
+
+<span class="Apple-style-span">回调函数由两个参数：被选元素列表中当前元素的下标，以及原始（旧的）值。然后以函数新值返回您希望使用的字符串。</span>
+
+<span class="Apple-style-span">带有回调函数的 text() 和 html()：</span>
+<h3><span class="Apple-style-span">实例</span></h3>
+<pre><span class="Apple-style-span">$("#btn1").click(function(){
+  $("#test1").text(function(i,origText){
+    return "Old text: " + origText + " New text: Hello world!
+    (index: " + i + ")";
+  });
+});
+
+$("#btn2").click(function(){
+  $("#test2").html(function(i,origText){
+    return "Old html: " + origText + " New html: Hello &lt;b&gt;world!&lt;/b&gt;
+    (index: " + i + ")";
+  });
+});
+</span></pre>
+</div>
+<h2><span class="Apple-style-span"> </span><span class="Apple-style-span">获取属性 - attr()</span></h2>
+</div>
+<div>
+
+<span class="Apple-style-span">如何获得链接中 href 属性的值：</span>
+<h3><span class="Apple-style-span">实例</span></h3>
+<pre><span class="Apple-style-span">$("button").click(function(){
+  alert($("#w3s").attr("href"));
+});</span></pre>
+</div>
+<div>
+
+<span class="Apple-style-span">改变（设置）链接中 href 属性的值：</span>
+<h3><span class="Apple-style-span">实例</span></h3>
+<pre><span class="Apple-style-span">$("button").click(function(){
+  $("#w3s").attr("href","http://www.w3school.com.cn/jquery");
+});
+</span></pre>
+</div>
+</div>
+<!--more-->
+
+&nbsp;
+<div>
+<h1><span class="Apple-style-span">jQuery 遍历</span></h1>
+</div>
+<div><span class="Apple-style-span">jQuery 遍历，意为“移动”，用于根据其相对于其他元素的关系来“查找”（或选取）HTML 元素。以某项选择开始，并沿着这个选择移动，直到抵达您期望的元素为止</span></div>
+<div>
+<h3><span class="Apple-style-span">图示解释：</span></h3>
+<span class="Apple-style-span"><img src="file:///C:/Users/YUANWA~1/AppData/Local/Temp/enhtmlclip/Image(1).gif" alt="遍历 DOM 树" /></span>
+
+</div>
+<div><span class="Apple-style-span"> </span></div>
+<div>
+<h2><span class="Apple-style-span">向上遍历 DOM 树</span></h2>
+<div>
+<h2><span class="Apple-style-span">jQuery parent() 方法</span></h2>
+<span class="Apple-style-span">parent() 方法返回被选元素的直接父元素,该方法只会向上一级对 DOM 树进行遍历</span>
+
+</div>
+</div>
+<div>
+<h3><span class="Apple-style-span">实例</span></h3>
+<pre><span class="Apple-style-span">$(document).ready(function(){
+  $("span").parent();
+});
+</span></pre>
+</div>
+<div><span class="Apple-style-span"> </span></div>
+<div>
+<h2><span class="Apple-style-span">jQuery parents() 方法</span></h2>
+<span class="Apple-style-span">parents() 方法返回被选元素的所有祖先元素，它一路向上直到文档的根元素 (&lt;html&gt;)</span>
+
+</div>
+<div>
+<pre><span class="Apple-style-span">$(document).ready(function(){
+  $("span").parents();
+});
+</span></pre>
+</div>
+<div><span class="Apple-style-span"> </span></div>
+<div><span class="Apple-style-span">使用可选参数来过滤对祖先元素的搜索</span></div>
+<div>
+<h3><span class="Apple-style-span">实例</span></h3>
+<pre><span class="Apple-style-span">$(document).ready(function(){
+  $("span").parents("ul");
+});
+</span></pre>
+</div>
+<div><span class="Apple-style-span"> </span></div>
+<div>
+<h2><span class="Apple-style-span">jQuery parentsUntil() 方法</span></h2>
+</div>
+<div><span class="Apple-style-span">parentsUntil() 方法返回介于两个给定元素之间的所有祖先元素</span></div>
+<div>
+
+<span class="Apple-style-span">返回介于 &lt;span&gt; 与 &lt;div&gt; 元素之间的所有祖先元素：</span>
+<h3><span class="Apple-style-span">实例</span></h3>
+<pre><span class="Apple-style-span">$(document).ready(function(){
+  $("span").parentsUntil("div");
+});
+</span></pre>
+</div>
+<div><span class="Apple-style-span"> </span></div>
+<div>
+<h2><span class="Apple-style-span">向下遍历 DOM 树</span></h2>
+</div>
+<div>
+<h2><span class="Apple-style-span">jQuery children() 方法</span></h2>
+<span class="Apple-style-span">children() 方法返回被选元素的所有直接子元素</span>
+
+</div>
+<div>
+
+<span class="Apple-style-span">返回每个 &lt;div&gt; 元素的所有直接子元素：</span>
+<h3><span class="Apple-style-span">实例</span></h3>
+<pre><span class="Apple-style-span">$(document).ready(function(){
+  $("div").children();
+});
+</span></pre>
+</div>
+<div><span class="Apple-style-span"> </span></div>
+<div>
+
+<span class="Apple-style-span">返回类名为 "1" 的所有 &lt;p&gt; 元素，并且它们是 &lt;div&gt; 的直接子元素：</span>
+<h3><span class="Apple-style-span">实例</span></h3>
+<pre><span class="Apple-style-span">$(document).ready(function(){
+  $("div").children("p.1");
+});
+</span></pre>
+</div>
+<div>
+<h2><span class="Apple-style-span">jQuery find() 方法</span></h2>
+<span class="Apple-style-span">find() 方法返回被选元素的后代元素，一路向下直到最后一个后代</span>
+
+</div>
+<div>
+
+<span class="Apple-style-span">返回属于 &lt;div&gt; 后代的所有 &lt;span&gt; 元素：</span>
+<h3><span class="Apple-style-span">实例</span></h3>
+<pre><span class="Apple-style-span">$(document).ready(function(){
+  $("div").find("span");
+});
+</span></pre>
+</div>
+<div>返回 &lt;div&gt; 的所有后代：</div>
+<div>
+<h3><span class="Apple-style-span">实例</span></h3>
+<pre><span class="Apple-style-span">$(document).ready(function(){
+  $("div").find("*");
+});
+</span></pre>
+</div>
+<div><span class="Apple-style-span"> </span></div>
+<div>
+<h2><span class="Apple-style-span">在 DOM 树中水平遍历</span></h2>
+</div>
+<div><span class="Apple-style-span"> </span></div>
+<div>
+<h2><span class="Apple-style-span">jQuery siblings() 方法</span></h2>
+<span class="Apple-style-span">siblings() 方法返回被选元素的所有同胞元素</span>
+
+</div>
+<div>
+
+<span class="Apple-style-span">返回 &lt;h2&gt; 的所有同胞元素：</span>
+<h3><span class="Apple-style-span">实例</span></h3>
+<pre><span class="Apple-style-span">$(document).ready(function(){
+  $("h2").siblings();
+});
+</span></pre>
+</div>
+<div>返回属于 &lt;h2&gt; 的同胞元素的所有 &lt;p&gt; 元素：</div>
+<div>
+<h3><span class="Apple-style-span">实例</span></h3>
+<pre><span class="Apple-style-span">$(document).ready(function(){
+  $("h2").siblings("p");
+});
+</span></pre>
+</div>
+<div>
+<h2><span class="Apple-style-span">jQuery next() 方法</span></h2>
+<span class="Apple-style-span">next() 方法返回被选元素的下一个同胞元素</span>
+
+</div>
+<div>
+
+<span class="Apple-style-span">返回 &lt;h2&gt; 的下一个同胞元素：</span>
+<h3><span class="Apple-style-span">实例</span></h3>
+<pre><span class="Apple-style-span">$(document).ready(function(){
+  $("h2").next();
+});
+</span></pre>
+</div>
+<div>
+<h2><span class="Apple-style-span">jQuery nextAll() 方法</span></h2>
+<span class="Apple-style-span">nextAll() 方法返回被选元素的所有跟随的同胞元素</span>
+
+</div>
+<div>
+
+<span class="Apple-style-span">返回 &lt;h2&gt; 的所有跟随的同胞元素：</span>
+<h3><span class="Apple-style-span">实例</span></h3>
+<pre><span class="Apple-style-span">$(document).ready(function(){
+  $("h2").nextAll();
+});
+</span></pre>
+</div>
+<div>
+<h2><span class="Apple-style-span">jQuery nextUntil() 方法</span></h2>
+<span class="Apple-style-span">nextUntil() 方法返回介于两个给定参数之间的所有跟随的同胞元素</span>
+
+</div>
+<div>
+
+<span class="Apple-style-span">返回介于 &lt;h2&gt; 与 &lt;h6&gt; 元素之间的所有同胞元素：</span>
+<h3><span class="Apple-style-span">实例</span></h3>
+<pre><span class="Apple-style-span">$(document).ready(function(){
+  $("h2").nextUntil("h6");
+});
+</span></pre>
+</div>
+<div><span class="Apple-style-span"> </span></div>
+<div>
+<h2><span class="Apple-style-span">jQuery prev(), prevAll() &amp; prevUntil() 方法</span></h2>
+<span class="Apple-style-span">prev(), prevAll() 以及 prevUntil() 方法的工作方式与上面的方法类似，只不过方向相反而已：它们返回的是前面的同胞元素（在 DOM 树中沿着同胞元素向后遍历，而不是向前）</span>
+
+</div>
+<div>
+<h1><span class="Apple-style-span">jQuery Ajax</span></h1>
+</div>
+<div><span class="Apple-style-span">AJAX 是与服务器交换数据的艺术，它在不重载全部页面的情况下，实现了对部分网页的更新</span></div>
+<div><span class="Apple-style-span">通过 jQuery AJAX 方法，您能够使用 HTTP Get 和 HTTP Post 从远程服务器上请求文本、HTML、XML 或 JSON - 同时您能够把这些外部数据直接载入网页的被选元素中。</span></div>
+<div>
+<h2><span class="Apple-style-span">jQuery load() 方法</span></h2>
+</div>
+<div><span class="Apple-style-span">load() 方法从服务器加载数据，并把返回的数据放入被选元素中</span></div>
+<div>
+<h3><span class="Apple-style-span">语法：</span></h3>
+<pre><span class="Apple-style-span">$(selector).load(URL,data,callback);
+</span></pre>
+</div>
+<div>
+
+<span class="Apple-style-span">必需的 URL 参数规定您希望加载的 URL。</span>
+
+<span class="Apple-style-span">可选的 data 参数规定与请求一同发送的查询字符串键/值对集合。</span>
+
+<span class="Apple-style-span">可选的 callback 参数是 load() 方法完成后所执行的函数名称</span>
+
+</div>
+<div>
+
+<span class="Apple-style-span">会把文件 "demo_test.txt" 的内容加载到指定的 &lt;div&gt; 元素中：</span>
+<h3><span class="Apple-style-span">示例</span></h3>
+<pre><span class="Apple-style-span">$("#div1").load("demo_test.txt");
+</span></pre>
+</div>
+<div>
+
+<span class="Apple-style-span">把 jQuery 选择器添加到 URL 参数。</span>
+
+<span class="Apple-style-span">下面的例子把 "demo_test.txt" 文件中 id="p1" 的元素的内容，加载到指定的 &lt;div&gt; 元素中：</span>
+<h3><span class="Apple-style-span">实例</span></h3>
+<pre><span class="Apple-style-span">$("#div1").load("demo_test.txt #p1");
+</span></pre>
+</div>
+<div>
+
+<span class="Apple-style-span">可选的 callback 参数规定当 load() 方法完成后所要允许的回调函数。回调函数可以设置不同的参数：</span>
+<ul>
+ 	<li><span class="Apple-style-span">responseTxt - 包含调用成功时的结果内容</span></li>
+ 	<li><span class="Apple-style-span">statusTXT - 包含调用的状态</span></li>
+ 	<li><span class="Apple-style-span">xhr - 包含 XMLHttpRequest 对象</span></li>
+</ul>
+</div>
+<div>
+
+<span class="Apple-style-span">下面的例子会在 load() 方法完成后显示一个提示框。如果 load() 方法已成功，则显示“外部内容加载成功！”，而如果失败，则显示错误消息：</span>
+<h3><span class="Apple-style-span">实例</span></h3>
+<pre><span class="Apple-style-span">$("button").click(function(){
+  $("#div1").load("demo_test.txt",function(responseTxt,statusTxt,xhr){
+    if(statusTxt=="success")
+      alert("外部内容加载成功！");
+    if(statusTxt=="error")
+      alert("Error: "+xhr.status+": "+xhr.statusText);
+  });
+});
+</span></pre>
+</div>
+<div>
+<h2><span class="Apple-style-span">HTTP 请求：GET vs. POST</span></h2>
+<span class="Apple-style-span">两种在客户端和服务器端进行请求-响应的常用方法是：GET 和 POST。</span>
+<ul>
+ 	<li><span class="Apple-style-span">GET - 从指定的资源请求数据</span></li>
+ 	<li><span class="Apple-style-span">POST - 向指定的资源提交要处理的数据</span></li>
+</ul>
+</div>
+<div>
+
+<span class="Apple-style-span">GET 基本上用于从服务器获得（取回）数据。注释：GET 方法可能返回缓存数据。</span>
+
+<span class="Apple-style-span">POST 也可用于从服务器获取数据。不过，POST 方法不会缓存数据，并且常用于连同请求一起发送数据</span>
+
+</div>
+<div>
+
+<span class="Apple-style-span">$.get() 方法通过 HTTP GET 请求从服务器上请求数据。</span>
+<h3><span class="Apple-style-span">语法：</span></h3>
+<pre><span class="Apple-style-span">$.get(                                                                                                  URL,                                                                                             callbackFunction                                                                                );</span></pre>
+</div>
+<div>
+<h3><span class="Apple-style-span">实例</span></h3>
+<pre><span class="Apple-style-span">$("button").click(function(){
+         url="/demo_test.php"                                                                             $.get(                                                                                                url,                                                                                             function(data,status){
+                   alert("Data: " + data + "\nStatus: " + status);
+              }                                                                                           );
+});
+</span></pre>
+</div>
+<div>
+
+<span class="Apple-style-span">$.get() 的第一个参数是我们希望请求的 URL（"demo_test.php"）</span>
+
+<span class="Apple-style-span">第二个参数是回调函数。第一个回调参数存有被请求页面的内容，第二个回调参数存有请求的状态</span>
+
+</div>
+<div>
+<h2><span class="Apple-style-span">jQuery $.post() 方法</span></h2>
+</div>
+<div>
+<h3><span class="Apple-style-span">语法：</span></h3>
+<pre><span class="Apple-style-span">$.post(                                                                                                    URL,                                                                                             data,                                                                                            callbackFunction                                                                              );</span></pre>
+</div>
+<div>
+
+<span class="Apple-style-span">必需的 URL 参数规定您希望请求的 URL。</span>
+
+<span class="Apple-style-span">可选的 data 参数规定连同请求发送的数据。</span>
+
+<span class="Apple-style-span">可选的 callback 参数是请求成功后所执行的函数名。</span>
+
+</div>
+<div>
+
+<span class="Apple-style-span">使用 $.post() 连同请求一起发送数据：</span>
+<h3><span class="Apple-style-span">实例</span></h3>
+<pre><span class="Apple-style-span">$("button").click(function(){                                                                     $.post(                                                                                                "demo_test_post.asp",
+       {name:"Donald Duck",city:"Duckburg"},
+       function(data,status){
+            alert("Data: " + data + "\nStatus: " + status);
+       });
+});
+
+
+Jquery数组
+</span></pre>
+<div class="postBody">
+<div id="cnblogs_post_body">
+<h5>$.each(array, [callback])遍历,很常用</h5>
+<div class="cnblogs_Highlighter">
+<div>
+<div id="highlighter_774292" class="syntaxhighlighter javascript">
+<table class=" xhe-border" border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+<div class="line number2 index1 alt1">2</div>
+<div class="line number3 index2 alt2">3</div>
+<div class="line number4 index3 alt1">4</div>
+<div class="line number5 index4 alt2">5</div>
+<div class="line number6 index5 alt1">6</div>
+<div class="line number7 index6 alt2">7</div>
+<div class="line number8 index7 alt1">8</div></td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="javascript keyword">var</code> <code class="javascript plain">arr = [</code><code class="javascript string">'javascript'</code><code class="javascript plain">, </code><code class="javascript string">'php'</code><code class="javascript plain">, </code><code class="javascript string">'java'</code><code class="javascript plain">, </code><code class="javascript string">'c++'</code><code class="javascript plain">, </code><code class="javascript string">'c#'</code><code class="javascript plain">, </code><code class="javascript string">'perl'</code><code class="javascript plain">, </code><code class="javascript string">'vb'</code><code class="javascript plain">, </code><code class="javascript string">'html'</code><code class="javascript plain">, </code><code class="javascript string">'css'</code><code class="javascript plain">, </code><code class="javascript string">'objective-c'</code><code class="javascript plain">];</code></div>
+<div class="line number2 index1 alt1"><code class="javascript plain">$.each(arr, </code><code class="javascript keyword">function</code><code class="javascript plain">(key, val) {</code></div>
+<div class="line number3 index2 alt2"><code class="javascript spaces">    </code><code class="javascript comments">// firebug console</code></div>
+<div class="line number4 index3 alt1"><code class="javascript spaces">    </code><code class="javascript plain">console.log(</code><code class="javascript string">'index in arr:'</code> <code class="javascript plain">+ key + </code><code class="javascript string">", corresponding value:"</code> <code class="javascript plain">+ val);</code></div>
+<div class="line number5 index4 alt2"><code class="javascript spaces">    </code><code class="javascript comments">// 如果想退出循环</code></div>
+<div class="line number6 index5 alt1"><code class="javascript spaces">    </code><code class="javascript comments">// return false;</code></div>
+<div class="line number7 index6 alt2"><code class="javascript plain">});</code></div>
+</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<h5>$.grep(array, callback, [invert])过滤,常用</h5>
+<div class="cnblogs_Highlighter">
+<div>
+<div id="highlighter_183832" class="syntaxhighlighter javascript">
+<table class=" xhe-border" border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+<div class="line number2 index1 alt1">2</div>
+<div class="line number3 index2 alt2">3</div>
+<div class="line number4 index3 alt1">4</div>
+<div class="line number5 index4 alt2">5</div>
+<div class="line number6 index5 alt1">6</div>
+<div class="line number7 index6 alt2">7</div>
+<div class="line number8 index7 alt1">8</div>
+<div class="line number9 index8 alt2">9</div></td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="javascript keyword">var</code> <code class="javascript plain">temp = [];</code></div>
+<div class="line number2 index1 alt1"><code class="javascript plain">temp = $.grep(arr, </code><code class="javascript keyword">function</code><code class="javascript plain">(val, key) {</code></div>
+<div class="line number3 index2 alt2"><code class="javascript spaces">    </code><code class="javascript keyword">if</code><code class="javascript plain">(val.indexOf(</code><code class="javascript string">'c'</code><code class="javascript plain">) != -1)</code></div>
+<div class="line number4 index3 alt1"><code class="javascript spaces">        </code><code class="javascript keyword">return</code> <code class="javascript keyword">true</code><code class="javascript plain">;</code></div>
+<div class="line number5 index4 alt2"><code class="javascript spaces">    </code><code class="javascript comments">// 如果[invert]参数不给或为false, $.grep只收集回调函数返回true的数组元素</code></div>
+<div class="line number6 index5 alt1"><code class="javascript spaces">    </code><code class="javascript comments">// 反之[invert]参数为true, $.grep收集回调函数返回false的数组元素</code></div>
+<div class="line number7 index6 alt2"><code class="javascript plain">}, </code><code class="javascript keyword">false</code><code class="javascript plain">);</code></div>
+<div class="line number8 index7 alt1"><code class="javascript plain">console.dir(temp);</code></div>
+</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<h5>$.map(array, [callback])用的不是太多</h5>
+<div class="cnblogs_Highlighter">
+<div>
+<div id="highlighter_337207" class="syntaxhighlighter javascript">
+<table class=" xhe-border" border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+<div class="line number2 index1 alt1">2</div>
+<div class="line number3 index2 alt2">3</div>
+<div class="line number4 index3 alt1">4</div>
+<div class="line number5 index4 alt2">5</div>
+<div class="line number6 index5 alt1">6</div>
+<div class="line number7 index6 alt2">7</div>
+<div class="line number8 index7 alt1">8</div>
+<div class="line number9 index8 alt2">9</div>
+<div class="line number10 index9 alt1">10</div>
+<div class="line number11 index10 alt2">11</div>
+<div class="line number12 index11 alt1">12</div>
+<div class="line number13 index12 alt2">13</div>
+<div class="line number14 index13 alt1">14</div></td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="javascript comments">//1.6之前的版本只支持数组</code></div>
+<div class="line number2 index1 alt1"><code class="javascript plain">temp = $.map(arr, </code><code class="javascript keyword">function</code><code class="javascript plain">(val, key) {</code></div>
+<div class="line number3 index2 alt2"><code class="javascript spaces">    </code><code class="javascript comments">//返回null,返回的数组长度减1</code></div>
+<div class="line number4 index3 alt1"><code class="javascript spaces">    </code><code class="javascript keyword">if</code><code class="javascript plain">(val === </code><code class="javascript string">'vb'</code><code class="javascript plain">) </code><code class="javascript keyword">return</code> <code class="javascript keyword">null</code><code class="javascript plain">;</code></div>
+<div class="line number5 index4 alt2"><code class="javascript spaces">    </code><code class="javascript keyword">return</code> <code class="javascript plain">val;</code></div>
+<div class="line number6 index5 alt1"><code class="javascript plain">});</code></div>
+<div class="line number7 index6 alt2"><code class="javascript plain">console.dir(temp);</code></div>
+<div class="line number8 index7 alt1"><code class="javascript comments">//1.6开始支持json格式的object</code></div>
+<div class="line number9 index8 alt2"><code class="javascript keyword">var</code> <code class="javascript plain">obj = {key1: </code><code class="javascript string">'val1'</code><code class="javascript plain">, key2: </code><code class="javascript string">'val2'</code><code class="javascript plain">, key3: </code><code class="javascript string">'val3'</code><code class="javascript plain">};</code></div>
+<div class="line number10 index9 alt1"><code class="javascript plain">temp = $.map(obj, </code><code class="javascript keyword">function</code><code class="javascript plain">(val, key) {</code></div>
+<div class="line number11 index10 alt2"><code class="javascript spaces">    </code><code class="javascript keyword">return</code> <code class="javascript plain">val;</code></div>
+<div class="line number12 index11 alt1"><code class="javascript plain">});</code></div>
+<div class="line number13 index12 alt2"><code class="javascript plain">console.dir(temp);</code></div>
+</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<h5>$.inArray(val, array)判断是否在指定数组中,常用</h5>
+<div class="cnblogs_Highlighter">
+<div>
+<div id="highlighter_443510" class="syntaxhighlighter javascript">
+<table class=" xhe-border" border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+<div class="line number2 index1 alt1">2</div>
+<div class="line number3 index2 alt2">3</div></td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="javascript comments">//返回元素在数组中的位置,0为起始位置,返回-1则未找到该元素</code></div>
+<div class="line number2 index1 alt1"><code class="javascript plain">console.log($.inArray(</code><code class="javascript string">'javascript'</code><code class="javascript plain">, arr));</code></div>
+</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<h5>$.merge(first, second)合并两个数组,使用频率一般</h5>
+<div class="cnblogs_Highlighter">
+<div>
+<div id="highlighter_501950" class="syntaxhighlighter javascript">
+<table class=" xhe-border" border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+<div class="line number2 index1 alt1">2</div>
+<div class="line number3 index2 alt2">3</div>
+<div class="line number4 index3 alt1">4</div>
+<div class="line number5 index4 alt2">5</div>
+<div class="line number6 index5 alt1">6</div>
+<div class="line number7 index6 alt2">7</div>
+<div class="line number8 index7 alt1">8</div>
+<div class="line number9 index8 alt2">9</div></td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="javascript keyword">var</code> <code class="javascript plain">frontEnd = [</code><code class="javascript string">'javascript'</code><code class="javascript plain">, </code><code class="javascript string">'css'</code><code class="javascript plain">, </code><code class="javascript string">'html'</code><code class="javascript plain">],</code></div>
+<div class="line number2 index1 alt1"><code class="javascript spaces">      </code><code class="javascript plain">backEnd = [</code><code class="javascript string">'java'</code><code class="javascript plain">, </code><code class="javascript string">'php'</code><code class="javascript plain">, </code><code class="javascript string">'c++'</code><code class="javascript plain">];</code></div>
+<div class="line number3 index2 alt2"><code class="javascript comments">// 这种方式会修改第一个参数, 即frontEnd数组</code></div>
+<div class="line number4 index3 alt1"><code class="javascript plain">temp = $.merge(frontEnd, backEnd);</code></div>
+<div class="line number5 index4 alt2"><code class="javascript plain">console.dir(temp);</code></div>
+<div class="line number6 index5 alt1"><code class="javascript plain">console.dir(frontEnd);</code></div>
+<div class="line number7 index6 alt2"><code class="javascript comments">// 可以用下面的方式来避免对原数组的影响</code></div>
+<div class="line number8 index7 alt1"><code class="javascript comments">// $.merge($.merge([], frontEnd), backEnd);</code></div>
+</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<h5>$.unique(array)过滤数组中的重复元素,不常用</h5>
+<div class="cnblogs_Highlighter">
+<div>blahblahblah....</div>
+</div>
+<div class="cnblogs_Highlighter">
+<div>
+<div id="highlighter_851609" class="syntaxhighlighter javascript">
+<table class=" xhe-border" border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+<div class="line number2 index1 alt1">2</div>
+<div class="line number3 index2 alt2">3</div>
+<div class="line number4 index3 alt1">4</div>
+<div class="line number5 index4 alt2">5</div>
+<div class="line number6 index5 alt1">6</div>
+<div class="line number7 index6 alt2">7</div>
+<div class="line number8 index7 alt1">8</div>
+<div class="line number9 index8 alt2">9</div></td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="javascript comments">// $.unique只支持DOM元素数组,去除重复DOM元素,不支持其他类型数组(String或者Number)</code></div>
+<div class="line number2 index1 alt1"><code class="javascript comments">// 获得原始的DOM数组,而不是jQuery封装的</code></div>
+<div class="line number3 index2 alt2"><code class="javascript keyword">var</code> <code class="javascript plain">divs = $(</code><code class="javascript string">'div'</code><code class="javascript plain">).get();</code></div>
+<div class="line number4 index3 alt1"><code class="javascript comments">// 增加几个class为dup的div</code></div>
+<div class="line number5 index4 alt2"><code class="javascript plain">divs = divs.concat($(</code><code class="javascript string">'div.dup'</code><code class="javascript plain">).get());</code></div>
+<div class="line number6 index5 alt1"><code class="javascript plain">console.log(</code><code class="javascript string">"before unique:"</code> <code class="javascript plain">+ divs.length);</code></div>
+<div class="line number7 index6 alt2"><code class="javascript plain">divs = $.unique(divs);</code></div>
+<div class="line number8 index7 alt1"><code class="javascript plain">console.log(</code><code class="javascript string">"after unique:"</code> <code class="javascript plain">+ divs.length);</code></div>
+</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<h5>$.makeArray(obj)将类数组对象转成数组,不常用</h5>
+<div class="cnblogs_Highlighter">
+<div>
+<div id="highlighter_625165" class="syntaxhighlighter javascript">
+<table class=" xhe-border" border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+<div class="line number2 index1 alt1">2</div>
+<div class="line number3 index2 alt2">3</div>
+<div class="line number4 index3 alt1">4</div>
+<div class="line number5 index4 alt2">5</div></td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="javascript comments">//首先什么是类数组对象?jQuery官网上用divs = getElementsByTag('div')来做例子</code></div>
+<div class="line number2 index1 alt1"><code class="javascript comments">//这个divs有类似数组的一些方法比如length,通过[index]方式获取元素等</code></div>
+<div class="line number3 index2 alt2"><code class="javascript comments">//然后通过$.makeArray(divs)使它转为数组,就可以用数组的其他功能</code></div>
+<div class="line number4 index3 alt1"><code class="javascript comments">//比如reverse(), pop()等</code></div>
+</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<h5>$(dom).toArray()将jQuery集合恢复成DOM数组,不常用</h5>
+<div class="cnblogs_Highlighter">
+<div>
+<div id="highlighter_90269" class="syntaxhighlighter javascript">
+<table class=" xhe-border" border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+<div class="line number2 index1 alt1">2</div></td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="javascript comments">//跟makeArray一样,相当的不常用,一般情况可以忽略</code></div>
+</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
