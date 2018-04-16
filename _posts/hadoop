@@ -1,0 +1,108 @@
+## 集群搭建
+```
+通常，集群里的一台机器被指定为 NameNode，另一台不同的机器被指定为JobTracker。这些机器是masters。余下的机器即作为DataNode也作为TaskTracker。这些机器是slaves
+
+Namenode是所有HDFS元数据的仲裁者和管理者
+一个典型的部署场景是一台机器上只运行一个Namenode实例，而集群中的其它机器分别运行一个Datanode实例
+
+```
+
+## 环境安装
+
+>- 1.前提环境check
+
+```
+java设置
+java -version
+ssh设置 
+which ssh
+ssh localhost
+```
+
+
+>- 2.hadoop下载
+
+```
+http://mirror.bit.edu.cn/apache/hadoop/common/hadoop-1.2.1/
+```
+
+>- 3.hadoop环境设置
+
+```
+hadoop-env.sh 设置JAVA_HOME
+
+hdfs-site.xml指定了HDFS的默认参数副本数，因为仅运行在一个节点上，所以这里的副本数为1：
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+  <property>
+    <name>fs.default.name</name>
+    <value>localhost:9000</value>
+  </property>
+  <property>
+    <name>mapred.job.tracker</name>
+    <value>localhost:9001</value>
+  </property>
+  <property>
+    <name>dfs.replication</name>
+    <value>1</value>
+  </property>
+</configuration>
+
+
+
+```
+
+
+>- 4.伪分布式模式的操作方法
+
+```
+
+./bin/hadoop namenode -format  格式化一个新的分布式文件系统->hadoop安装成功
+./bin/start-all.sh  执行start-all.sh启动,启动Hadoop守护进程
+
+将输入文件拷贝到分布式文件系统：
+$ bin/hadoop fs -put conf input
+
+运行发行版提供的示例程序：
+$ bin/hadoop jar hadoop-examples-1.2.1.jar grep input output 'dfs[a-z.]+'
+
+查看输出文件：
+将输出文件从分布式文件系统拷贝到本地文件系统查看：
+$ bin/hadoop fs -get output output 
+$ cat output/*
+或者
+在分布式文件系统上查看输出文件：
+$ bin/hadoop fs -cat output/*
+
+完成全部操作后，停止守护进程：
+$ bin/stop-all.sh
+
+浏览NameNode和JobTracker的网络接口，它们的地址默认为：
+
+NameNode - http://localhost:50070/
+JobTracker - http://localhost:50030/
+
+jps查看进程状态：
+$ jps
+67217 DataNode
+66455 NameNode
+74987 Jps
+68810 TaskTracker
+68045 JobTracker
+67980 SecondaryNameNode
+ 
+
+
+```
+>- 参考
+```
+https://segmentfault.com/a/1190000009103629
+1.学习资料
+https://hadoop.apache.org/docs/r1.0.4/cn/quickstart.html#FullyDistributed
+2.mac安装说明
+https://segmentfault.com/a/1190000009103629
+```
