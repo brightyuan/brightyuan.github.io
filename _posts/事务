@@ -1,0 +1,26 @@
+<span class="Apple-style-span">事务(transaction) :
+事务(Transaction)是并发控制的基本单位。这些操作要么都执行，要么都
+不执行,具有原子性。例如，银行转帐工作：从一个帐号扣款并使另一个帐号增款，这
+两个操作要么都执行，要么都不执行。所以，应该把他们看成一个事务,保持数据一致性。
+事务特性:
+1.原子性(atomic)
+2.一致性(consistence)
+换句话说，一个事务应该把系统从一个一致-状态转换到另一个一致状态。举个例子，在关系数据库的情况下，一个一致的事务将保护定义在数据上的所有完整性约束。
+3.隔离性(isolation)
+在同一个环境中可能有多个事务并发执行，而每个事务都应表现为独立执行。串行的执行一系列事务的效果应该同于并发的执行它们。这要求两件事:
+①在一个事务执行过程中，数据的中间的(可能不一致)状态不应该被暴露给所有的其他事务。
+②两个并发的事务应该不能操作同一项数据。数据库管理系统通常使用锁来实现这个特征。
+</span>
+
+<span class="Apple-style-span">4.持久性(durability):一个被完成的事务的效果应该是持久的。</span>
+
+<span class="Apple-style-span">事务基本格式：</span>
+<pre class="java">personTransaction tx = new personTransaction("personalBuy");
+try{
+	operationA(); 
+	operationB();  
+	tx.commit();
+}catch(Exception e){
+	tx.rollback();
+}</pre>
+&nbsp;
