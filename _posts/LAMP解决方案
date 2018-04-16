@@ -1,0 +1,45 @@
+<div>LAMP网站架构方案</div>
+<span class="Apple-style-span">LAMP（Linux- Apache-MySQL-PHP）网站架构是目前国际流行的Web框架，</span>
+<span class="Apple-style-span">该框架包括：Linux操作系统，Apache网络服务器，MySQL数据库，Perl、PHP或者Python编程语言，</span>
+
+<span class="Apple-style-span">优势：</span>
+<span class="Apple-style-span">和 Java/J2EE架构相比，LAMP具有Web资源丰富、轻量、快速开发等特点，微软的.NET架构相比，LAMP具有通用、跨平台、高性能、低价格的 优势，因此LAMP无论是性能、质量还是价格都是企业搭建网站的首选平台。</span>
+
+<span class="Apple-style-span">对于大流量、大并发量的网站系统架构来说:</span>
+<div><span class="Apple-style-span">硬件上</span>使用高性能的服务器、负载均衡、CDN等，</div>
+<div><span class="Apple-style-span">在软件架构上:</span>使用高性能的操作系统（OS）、高性能的网页服务器（Web Server）、高性能的数据库（Database）、高效率的编程语言等。</div>
+<div>
+下面我将从这几点对其一一讨论:</div>
+<div>
+操作系统
+免费的高度稳定性的服务器可以用CentOS
+
+Web服务器、缓存和PHP加速
+Apache是LAMP架构最核心的WebServer，开源、稳定、模块丰富是Apache的优势。
+Apache的缺点:有些臃肿，内存和CPU开销大，性能上有损耗，不如一些轻量级的Web服务器（例如nginx）高效</div>
+<div>轻量级的Web服务器:对于静态文件的响应能力来说远高于Apache服务器。
+
+Apache做为WebServer是负载PHP的最佳选择，
+如果流量很大的话，可以采用nginx来负载非PHP的Web请求。nginx是一个高性能的HTTP和反向代理服器，Nginx以它的稳定性、丰富的功能集、示例配置文件和低系统资源的消耗而闻名。</div>
+<div>Nginx不支持PHP和CGI等动态语言，但支持负载均衡和容错，可和Apache配合使用，是轻量级的HTTP服务器的首选。
+
+Web服务器的缓存方案:</div>
+<div>1&gt;Apache提供了自己的缓存模块</div>
+<div>2&gt;外加的Squid模块进行缓存，这两种方式均可以有效的提高Apache的访问响应能力。Squid Cache是一个Web缓存服务器，支持高效的缓存，可以作为网页服务器的前置cache服务器缓存相关请求来提高Web服务器的速度，把Squid放在 Apache的前端来缓存Web服务器生成的动态内容，而Web应用程序只需要适当地设置页面实效时间即可。如访问量巨大则可考虑使用memcache作 为分布式缓存。</div>
+<div></div>
+<div>
+<div>PHP的加速:</div>
+使用eAccelerator加速器，eAccelerator是一个自由开放源码PHP加速器，优化和动 态内容缓存，提高了性能PHP脚本的缓存性能，使得PHP脚本在编译的状态下，对服务器的开销几乎完全消除。它还有对脚本起优化作用，以加快其执行效率。 使PHP程序代码执效率能提高1-10倍。
+具体的解决方案有以下几种：
+1、squid + Apache + PHP + eAccelerator
+使用Apache负载PHP，使用squid进行缓存，html或图片的请求可以直接由squid返回给用户。很多大型网站都采用这种架构。
+2、nginx/Apache + PHP（fastcgi） + eAccelerator
+使用nginx或Apache负载PHP，PHP使用fastcgi方式运行，效率较高。
+3、nginx + Apache + PHP + eAccelerator
+此方案综合了nginx和Apache的优点，使用Apache负载PHP，nginx负责解析其他Web请求，使用nginx的rewrite模块，Apache端口不对外开放。
+
+数据库
+开源的数据库中，MySQL在性能、稳定性和功能上是首选，可以达到百万级别的数据存储，网站初期可以将MySQL和Web服务器放在一起</div>
+<div>
+当访问量达到一定规模后，应该将MySQL数据库从WebServer上独立出来，在单独的服务器上运行，同时保持WebServer和MySQL服务器的稳定连接。
+当数据库访问量达到更大的级别，可以考虑使用MySQL Cluster等数据库集群或者库表散列等解决方案。</div>
