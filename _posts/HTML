@@ -1,0 +1,134 @@
+<h2>HTML &lt;div&gt; 元素</h2>
+<div>HTML &lt;div&gt; 元素是块级元素,可用于组合其他 HTML 元素的容器。<span class="Apple-style-span">属于块级元素，浏览器会在其前后显示折行</span></div>
+<div><span class="Apple-style-span">1.如果与 CSS 一同使用，&lt;div&gt; 元素可用于对大的内容块设置样式属性</span></div>
+<div><span class="Apple-style-span">2.另一个常见的用途是文档布局。它取代了使用表格定义布局的老式方法。使用 &lt;table&gt; 元素进行文档布局不是表格的正确用法。&lt;table&gt; 元素的作用是显示表格化的数据。</span></div>
+<!--more-->
+<div><span class="Apple-style-span">HTML基础结构</span></div>
+<div><span class="Apple-style-span">&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;放置文章标题&lt;/title&gt;
+&lt;meta http-equiv="Content-Type" content="text/html; charset=gb2312"/&gt;
+//这里是网页编码现在是gb2312
+&lt;meta name="keywords" content="关键字"/&gt;
+&lt;meta name="description" content="本页描述或关键字描述"/&gt;
+&lt;/head&gt;
+&lt;body&gt;
+这里就是正文内容
+&lt;/body&gt;
+&lt;/html&gt;</span></div>
+<div></div>
+<div>
+<h2>HTML &lt;span&gt; 元素</h2>
+HTML &lt;span&gt; 元素是内联元素，可用作文本的容器。
+
+当与 CSS 一同使用时，&lt;span&gt; 元素可用于为部分文本设置样式属性
+
+</div>
+<div></div>
+<div><span class="Apple-style-span">div 元素是用于分组 HTML 元素的块级元素。</span></div>
+<div>
+<h1><span class="Apple-style-span">HTML &lt;th&gt; 标签</span></h1>
+</div>
+<div>
+
+定义表格内的表头单元格。
+
+HTML 表单中有两种类型的单元格：
+<ul>
+ 	<li>表头单元格 - 包含表头信息（由 th 元素创建）</li>
+ 	<li>标准单元格 - 包含数据（由 td 元素创建）</li>
+</ul>
+th 元素内部的文本通常会呈现为居中的粗体文本，而 td 元素内的文本通常是左对齐的普通文本
+
+</div>
+<div></div>
+<div></div>
+<div></div>
+<div><span class="Apple-style-span">简单理解，</span><span class="Apple-style-span">div</span><span class="Apple-style-span">是标签，</span><span class="Apple-style-span">css</span><span class="Apple-style-span">是设置标签样式（穿衣服），</span><span class="Apple-style-span">html</span><span class="Apple-style-span">是由div等标签组成的网页</span></div>
+<div></div>
+<div>
+<pre class="html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;style type="text/css"&gt;
+div#container{width:500px}
+div#header {background-color:#99bbbb;}
+div#menu {background-color:#ffff99;height:200px;width:150px;float:left;}
+div#content {background-color:#EEEEEE;height:200px;width:350px;float:left;}
+div#footer {background-color:#99bbbb;clear:both;text-align:center;}
+h1 {margin-bottom:0;}
+h2 {margin-bottom:0;font-size:18px;}
+ul {margin:0;}
+li {list-style:none;}
+&lt;/style&gt;
+&lt;/head&gt;
+
+
+&lt;body&gt;
+
+
+&lt;div id="container"&gt;
+
+
+&lt;div id="header"&gt;
+&lt;h1&gt;Main Title of Web Page&lt;/h1&gt;
+&lt;/div&gt;
+
+
+&lt;div id="menu"&gt;
+&lt;h2&gt;Menu&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;HTML&lt;/li&gt;
+&lt;li&gt;CSS&lt;/li&gt;
+&lt;li&gt;JavaScript&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+
+
+&lt;div id="content"&gt;Content goes here&lt;/div&gt;
+
+
+&lt;div id="footer"&gt;Copyright W3School.com.cn&lt;/div&gt;
+
+
+&lt;/div&gt;
+
+
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+<div>
+<h2>HTML 块元素</h2>
+大多数 HTML 元素被定义为块级元素或内联元素。
+
+编者注：“块级元素”译为 block level element，“内联元素”译为 inline element。
+
+块级元素在浏览器显示时，通常会以新行来开始（和结束）。
+
+例子：&lt;h1&gt;, &lt;p&gt;, &lt;ul&gt;, &lt;table&gt;
+
+</div>
+<div>
+<h2>HTML 内联元素</h2>
+内联元素在显示时通常不会以新行开始。
+
+例子：&lt;b&gt;, &lt;td&gt;, &lt;a&gt;, &lt;img&gt;
+
+</div>
+<div>
+<h2>HTML &lt;div&gt; 元素</h2>
+HTML &lt;div&gt; 元素是块级元素，它是可用于组合其他 HTML 元素的容器。
+
+&lt;div&gt; 元素没有特定的含义。除此之外，由于它属于块级元素，浏览器会在其前后显示折行。
+
+如果与 CSS 一同使用，&lt;div&gt; 元素可用于对大的内容块设置样式属性。
+
+&lt;div&gt; 元素的另一个常见的用途是文档布局。它取代了使用表格定义布局的老式方法。使用 &lt;table&gt; 元素进行文档布局不是表格的正确用法。&lt;table&gt; 元素的作用是显示表格化的数据。
+
+</div>
+<div>
+<h2>HTML &lt;span&gt; 元素</h2>
+HTML &lt;span&gt; 元素是内联元素，可用作文本的容器。
+
+&lt;span&gt; 元素也没有特定的含义。
+
+当与 CSS 一同使用时，&lt;span&gt; 元素可用于为部分文本设置样式属性。
