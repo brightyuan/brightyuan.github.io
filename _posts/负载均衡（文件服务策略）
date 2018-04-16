@@ -1,0 +1,218 @@
+上回我提到的这么多服务器，他们共同需要的文件从哪里来？
+那么我们就需要文件服务器，文件服务器从哪里来，我们先看图了解下：
+
+<img src="http://images.cnitblog.com/blog/124819/201409/101403272315095.png" alt="" />
+
+图1
+
+&nbsp;
+
+---------------------------------------------------------------------------------------------------------------
+
+&nbsp;
+
+&nbsp;
+
+<img src="http://images.cnitblog.com/blog/124819/201409/101404073567936.png" alt="" />
+
+图2
+
+不管是图1还是图2都能解决问题。
+
+当你拿着这两份图给老板审批的时候，老板都会选择图2。
+
+这个涉及高层的问题，先不用去理会，今天我们主要的内容是文件服务策略。
+
+&nbsp;
+
+今天介绍的文件服务策略分为三种（Linux）：
+1. 文件共享
+2. 文件同步
+3. 分布式文件系统
+三种的优缺点，本篇不作声明。
+
+&nbsp;
+
+<span class="Apple-style-span">1. 文件共享篇</span>
+
+&nbsp;
+
+参照图2，PA为文件服务器，文件主要存放服务器。
+P1，P2，P3执行以下命令即可，你可以把该命令放入/etc/rc.local,开机自动启动 ：
+<div class="cnblogs_code">
+<pre><span class="Apple-style-span">mount</span> -o rw <span class="Apple-style-span">192.168</span>.<span class="Apple-style-span">2.2</span>:/storage  /storage</pre>
+</div>
+注：PA,P1,P2,P3   /storage为文件路径
+
+&nbsp;
+
+<span class="Apple-style-span">2. 文件同步篇</span>
+
+PA安装rsync服务端，如何安装请查看：http://rsync.samba.org/
+
+2.1 软件包安装
+<div class="cnblogs_code">
+<pre><span class="Apple-style-span">sudo</span> apt-get  <span class="Apple-style-span">install</span>  rsync  #在debian、ubuntu 等在线安装方法；
+<span class="Apple-style-span">yum</span> <span class="Apple-style-span">install</span> rsync    #Fedora、Redhat 等在线安装方法；
+rpm -ivh rsync       #Fedora、Redhat 等rpm包安装方法；</pre>
+</div>
+2.2 配置文件
+
+rsync的主要有以下三个配置文件/etc/rsyncd.conf(主配置文件)、/etc/rsyncd.secrets(密码文件)、/etc/rsyncd.motd(rysnc服务器信息)
+注：rsyncd.secrets这个密码文件的文件属性设为root拥有, 且权限要设为600, 否则无法备份成功!
+
+/etc/rsyncd.conf：
+<div class="cnblogs_code">
+<pre>pid file = /var/run/rsyncd.pid   
+port = 873
+address = 192.168.1.171  
+　 
+uid = root
+gid = root
+
+use chroot = yes  
+read only = yes 
+
+#limit access to private LANs
+hosts allow=192.168.2.0/255.255.255.0  
+hosts deny=*
+
+max connections = 5 
+#motd file = /etc/rsyncd.motd
+
+#This will give you a separate log file
+#log file = /var/log/rsync.log
+
+#This will log every file transferred - up to 85,000+ per user, per sync
+#transfer logging = yes
+
+log format = %t %a %m %f %b
+syslog facility = local3
+timeout = 300
+
+<span class="Apple-style-span">[</span><span class="Apple-style-span">storage</span><span class="Apple-style-span">]</span>   
+path = /storage
+list=yes 
+ignore errors 
+auth users = root
+secrets file = /etc/rsyncd.secrets</pre>
+</div>
+rsyncd.secrets：
+<div class="cnblogs_code">
+<pre>root:storage@mydomain.com</pre>
+</div>
+2.3 启动服务
+<div class="cnblogs_code">
+<pre>/etc/init.d/xinetd reload</pre>
+</div>
+&nbsp;
+
+P1、P2、P3也一样安装rsync。
+
+开个定时命令crontab，每几分钟同步一次，执行以下命令：
+<div class="cnblogs_code">
+<pre>rsync -vzrtopg --delete root@<span class="Apple-style-span">192.168</span>.<span class="Apple-style-span">2.2</span>::storage --password-<span class="Apple-style-span">file</span>=/etc/rsync.pass</pre>
+</div>
+为了不用输入密码，/etc/rsync.pass加入密码
+<div class="cnblogs_code">
+<pre>storage@mydomain.com</pre>
+</div>
+&nbsp;
+
+<span class="Apple-style-span">3. 分布式文件系统</span>
+
+<span class="Apple-style-span">
+</span>开始之前先看图.
+
+<span class="Apple-style-span"><img src="http://images.cnitblog.com/blog/124819/201409/101417061843100.png" alt="" /></span>
+
+首先了解下几个概念:
+1. PA:Master文件服务器（主服务器）
+2. P1、P2、P3：chunk文件服务器（文件存放服务器）
+
+文件介绍的也是使用moosefs，官方网站：<a href="http://www.moosefs.org/reference-guide.html#making-and-installing" target="_blank" rel="noopener">http://www.moosefs.org/reference-guide.html#making-and-installing</a>
+
+里面有篇中文文档，挺靠谱的。
+
+&nbsp;
+
+3.1 PA安装MooseFS Master
+<div class="cnblogs_code">
+<pre><span class="Apple-style-span">wget</span> http:<span class="Apple-style-span">//</span><span class="Apple-style-span">ncu.dl.sourceforge.net/project/moosefs/moosefs/1.6.11/mfs-1.6.11.tar.gz</span>
+<span class="Apple-style-span">tar</span> zxvf mfs-<span class="Apple-style-span">1.6</span>.<span class="Apple-style-span">11</span>.<span class="Apple-style-span">tar</span>.gz
+cd mfs-<span class="Apple-style-span">1.6</span>.<span class="Apple-style-span">11</span>
+useradd mfs -s /sbin/nologin
+./configure --prefix=/usr/local/mfs --with-default-user=mfs --with-default-group=mfs
+<span class="Apple-style-span">make</span>
+<span class="Apple-style-span">make</span> <span class="Apple-style-span">install</span></pre>
+</div>
+把Master配置文件，拷贝过去：
+<div class="cnblogs_code">
+<pre>cd /usr/local/mfs/etc/
+<span class="Apple-style-span">cp</span> mfsmaster.cfg.dist mfsmaster.cfg
+<span class="Apple-style-span">cp</span> mfsexports.cfg.dist mfsexports.cfg</pre>
+</div>
+启动、暂停命令
+<div class="cnblogs_code">
+<pre>/usr/local/mfs/sbin/mfsmaster start
+/usr/local/mfs/sbin/mfsmaster –s</pre>
+</div>
+Master mfsexports.cfg配置
+<div class="cnblogs_code">
+<pre>192.168.2.0/24 . rw
+192.168.2.0/24 / rw</pre>
+</div>
+设置副本的份数，推荐 3 份
+<div class="cnblogs_code">
+<pre>/usr/local/mfs/bin/mfssetgoal -r <span class="Apple-style-span">3</span></pre>
+</div>
+&nbsp;
+
+3.2 P1、P2、P3安装MooseFS Chunk Server
+<div class="cnblogs_code">
+<pre><span class="Apple-style-span">wget</span> http:<span class="Apple-style-span">//</span><span class="Apple-style-span">ncu.dl.sourceforge.net/project/moosefs/moosefs/1.6.11/mfs-1.6.11.tar.gz</span>
+<span class="Apple-style-span">tar</span> zxvf mfs-<span class="Apple-style-span">1.6</span>.<span class="Apple-style-span">11</span>.<span class="Apple-style-span">tar</span>.gz 
+cd mfs-<span class="Apple-style-span">1.6</span>.<span class="Apple-style-span">11</span>
+useradd mfs -s /sbin/nologin
+./configure --prefix=/usr/local/mfs --with-default-user=mfs --with-default-group=mfs
+<span class="Apple-style-span">make</span>
+<span class="Apple-style-span">make</span> <span class="Apple-style-span">install</span></pre>
+</div>
+把Chunk Server配置文件，拷贝过去：
+<div class="cnblogs_code">
+<pre>cd /usr/local/mfs/etc/
+<span class="Apple-style-span">cp</span> mfschunkserver.cfg.dist mfschunkserver.cfg
+<span class="Apple-style-span">cp</span> mfshdd.cfg.dist mfshdd.cfg</pre>
+</div>
+启动、暂停命令
+<div class="cnblogs_code">
+<pre>/usr/local/mfs/sbin/mfschunkserver start
+/usr/local/mfs/sbin/mfschunkserver stop</pre>
+</div>
+mfshdd.cfg配置
+<div class="cnblogs_code">
+<pre>/data/mfs #文件存放路径</pre>
+</div>
+&nbsp;
+
+3.3 MooseFS Client安装
+
+PA、P1、P2、P3都安装，安装如下：
+<div class="cnblogs_code">
+<pre><span class="Apple-style-span">wget</span> http:<span class="Apple-style-span">//</span><span class="Apple-style-span">ncu.dl.sourceforge.net/project/moosefs/moosefs/1.6.11/mfs-1.6.11.tar.gz</span>
+<span class="Apple-style-span">tar</span> zxvf mfs-<span class="Apple-style-span">1.6</span>.<span class="Apple-style-span">11</span>.<span class="Apple-style-span">tar</span>.gz 
+cd mfs-<span class="Apple-style-span">1.6</span>.<span class="Apple-style-span">11</span>
+useradd mfs -s /sbin/nologin
+./configure --prefix=/usr/local/mfs --with-default-user=mfs --with-default-group=mfs
+--enable-mfsmount
+make
+make <span class="Apple-style-span">install</span></pre>
+</div>
+PA、P1、P2、P3挂载文件系统：
+<div class="cnblogs_code">
+<pre>/usr/local/mfs/bin/mfsmount /storage -H <span class="Apple-style-span">192.168</span>.<span class="Apple-style-span">2.2</span></pre>
+</div>
+&nbsp;
+
+总结: 好了，三种解决方案都介绍完了，整体都很简单，赶快来选择适合自己的解决方案吧，动手试试吧！
+当然三种方案都有自己的优缺点，我希望看了文章的不点<span class="Apple-style-span">推荐</span>的人就回答下这些问题吧！
