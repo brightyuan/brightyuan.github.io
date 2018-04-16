@@ -1,0 +1,35 @@
+<span class="Apple-style-span">第一章、左旋转字符串</span>
+
+<span class="Apple-style-span">题目描述：</span>
+
+<span class="Apple-style-span">定义字符串的左旋转操作：把字符串前面的若干个字符移动到字符串的尾部。
+如把字符串abcdef左旋转2位得到字符串cdefab。
+请实现字符串左旋转的函数，要求对长度为n的字符串操作的时间复杂度为O(n)，空间复杂度为O(1)。 </span>
+
+<span class="Apple-style-span">解法二：
+假设原数组序列为abcd1234，要求变换成的数组序列为1234abcd，即循环右移了4位。比较之后，不难看出，其中有两段的顺序是不变的：1234和abcd，可把这两段看成两个整体。右移K位的过程就是把数组的两部分交换一下。
+变换的过程通过以下步骤完成：
+逆序排列abcd：abcd1234 → dcba1234；
+逆序排列1234：dcba1234 → dcba4321；
+全部逆序：dcba4321 → 1234abcd。
+伪代码可以参考清单2-35。
+//代码清单2-35
+Reverse(int* arr, int b, int e)
+{
+for(; b &lt; e; b++, e--)
+{
+int temp = arr[e];
+arr[e] = arr[b];
+arr[b] = temp;
+}
+}</span>
+
+<span class="Apple-style-span">RightShift(int* arr, int N, int K)
+{
+K %= N;
+Reverse(arr, 0, N – K - 1);
+Reverse(arr, N - K, N - 1);
+Reverse(arr, 0, N - 1);
+}</span>
+
+原文出处：<a href="http://blog.csdn.net/v_JULY_v/article/details/6322882" target="_blank" rel="noopener">http://blog.csdn.net/v_JULY_v/article/details/6322882</a>
