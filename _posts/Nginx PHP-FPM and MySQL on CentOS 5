@@ -1,0 +1,28 @@
+<span class="Apple-style-span">This is tutorial how to install Nginx PHP-FPM and MySQL on CentOS 5 64bit VPS</span>
+
+Install Remi repository on CentOS 5 :
+<blockquote># rpm -Uvh http://dl.fedoraproject.org/pub/epel/5/x86_64/epel-release-5-4.noarch.rpm
+# rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-5.rpm</blockquote>
+Install Nginx and PHP-FPM
+<blockquote># yum --enablerepo=remi,remi-test install nginx php-fpm php-common</blockquote>
+Install PHP modules
+<blockquote># yum --enablerepo=remi,remi-test install php-pecl-apc php-cli php-pear php-pdo php-mysql php-pgsql php-pecl-mongo php-sqlite php-pecl-memcache php-pecl-memcached php-gd php-mbstring php-mcrypt php-xml</blockquote>
+Start Nginx and Autostart on boot
+<blockquote>#service nginx start
+# chkconfig nginx on</blockquote>
+Start php-fpm and autostart on boot
+<blockquote># service php-fpm start
+# chkconfig php-fpm on</blockquote>
+for install mysql uses this tutorial:
+
+yum --enablerepo=remi,remi-test install mysql-server
+
+Test Nginx and PHP-FPM setup:
+<ul>
+ 	<li>Create info.php file on nginx vhost directory with following content:
+<blockquote>&lt;?php
+phpinfo();
+?&gt;</blockquote>
+</li>
+ 	<li>type in browser xxxxx/info.php</li>
+</ul>
