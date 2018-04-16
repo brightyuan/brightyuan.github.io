@@ -1,0 +1,38 @@
+<span class="Apple-style-span">一、系统性能调优-步骤及思路</span>
+
+<span class="Apple-style-span">系统优化：减少计算机执行进程，更改工作模式，删除不必要的中断让机器运行更有效，优化文件位置使数据读写更快，空出更多资源供用户使用，以及减少不必要的系统加载以及自动启动项。</span>
+
+<span class="Apple-style-span">优化步骤：</span>
+
+<span class="Apple-style-span"><span class="Apple-style-span" lang="EN-US">1</span>、发现问题-&gt;<span class="Apple-style-span" lang="EN-US">2</span>、分析问题-&gt;<span class="Apple-style-span" lang="EN-US">3</span>、提出方案-&gt;<span class="Apple-style-span" lang="EN-US">4</span>、解决问题-&gt;<span class="Apple-style-span" lang="EN-US">5</span>、结果报告</span>
+
+<span class="Apple-style-span">1.发现问题：一般性能的问题无非是系统工作效率低下，最常见的就是对数据库的</span><span class="Apple-style-span" lang="EN-US">CRUD</span><span class="Apple-style-span">操作缓慢、导出数据无响应等--&gt;定位问题--&gt;借助工具进行性能测试--&gt;优化、</span>
+
+<span class="Apple-style-span">工具：javaVisual，LoadRunner</span>
+
+<span class="Apple-style-span">2.分析问题：</span>
+
+<span class="Apple-style-span">找到系统性能瓶颈的位置，然后从外向里添加日志，打印出各方法的执行时间，这样便很快就能找到问题的具体位置。
+</span>
+
+<span class="Apple-style-span">切记：优化一定要对系统进行深入分析，找到性能问题根源切入点，而不被表象迷糊。例如我们发现内存高了，首先想到不应该是扩大内存，而是为什么如此消耗内存，用工具（<span class="Apple-style-span" lang="EN-US">Java VisualVM</span>）看看内存消耗在什么地方，想办法解决。</span>
+
+<span class="Apple-style-span"><span class="Apple-style-span" lang="EN-US">3</span>、提出方案</span>
+
+<span class="Apple-style-span">从成本考虑大致顺序如下：数据库--&gt;应用层--&gt;Web层--&gt;硬件</span>
+
+<span class="Apple-style-span">一般来说在数据库上建立索引、分区等操作要比在应用层重构算法来的省时省力；应用层和</span><span class="Apple-style-span" lang="EN-US">Web</span><span class="Apple-style-span">层基本上是一致的，但和硬件比起来在软件层次的优化还是第一位的。就像上面说的，内存不够用了不应该去考虑换机器、加内存，而是找到内存开销大的地方，解决之。</span>
+
+<span class="Apple-style-span"><span class="Apple-style-span" lang="EN-US">4</span>、解决问题</span>
+
+<span class="Apple-style-span">要强调的是性能瓶颈都是相对的，也就是说的一处瓶颈消失了，系统一旦压力增大后，在其他地方又发现新的性能瓶颈。所以说性能优化是一个迭代的过程，需要逐步的去解决问题，直至满足系统需要。</span>
+
+<span class="Apple-style-span"><span class="Apple-style-span" lang="EN-US">5</span>、结果报告
+</span>
+
+<span class="Apple-style-span">为了后期有什么问题可以查看文档进行回溯，也为以后的优化提供现成的解决方案，要将优化过程中的文档上传保存。
+</span>
+
+<span class="Apple-style-span">二、系统性能调优--数据库的设计优化（未完待）</span>
+
+相关文献链接：<a href="http://blog.csdn.net/beijiguangyong/article/details/8983472" target="_blank" rel="noopener">http://blog.csdn.net/beijiguangyong/article/details/8983472</a>
