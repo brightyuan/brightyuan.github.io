@@ -1,0 +1,30 @@
+<h1>1.  算法是什么</h1>
+<h1><span class="Apple-style-span">算法：一种计算的方法，在程序设计上，表现为一组指令序列。</span></h1>
+<div>输入-&gt;算法-&gt;输出</div>
+<div><img src="file:///C:/Users/YUANWA~1/AppData/Local/Temp/enhtmlclip/Image.jpg" alt="" /></div>
+<h1>2.  如何评价算法</h1>
+<div></div>
+<div>对于程序设计而言，无非就是两个方面：算法有多快？（时间效率）；内存耗得多不多？（空间效率）</div>
+<div><span class="Apple-style-span">算法的复杂度分析，包括上述两个方面，各自称为时间复杂度分析和空间复杂度分析。通常我们更关注的是算法的时间复杂度。</span></div>
+<div></div>
+<div>设问题规模为n，即输入数据的大小，时间复杂度记为T(n)</div>
+<div><span class="Apple-style-span">比如n个输入数据，需要做2*n个基本运算，那么T(n) = 2*n</span></div>
+<div><span class="Apple-style-span"> </span></div>
+<div><span class="Apple-style-span">渐进时间复杂度</span><span class="Apple-style-span">
+</span></div>
+比如：     T(n) = 2*n        则O(n)=n，     实际中就称算法时间复杂度为n
+
+T(n)= 3*n<sup>2           </sup>则O(n)=n<sup>2</sup>，  实际中就称算法时间复杂度为n<sup>2</sup>
+<div><span class="Apple-style-span">T(n) =3* log(n)则O(n)=log(n)，    实际中就称算法时间复杂度为log(n)</span></div>
+<h2>空间复杂度分析</h2>
+分析算法运行过程中所占用存储空间大小，其分析和时间复杂度类似。
+
+如果使用1个基本空间单位，则空间复杂度为O(1)
+
+如果使用n个基本空间单位，则空间复杂度为O(n)
+
+这里说的空间复杂度实际中也是渐进空间复杂度。
+<div></div>
+<div></div>
+<div></div>
+<div></div>
