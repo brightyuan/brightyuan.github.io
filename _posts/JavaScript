@@ -1,0 +1,2269 @@
+<div><span class="Apple-style-span">简介：</span></div>
+<span class="Apple-style-span">Node.js，avaScript的服务器技术</span>
+<div><span class="Apple-style-span">jQuery ,JavaScript的前端技术</span><span class="Apple-style-span">要实现在后台运行JavaScript代码，代码需要先被解释然后正确的执行</span><span class="Apple-style-span">Node.js的原理正是如此，它使用了Google的V8虚拟机</span><span class="Apple-style-span">Node.js事实上既是一个运行时环境，同时又是一个库,</span><span class="Apple-style-span">伴随着Node.js的还有许多有用的模块，它们可以简化很多重复的劳作，比如向终端输出字符串</span><span class="Apple-style-span">JavaScript 被用来改进设计、验证表单、检测浏览器、创建cookies.</span></div>
+<!--more-->
+<p style="text-align: left;"></p>
+
+<dl>
+ 	<dt>将动态的文本放入 HTML 页面 ,<span style="color: #000000;">对事件作出响应,</span><span style="color: #000000;">可以读写 HTML 元素</span></dt>
+</dl>
+<div>JavaScript 是一种解释性语言（就是说，代码执行不进行预编译）。</div>
+<div></div>
+&nbsp;
+<div><span class="Apple-style-span"> </span></div>
+<div><span class="Apple-style-span">简明教程：</span></div>
+<div>
+<h2><span class="Apple-style-span">如何把 JavaScript 放入 HTML 页面</span></h2>
+</div>
+<div>
+<pre><code>document.write("Hello World!");
+</code></pre>
+<div>
+<h2><code><span class="Apple-style-span">如何与老的浏览器打交道</span></code></h2>
+</div>
+<div>
+
+<code>防止那些不支持 JavaScript 的浏览器会把脚本作为页面的内容来显示 可以使用这样的 HTML 注释标签</code>
+
+</div>
+<div>
+<pre><code>&lt;script type="text/javascript"&gt;
+     &lt;!--
+          document.write("Hello World!");
+<a>     //--&gt;</a></code></pre>
+<pre>&lt;/script&gt;
+</pre>
+</div>
+</div>
+<div>实例
+<span class="Apple-style-span">head 部分</span>
+包含函数的脚本位于文档的 head 部分--&gt;确保在调用函数前，脚本已经载入了。</div>
+<div>
+<div>
+
+<span class="Apple-style-span">当脚本被调用时，或者当事件被触发时，</span>脚本就会被执行。当把脚本放置到 head 部分后，就可以确保在需要使用脚本之前，它已经被载入了。
+
+</div>
+<span class="Apple-style-span">body 部分</span>
+
+</div>
+<div>
+<div>
+
+在页面载入时脚本就会被执行。当你把脚本放置于 body 部分后，它就会生成页面的内容
+
+</div>
+<span class="Apple-style-span">外部 JavaScript</span>
+
+</div>
+<div>
+
+希望在若干个页面中运行 JavaScript，同时不在每个页面中写相同的脚本。
+
+</div>
+<div>
+<pre><code>&lt;script src="xxx.js"&gt;....&lt;/script&gt;</code></pre>
+<div><span class="Apple-style-span">注释</span></div>
+<div>
+<pre>// 这行代码输出标题：
+</pre>
+<div>
+<pre>/*
+  下面的代码将输出
+  一个标题和两个段落
+*/
+</pre>
+<pre><span class="Apple-style-span">变量名称的规则：</span></pre>
+<pre>变量对大小写敏感（y 和 Y 是两个不同的变量） 
+变量必须以字母或下划线开始 
+</pre>
+<div>通过 <span class="Apple-style-span">var 语句</span>来声明 JavaScript 变量：</div>
+<div>
+<pre>var x;
+</pre>
+<div>
+<pre>var carname="Volvo";
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div>如果您所赋值的变量还未进行过声明，该变量会自动声明</div>
+<div>重新声明 JavaScript 变量
+如果您再次声明了 JavaScript 变量，该变量也不会丢失其原始值var x=5;
+var x;</div>
+<div>
+<h2><span class="Apple-style-span">运算符</span></h2>
+</div>
+<div>+ 运算符用于把文本值或字符串变量加起来（连接起来）</div>
+<div>
+<h2><span class="Apple-style-span">运算符:</span></h2>
+</div>
+<div>
+<pre>variablename=(condition)?value1:value2 
+</pre>
+<pre>if,switch  同于php
+</pre>
+<div><span class="Apple-style-span">警告框</span></div>
+<div>经常用于确保用户可以得到某些信息</div>
+<div>
+<pre>alert("文本")
+</pre>
+<div><span class="Apple-style-span">确认框</span></div>
+<div>用于使用户可以验证或者接受某些信息</div>
+<div>
+<pre>confirm("文本")
+</pre>
+<div><span class="Apple-style-span">提示框</span></div>
+<div>经常用于提示用户在进入页面前输入某个值</div>
+<div>
+<pre>prompt("文本","默认值")
+</pre>
+<div>
+<h2><span class="Apple-style-span">函数</span></h2>
+<div>     1&gt;将脚本编写为函数，就可以避免页面载入时执行该脚本</div>
+</div>
+<div>     2&gt;函数包含着一些代码，这些代码只能被事件激活，或者在函数被调用时才会执行</div>
+<div>     3&gt;函数在页面起始位置定义，即 &lt;head&gt; 部分</div>
+<div></div>
+<div><span class="Apple-style-span">定义函数</span></div>
+<div>//带有参数，返回值的方法</div>
+<div>
+<pre>function prod(a,b){
+     x=a*b
+     return x
+}
+</pre>
+<div>
+<h2><span class="Apple-style-span">变量的生存期</span></h2>
+<div>1&gt;当您在函数内声明了一个变量后，就只能在该函数中访问该变量。当退出该函数后，这个变量会被撤销。这种变量称为本地变量。</div>
+<div>     您可以在不同的函数中使用名称相同的本地变量，这是因为只有声明过变量的函数能够识别其中的每个变量。</div>
+<div>2&gt;如果您在函数之外声明了一个变量，则页面上的所有函数都可以访问该变量。这些变量的生存期从声明它们之后开始，在页面关闭时结束</div>
+</div>
+<div>
+<h2><span class="Apple-style-span">for 循环</span></h2>
+在脚本的运行次数已确定的情况下使用 for 循环。
+<h3><span class="Apple-style-span">语法：</span></h3>
+<pre><code>for</code> (变量=开始值;变量&lt;=结束值;变量=变量+步进值) { 需执行的代码 }</pre>
+<div>
+<h2><span class="Apple-style-span">while 循环</span></h2>
+while 循环用于在指定条件为 true 时循环执行代码。
+<h3><span class="Apple-style-span">语法：</span></h3>
+<pre><code>while</code> (变量&lt;=结束值) { 需执行的代码 }</pre>
+<div>
+<h2><span class="Apple-style-span">do...while 循环</span></h2>
+</div>
+<div>
+<h3><span class="Apple-style-span">语法：</span></h3>
+<pre><code>do</code> { 需执行的代码 } <code>while</code> (变量&lt;=结束值)</pre>
+<div>
+<h2><span class="Apple-style-span"> For...In 声明</span></h2>
+</div>
+<div>For...In 声明用于对数组或者对象的属性进行循环操作</div>
+<div>
+<h3><span class="Apple-style-span">语法：</span></h3>
+<pre><code>for</code> (变量 <code>in</code> 对象) { 在此执行代码 }</pre>
+<pre>//“变量”用来指定变量，指定的变量可以是数组元素，也可以是对象的属性
+</pre>
+<pre>事件举例：
+鼠标点击 
+页面或图像载入 
+鼠标悬浮于页面的某个热点之上 
+在表单中选取输入框 
+确认表单 
+键盘按键 
+onload 和 onUnload
+当用户进入或离开页面时就会触发 onload 和 onUnload 事件。
+onload 事件常用来检测访问者的浏览器类型和版本，然后根据这些信息载入特定版本的网页
+onload 和 onUnload 事件也常被用来处理用户进入或离开页面时所建立的 cookies
+onFocus, onBlur 和 onChange
+onFocus、onBlur 和 onChange 事件通常相互配合用来验证表单。
+
+下面是一个使用 onChange 事件的例子。用户一旦改变了域的内容，checkEmail() 函数就会被调用。
+
+&lt;input type="text" size="30" id="email" onchange="checkEmail()"&gt;
+onSubmit
+onSubmit 用于在提交表单之前验证所有的表单域。
+使用 onSubmit 事件的例子。当用户单击表单中的确认按钮时，checkForm() 函数就会被调用。
+假若域的值无效，此次提交就会被取消。checkForm() 函数的返回值是 true 或者 false。
+如果返回值为true，则提交表单，反之取消提交。
+
+&lt;form method="post" action="xxx.htm" onsubmit="return checkForm()"&gt;
+onMouseOver 和 onMouseOut
+onMouseOver 和 onMouseOut 用来创建“动态的”按钮。
+当 onMouseOver 事件被脚本侦测到时，就会弹出一个警告框
+onmouseover="alert('An onMouseOver event');return false"&gt;
+
+Try...Catch 语句
+语法：
+try
+{
+   //在此运行代码
+}
+catch(err)
+{
+   //在此处理错误
+}
+</pre>
+<div>
+<h2><span class="Apple-style-span">Throw 声明</span></h2>
+</div>
+<div>
+
+throw 声明的作用是创建 exception（异常）。你可以把这个声明与 try...catch 声明配合使用，以达到控制程序流并产生精确错误消息的目的
+
+</div>
+<div>
+<pre>&lt;script type="text/javascript"&gt;
+var x=prompt("Enter a number between 0 and 10:","")
+<code>try</code> { if(x&gt;10) <code>          throw "Err1"</code> else if(x&lt;0) <code>          throw "Err2"</code> } <code>catch(er)</code> { if(er=="Err1") alert("Error! The value is too high") if(er == "Err2") alert("Error! The value is too low") } &lt;/script&gt;</pre>
+</div>
+<pre>onerror 事件 （chrome、opera、safari 浏览器不支持）
+
+只要页面中出现脚本错误，就会产生 onerror 事件
+</pre>
+<div>
+<pre>&lt;html&gt;
+&lt;head&gt;
+    &lt;script type="text/javascript"&gt;
+        onerror = handleErr
+        var txt = ""
+
+        function handleErr(msg, url, l) {
+            txt = "There was an error on this page.\n\n"
+            txt += "Error: " + msg + "\n"
+            txt += "URL: " + url + "\n"
+            txt += "Line: " + l + "\n\n"
+            txt += "Click OK to continue.\n\n"
+            alert(txt)
+            return true
+        }
+
+        function message() {
+            alert("Welcome guest!")
+        }
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;input type="button" value="View message" onclick="message()"/&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+</div>
+<div>
+
+下面的表格列出了其余的特殊字符，这些特殊字符都可以使用反斜杠来添加到文本字符串中：
+<table class=" xhe-border">
+<tbody>
+<tr>
+<th>代码</th>
+<th>输出</th>
+</tr>
+<tr>
+<td>\'</td>
+<td>单引号</td>
+</tr>
+<tr>
+<td>\"</td>
+<td>双引号</td>
+</tr>
+<tr>
+<td>\&amp;</td>
+<td>和号</td>
+</tr>
+<tr>
+<td>\\</td>
+<td>反斜杠</td>
+</tr>
+<tr>
+<td>\n</td>
+<td>换行符</td>
+</tr>
+<tr>
+<td>\r</td>
+<td>回车符</td>
+</tr>
+<tr>
+<td>\t</td>
+<td>制表符</td>
+</tr>
+<tr>
+<td>\b</td>
+<td>退格符</td>
+</tr>
+<tr>
+<td>\f</td>
+<td>换页符</td>
+</tr>
+</tbody>
+</table>
+</div>
+<pre><span class="Apple-style-span">字符串使用单引号或者双引号</span>来起始或者结束。
+var txt="We are the so-called \"Vikings\" from the north."
+document.write ("You \&amp; me are singing!")
+</pre>
+<pre>在文本字符串内部使用<span class="Apple-style-span">反斜杠对代码进行折行</span>
+document.write("Hello \
+World!")
+JavaScript 是面向对象的编程语言 (OOP)
+</pre>
+<div>
+<h2><span class="Apple-style-span">String（字符串）对象 实例</span></h2>
+</div>
+<div>
+<table class=" xhe-border">
+<tbody>
+<tr>
+<th>方法</th>
+<th>描述</th>
+<th>FF</th>
+<th>IE</th>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">anchor()</a></td>
+<td>创建 HTML 锚。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">big()</a></td>
+<td>用大号字体显示字符串。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">blink()</a></td>
+<td>显示闪动字符串。</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">bold()</a></td>
+<td>使用粗体显示字符串。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">charAt()</a></td>
+<td>返回在指定位置的字符。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">charCodeAt()</a></td>
+<td>返回在指定的位置的字符的 Unicode 编码。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">concat()</a></td>
+<td>连接字符串。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">fixed()</a></td>
+<td>以打字机文本显示字符串。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">fontcolor()</a></td>
+<td>使用指定的颜色来显示字符串。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">fontsize()</a></td>
+<td>使用指定的尺寸来显示字符串。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">fromCharCode()</a></td>
+<td>从字符编码创建一个字符串。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">indexOf()</a></td>
+<td>检索字符串。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">italics()</a></td>
+<td>使用斜体显示字符串。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">lastIndexOf()</a></td>
+<td>从后向前搜索字符串。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">link()</a></td>
+<td>将字符串显示为链接。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">localeCompare()</a></td>
+<td>用本地特定的顺序来比较两个字符串。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">match()</a></td>
+<td>找到一个或多个正在表达式的匹配。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">replace()</a></td>
+<td>替换与正则表达式匹配的子串。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">search()</a></td>
+<td>检索与正则表达式相匹配的值。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">slice()</a></td>
+<td>提取字符串的片断，并在新的字符串中返回被提取的部分。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">small()</a></td>
+<td>使用小字号来显示字符串。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">split()</a></td>
+<td>把字符串分割为字符串数组。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">strike()</a></td>
+<td>使用删除线来显示字符串。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">sub()</a></td>
+<td>把字符串显示为下标。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">substr()</a></td>
+<td>从起始索引号提取字符串中指定数目的字符。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">substring()</a></td>
+<td>提取字符串中两个指定的索引号之间的字符。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">sup()</a></td>
+<td>把字符串显示为上标。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">toLocaleLowerCase()</a></td>
+<td>把字符串转换为小写。</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">toLocaleUpperCase()</a></td>
+<td>把字符串转换为大写。</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">toLowerCase()</a></td>
+<td>把字符串转换为小写。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">toUpperCase()</a></td>
+<td>把字符串转换为大写。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td>toSource()</td>
+<td>代表对象的源代码。</td>
+<td>1</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">toString()</a></td>
+<td>返回字符串。</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">valueOf()</a></td>
+<td>返回某个字符串对象的原始值。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<h2><span class="Apple-style-span">Date（日期）对象 实例</span></h2>
+</div>
+<div>
+<h2><span class="Apple-style-span">Date 对象方法</span></h2>
+FF: Firefox, IE: Internet Explorer
+<table class=" xhe-border">
+<tbody>
+<tr>
+<th>方法</th>
+<th>描述</th>
+<th>FF</th>
+<th>IE</th>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Date()</a></td>
+<td>返回当日的日期和时间。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">getDate()</a></td>
+<td>从 Date 对象返回一个月中的某一天 (1 ~ 31)。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">getDay()</a></td>
+<td>从 Date 对象返回一周中的某一天 (0 ~ 6)。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">getMonth()</a></td>
+<td>从 Date 对象返回月份 (0 ~ 11)。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">getFullYear()</a></td>
+<td>从 Date 对象以四位数字返回年份。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">getYear()</a></td>
+<td>请使用 getFullYear() 方法代替。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">getHours()</a></td>
+<td>返回 Date 对象的小时 (0 ~ 23)。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">getMinutes()</a></td>
+<td>返回 Date 对象的分钟 (0 ~ 59)。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">getSeconds()</a></td>
+<td>返回 Date 对象的秒数 (0 ~ 59)。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">getMilliseconds()</a></td>
+<td>返回 Date 对象的毫秒(0 ~ 999)。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">getTime()</a></td>
+<td>返回 1970 年 1 月 1 日至今的毫秒数。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">getTimezoneOffset()</a></td>
+<td>返回本地时间与格林威治标准时间 (GMT) 的分钟差。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">getUTCDate()</a></td>
+<td>根据世界时从 Date 对象返回月中的一天 (1 ~ 31)。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">getUTCDay()</a></td>
+<td>根据世界时从 Date 对象返回周中的一天 (0 ~ 6)。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">getUTCMonth()</a></td>
+<td>根据世界时从 Date 对象返回月份 (0 ~ 11)。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">getUTCFullYear()</a></td>
+<td>根据世界时从 Date 对象返回四位数的年份。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">getUTCHours()</a></td>
+<td>根据世界时返回 Date 对象的小时 (0 ~ 23)。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">getUTCMinutes()</a></td>
+<td>根据世界时返回 Date 对象的分钟 (0 ~ 59)。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">getUTCSeconds()</a></td>
+<td>根据世界时返回 Date 对象的秒钟 (0 ~ 59)。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">getUTCMilliseconds()</a></td>
+<td>根据世界时返回 Date 对象的毫秒(0 ~ 999)。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">parse()</a></td>
+<td>返回1970年1月1日午夜到指定日期（字符串）的毫秒数。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">setDate()</a></td>
+<td>设置 Date 对象中月的某一天 (1 ~ 31)。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">setMonth()</a></td>
+<td>设置 Date 对象中月份 (0 ~ 11)。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">setFullYear()</a></td>
+<td>设置 Date 对象中的年份（四位数字）。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">setYear()</a></td>
+<td>请使用 setFullYear() 方法代替。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">setHours()</a></td>
+<td>设置 Date 对象中的小时 (0 ~ 23)。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">setMinutes()</a></td>
+<td>设置 Date 对象中的分钟 (0 ~ 59)。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">setSeconds()</a></td>
+<td>设置 Date 对象中的秒钟 (0 ~ 59)。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">setMilliseconds()</a></td>
+<td>设置 Date 对象中的毫秒 (0 ~ 999)。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">setTime()</a></td>
+<td>以毫秒设置 Date 对象。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">setUTCDate()</a></td>
+<td>根据世界时设置 Date 对象中月份的一天 (1 ~ 31)。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">setUTCMonth()</a></td>
+<td>根据世界时设置 Date 对象中的月份 (0 ~ 11)。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">setUTCFullYear()</a></td>
+<td>根据世界时设置 Date 对象中的年份（四位数字）。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">setUTCHours()</a></td>
+<td>根据世界时设置 Date 对象中的小时 (0 ~ 23)。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">setUTCMinutes()</a></td>
+<td>根据世界时设置 Date 对象中的分钟 (0 ~ 59)。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">setUTCSeconds()</a></td>
+<td>根据世界时设置 Date 对象中的秒钟 (0 ~ 59)。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">setUTCMilliseconds()</a></td>
+<td>根据世界时设置 Date 对象中的毫秒 (0 ~ 999)。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">toSource()</a></td>
+<td>返回该对象的源代码。</td>
+<td>1</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">toString()</a></td>
+<td>把 Date 对象转换为字符串。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">toTimeString()</a></td>
+<td>把 Date 对象的时间部分转换为字符串。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">toDateString()</a></td>
+<td>把 Date 对象的日期部分转换为字符串。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">toGMTString()</a></td>
+<td>请使用 toUTCString() 方法代替。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">toUTCString()</a></td>
+<td>根据世界时，把 Date 对象转换为字符串。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">toLocaleString()</a></td>
+<td>根据本地时间格式，把 Date 对象转换为字符串。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">toLocaleTimeString()</a></td>
+<td>根据本地时间格式，把 Date 对象的时间部分转换为字符串。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">toLocaleDateString()</a></td>
+<td>根据本地时间格式，把 Date 对象的日期部分转换为字符串。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">UTC()</a></td>
+<td>根据世界时返回 1997 年 1 月 1 日 到指定日期的毫秒数。</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">valueOf()</a></td>
+<td>返回 Date 对象的原始值。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<h2><span class="Apple-style-span">定义日期</span></h2>
+</div>
+<div>
+<pre>var myDate=<code>new</code> Date()</pre>
+</div>
+<div>注释：Date 对象自动使用当前的日期和时间作为其初始值</div>
+<div></div>
+<div>
+<h2><span class="Apple-style-span">操作日期</span></h2>
+</div>
+<div>
+<div>
+
+日期对象设置了一个特定的日期 (2008 年 8 月 9 日)：
+
+</div>
+<pre>var myDate=new Date()
+myDate.<code>setFullYear</code>(2008,7,9)</pre>
+</div>
+<div>
+<div>
+
+将日期对象设置为 5 天后的日期
+
+</div>
+<pre>var myDate=new Date()
+myDate.<code>setDate</code>(myDate.getDate()+5)</pre>
+</div>
+<div>
+
+数组对象的作用是：使用单独的变量名来存储一系列的值
+定义数组
+var mycars=new Array()
+mycars[0]="Saab"
+mycars[1]="Volvo"
+mycars[2]="BMW"
+
+var mycars=new Array("Saab","Volvo","BMW")
+访问数组
+document.write(mycars[0])
+修改已有数组中的值
+mycars[0]="Opel";
+
+</div>
+<div>
+<table class=" xhe-border">
+<tbody>
+<tr>
+<th>方法</th>
+<th>描述</th>
+<th>FF</th>
+<th>IE</th>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">concat()</a></td>
+<td>连接两个或更多的数组，并返回结果。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">join()</a></td>
+<td>把数组的所有元素放入一个字符串。元素通过指定的分隔符进行分隔。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">pop()</a></td>
+<td>删除并返回数组的最后一个元素</td>
+<td>1</td>
+<td>5.5</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">push()</a></td>
+<td>向数组的末尾添加一个或更多元素，并返回新的长度。</td>
+<td>1</td>
+<td>5.5</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">reverse()</a></td>
+<td>颠倒数组中元素的顺序。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">shift()</a></td>
+<td>删除并返回数组的第一个元素</td>
+<td>1</td>
+<td>5.5</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">slice()</a></td>
+<td>从某个已有的数组返回选定的元素</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">sort()</a></td>
+<td>对数组的元素进行排序</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">splice()</a></td>
+<td>删除元素，并向数组添加新元素。</td>
+<td>1</td>
+<td>5.5</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">toSource()</a></td>
+<td>返回该对象的源代码。</td>
+<td>1</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">toString()</a></td>
+<td>把数组转换为字符串，并返回结果。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">toLocaleString()</a></td>
+<td>把数组转换为本地数组，并返回结果。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">unshift()</a></td>
+<td>向数组的开头添加一个或更多元素，并返回新的长度。</td>
+<td>1</td>
+<td>6</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">valueOf()</a></td>
+<td>返回数组对象的原始值</td>
+<td>1</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div></div>
+<div>
+<h1><span class="Apple-style-span">Boolean（逻辑）对象</span></h1>
+</div>
+<div>
+<h2><span class="Apple-style-span">Boolean 对象</span></h2>
+</div>
+<div> Boolean 对象理解为一个产生逻辑值的对象包装器,用于将非逻辑值转换为逻辑值（true 或者 false）。</div>
+<div>
+<pre>var myBoolean=new Boolean()
+var myBoolean=new Boolean(0)
+var myBoolean=new Boolean(null)
+var myBoolean=new Boolean("")
+var myBoolean=new Boolean(false)
+var myBoolean=new Boolean(NaN)
+</pre>
+下面的所有的代码行均会创初始值为 true 的 Boolean 对象：
+<pre>var myBoolean=new Boolean(true)
+var myBoolean=new Boolean("true")
+var myBoolean=new Boolean("false")
+var myBoolean=new Boolean("Richard")
+</pre>
+<div>
+
+下面的例子展示 <span class="Apple-style-span">toSource()</span> 方法的用法：
+<pre>&lt;script type="text/javascript"&gt;
+
+function employee(name,job,born)
+{
+     this.name=name;
+     this.job=job;
+     this.born=born;
+}
+
+var bill=new employee("Bill Gates","Engineer",1985);
+
+document.write(<code>bill.toSource()</code>); &lt;/script&gt;</pre>
+输出：
+<pre>({name:"Bill Gates", job:"Engineer", born:1985}) 
+</pre>
+</div>
+</div>
+<div></div>
+<div>
+<table class=" xhe-border">
+<tbody>
+<tr>
+<th>方法</th>
+<th>描述</th>
+<th></th>
+<th></th>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">toSource()</a></td>
+<td>返回该对象的源代码。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">toString()</a></td>
+<td>把逻辑值转换为字符串，并返回结果。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">valueOf()</a></td>
+<td>返回 Boolean 对象的原始值。</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div></div>
+<div></div>
+<div>
+<h2><span class="Apple-style-span">Math 对象</span></h2>
+</div>
+<div>
+<dl>
+ 	<dt><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">round()</a></dt>
+ 	<dd>如何使用 round()。</dd>
+ 	<dt><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">random()</a></dt>
+ 	<dd>如何使用 random() 来返回 0 到 1 之间的随机数。</dd>
+ 	<dt><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">max()</a></dt>
+ 	<dd>如何使用 max() 来返回两个给定的数中的较大的数。</dd>
+ 	<dt><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">min()</a></dt>
+ 	<dd>如何使用 min() 来返回两个给定的数中的较小的数。</dd>
+</dl>
+</div>
+<div>
+<h1><span class="Apple-style-span">RegExp 对象</span></h1>
+</div>
+<div>RegExp 是正则表达式的缩写,<span class="Apple-style-span">用于规定在文本中检索的内容,</span>可用于解析、格式检查、替换等等</div>
+<div></div>
+<div>
+<h2><span class="Apple-style-span">定义 RegExp</span></h2>
+</div>
+<div>RegExp 对象用于存储检索模式</div>
+<div>
+<pre>var patt1=new RegExp("e");
+</pre>
+<div>当您使用该 RegExp 对象在一个字符串中检索时，将寻找的是字符 "e"</div>
+<div>
+<h2><span class="Apple-style-span">RegExp 对象的方法</span></h2>
+</div>
+<div>
+<h2><span class="Apple-style-span">test()</span></h2>
+<div></div>
+<div>test() 方法检索字符串中的指定值。返回值是 true 或 false</div>
+</div>
+<div>
+<h3><span class="Apple-style-span">例子：</span></h3>
+<pre>var patt1=new RegExp("e");
+
+document.write(patt1.test("The best things in life are free")); 
+</pre>
+由于该字符串中存在字母 "e"，以上代码的输出将是：
+<pre>true
+</pre>
+<div>
+<h2><span class="Apple-style-span">exec()</span></h2>
+<div></div>
+<div>exec() 方法检索字符串中的指定值。返回值是被找到的值。如果没有发现匹配，则返回 null</div>
+</div>
+<div>
+<h3><span class="Apple-style-span">例子 1：</span></h3>
+<pre>var patt1=new RegExp("e");
+
+document.write(patt1.exec("The best things in life are free")); 
+</pre>
+由于该字符串中存在字母 "e"，以上代码的输出将是：
+<pre>e
+</pre>
+<div>
+<h2><span class="Apple-style-span">compile()</span></h2>
+compile() 方法用于改变 RegExp。
+<div>compile() 既可以改变检索模式，也可以添加或删除第二个参数</div>
+</div>
+<div>
+<h3><span class="Apple-style-span">例子：</span></h3>
+<pre>var patt1=new RegExp("e");
+
+document.write(patt1.test("The best things in life are free"));
+
+patt1.compile("d");
+
+document.write(patt1.test("The best things in life are free"));
+</pre>
+由于字符串中存在 "e"，而没有 "d"，以上代码的输出是：
+<pre>true false
+</pre>
+<pre></pre>
+<div>
+<h2><span class="Apple-style-span">RegExp 对象</span></h2>
+RegExp 对象表示正则表达式，它是对字符串执行模式匹配的强大工具。
+<h3><span class="Apple-style-span">直接量语法</span></h3>
+<pre>/pattern/attributes
+</pre>
+<h3><span class="Apple-style-span">创建 RegExp 对象的语法：</span></h3>
+<pre>new RegExp(<span class="Apple-style-span">pattern</span>, <span class="Apple-style-span">attributes</span>);
+</pre>
+<h3><span class="Apple-style-span">参数</span></h3>
+参数 <span class="Apple-style-span">pattern</span> 是一个字符串，指定了正则表达式的模式或其他正则表达式。
+
+参数 <span class="Apple-style-span">attributes</span> 是一个可选的字符串，包含属性 "g"、"i" 和 "m"，分别用于指定全局匹配、区分大小写的匹配和多行匹配。ECMAScript 标准化之前，不支持 m 属性。如果 <span class="Apple-style-span">pattern</span> 是正则表达式，而不是字符串，则必须省略该参数。
+<h3><span class="Apple-style-span">返回值</span></h3>
+一个新的 RegExp 对象，具有指定的模式和标志。如果参数 <span class="Apple-style-span">pattern</span> 是正则表达式而不是字符串，那么 RegExp() 构造函数将用与指定的 RegExp 相同的模式和标志创建一个新的 RegExp 对象。
+
+如果不用 new 运算符，而将 RegExp() 作为函数调用，那么它的行为与用 new 运算符调用时一样，只是当 <span class="Apple-style-span">pattern</span> 是正则表达式时，它只返回 <span class="Apple-style-span">pattern</span>，而不再创建一个新的 RegExp 对象。
+<h3><span class="Apple-style-span">抛出</span></h3>
+SyntaxError - 如果 <span class="Apple-style-span">pattern</span> 不是合法的正则表达式，或 <span class="Apple-style-span">attributes</span> 含有 "g"、"i" 和 "m" 之外的字符，抛出该异常。
+
+TypeError - 如果 <span class="Apple-style-span">pattern</span> 是 RegExp 对象，但没有省略 <span class="Apple-style-span">attributes</span> 参数，抛出该异常。
+
+</div>
+<div>
+<h2><span class="Apple-style-span">修饰符</span></h2>
+<table class=" xhe-border">
+<tbody>
+<tr>
+<th>修饰符</th>
+<th>描述</th>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">i</a></td>
+<td>执行对大小写不敏感的匹配。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">g</a></td>
+<td>执行全局匹配（查找所有匹配而非在找到第一个匹配后停止）。</td>
+</tr>
+<tr>
+<td>m</td>
+<td>执行多行匹配。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<h2><span class="Apple-style-span">方括号</span></h2>
+方括号用于查找某个范围内的字符：
+<table class=" xhe-border">
+<tbody>
+<tr>
+<th>表达式</th>
+<th>描述</th>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">[abc]</a></td>
+<td>查找方括号之间的任何字符。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">[^abc]</a></td>
+<td>查找任何不在方括号之间的字符。</td>
+</tr>
+<tr>
+<td>[0-9]</td>
+<td>查找任何从 0 至 9 的数字。</td>
+</tr>
+<tr>
+<td>[a-z]</td>
+<td>查找任何从小写 a 到小写 z 的字符。</td>
+</tr>
+<tr>
+<td>[A-Z]</td>
+<td>查找任何从大写 A 到大写 Z 的字符。</td>
+</tr>
+<tr>
+<td>[a-Z]</td>
+<td>查找任何从小写 a 到大写 Z 的字符。</td>
+</tr>
+<tr>
+<td>[adgk]</td>
+<td>查找给定集合内的任何字符。</td>
+</tr>
+<tr>
+<td>[^adgk]</td>
+<td>查找给定集合外的任何字符。</td>
+</tr>
+<tr>
+<td>[red|blue|green]</td>
+<td>查找任何指定的选项。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<h2><span class="Apple-style-span">元字符</span></h2>
+元字符（Metacharacter）是拥有特殊含义的字符：
+<table class=" xhe-border">
+<tbody>
+<tr>
+<th>元字符</th>
+<th>描述</th>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">.</a></td>
+<td>查找单个字符，除了换行和行结束符。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">\w</a></td>
+<td>查找单词字符。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">\W</a></td>
+<td>查找非单词字符。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">\d</a></td>
+<td>查找数字。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">\D</a></td>
+<td>查找非数字字符。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">\s</a></td>
+<td>查找空白字符。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">\S</a></td>
+<td>查找非空白字符。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">\b</a></td>
+<td>查找位于单词的开头或结尾的匹配。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">\B</a></td>
+<td>查找不处在单词的开头或结尾的匹配。</td>
+</tr>
+<tr>
+<td>\0</td>
+<td>查找 NUL 字符。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">\n</a></td>
+<td>查找换行符。</td>
+</tr>
+<tr>
+<td>\f</td>
+<td>查找换页符。</td>
+</tr>
+<tr>
+<td>\r</td>
+<td>查找回车符。</td>
+</tr>
+<tr>
+<td>\t</td>
+<td>查找制表符。</td>
+</tr>
+<tr>
+<td>\v</td>
+<td>查找垂直制表符。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">\xxx</a></td>
+<td>查找以八进制数 xxx 规定的字符。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">\xdd</a></td>
+<td>查找以十六进制数 dd 规定的字符。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">\uxxxx</a></td>
+<td>查找以十六进制数 xxxx 规定的 Unicode 字符。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<h2><span class="Apple-style-span">量词</span></h2>
+<table class=" xhe-border">
+<tbody>
+<tr>
+<th>量词</th>
+<th>描述</th>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">n+</a></td>
+<td>匹配任何包含至少一个 n 的字符串。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">n*</a></td>
+<td>匹配任何包含零个或多个 n 的字符串。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">n?</a></td>
+<td>匹配任何包含零个或一个 n 的字符串。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">n{X}</a></td>
+<td>匹配包含 X 个 n 的序列的字符串。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">n{X,Y}</a></td>
+<td>匹配包含 X 或 Y 个 n 的序列的字符串。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">n{X,}</a></td>
+<td>匹配包含至少 X 个 n 的序列的字符串。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">n$</a></td>
+<td>匹配任何结尾为 n 的字符串。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">^n</a></td>
+<td>匹配任何开头为 n 的字符串。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">?=n</a></td>
+<td>匹配任何其后紧接指定字符串 n 的字符串。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">?!n</a></td>
+<td>匹配任何其后没有紧接指定字符串 n 的字符串。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<h2><span class="Apple-style-span">RegExp 对象属性</span></h2>
+FF: Firefox, IE: Internet Explorer
+<table class=" xhe-border">
+<tbody>
+<tr>
+<th>属性</th>
+<th>描述</th>
+<th>FF</th>
+<th>IE</th>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">global</a></td>
+<td>RegExp 对象是否具有标志 g。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">ignoreCase</a></td>
+<td>RegExp 对象是否具有标志 i。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">lastIndex</a></td>
+<td>一个整数，标示开始下一次匹配的字符位置。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">multiline</a></td>
+<td>RegExp 对象是否具有标志 m。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">source</a></td>
+<td>正则表达式的源文本。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<h2><span class="Apple-style-span">RegExp 对象方法</span></h2>
+FF: Firefox, IE: Internet Explorer
+<table class=" xhe-border">
+<tbody>
+<tr>
+<th>方法</th>
+<th>描述</th>
+<th>FF</th>
+<th>IE</th>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">compile</a></td>
+<td>编译正则表达式。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">exec</a></td>
+<td>检索字符串中指定的值。返回找到的值，并确定其位置。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">test</a></td>
+<td>检索字符串中指定的值。返回 true 或 false。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<h2><span class="Apple-style-span">支持正则表达式的 String 对象的方法</span></h2>
+FF: Firefox, IE: Internet Explorer
+<table class=" xhe-border">
+<tbody>
+<tr>
+<th>方法</th>
+<th>描述</th>
+<th>FF</th>
+<th>IE</th>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">search</a></td>
+<td>检索与正则表达式相匹配的值。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">match</a></td>
+<td>找到一个或多个正则表达式的匹配。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">replace</a></td>
+<td>替换与正则表达式匹配的子串。</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">split</a></td>
+<td>把字符串分割为字符串数组。</td>
+<td></td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<h2><span class="Apple-style-span">HTML DOM</span></h2>
+HTML DOM 是 W3C 标准（是 HTML 文档对象模型的英文缩写，Document Object Model for HTML）。
+<div>HTML DOM 定义了用于 HTML 的一系列标准的对象，以及访问和处理 HTML 文档的标准方法</div>
+</div>
+<div>通过 DOM，可以访问所有的 HTML 元素，连同它们所包含的文本和属性。可以对其中的内容进行修改和删除，同时也可以创建新的元素</div>
+<div>使用 JavaScript 来访问和处理 DOM 对象的知识：</div>
+<div>
+<table class=" xhe-border">
+<tbody>
+<tr>
+<th>对象</th>
+<th>描述</th>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Document</a></td>
+<td>代表整个 HTML 文档，用来访问页面中的所有元素。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Anchor</a></td>
+<td>代表 &lt;a&gt; 元素。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Area</a></td>
+<td>代表图像地图中的 &lt;area&gt; 元素。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Base</a></td>
+<td>代表 &lt;base&gt; 元素。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Body</a></td>
+<td>代表图像地图中的 &lt;body&gt; 元素。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Button</a></td>
+<td>代表 &lt;button&gt; 元素。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Event</a></td>
+<td>代表事件的状态</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Form</a></td>
+<td>代表 &lt;form&gt; 元素</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Frame</a></td>
+<td>代表 &lt;frame&gt; 元素</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Frameset</a></td>
+<td>代表 &lt;frameset&gt; 元素</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Iframe</a></td>
+<td>代表 &lt;iframe&gt; 元素</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Image</a></td>
+<td>代表 &lt;img&gt; 元素</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Input button</a></td>
+<td>代表 HTML 表单中的按钮</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Input checkbox</a></td>
+<td>代表 HTML 表单中的选择框</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Input file</a></td>
+<td>代表 HTML 表单中的 fileupload 。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Input hidden</a></td>
+<td>代表 HTML 表单中的隐藏域。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Input password</a></td>
+<td>代表 HTML 表单中的密码域。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Input radio</a></td>
+<td>代表 HTML 表单中的单选框。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Input reset</a></td>
+<td>代表 HTML 表单中的重置按钮。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Input submit</a></td>
+<td>代表 HTML 表单中的确认按钮。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Input text</a></td>
+<td>代表 HTML 表单中的文本输入域。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Link</a></td>
+<td>代表 &lt;link&gt; 元素</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Meta</a></td>
+<td>代表 &lt;meta&gt; 元素</td>
+</tr>
+<tr>
+<td><a title="HTML DOM Object 对象" href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Object</a></td>
+<td>代表一个 &lt;Object&gt; 元素</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Option</a></td>
+<td>代表 &lt;option&gt; 元素</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Select</a></td>
+<td>代表 HTML 表单中的选择列表。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Style</a></td>
+<td>代表某个单独的样式声明。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Table</a></td>
+<td>代表 &lt;table&gt; 元素。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">TableData</a></td>
+<td>代表 &lt;td&gt; 元素。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">TableRow</a></td>
+<td>代表 &lt;tr&gt; 元素。</td>
+</tr>
+<tr>
+<td><a href="http://write.blog.csdn.net/postedit/39207221" target="_blank" rel="noopener">Textarea</a></td>
+<td>代表 &lt;textarea&gt; 元素。</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div></div>
+<div>
+<h2><span class="Apple-style-span"> 表单验证</span></h2>
+</div>
+<div><span class="Apple-style-span">在数据被送往服务器前对 HTML 表单中的这些输入数据进行验证</span></div>
+<div><span class="Apple-style-span">检查用户是否已填写表单中的必填（或必选）项目。假如必填或必选项为空，那么警告框会弹出，并且函数的返回值为 false，否则函数的返回值则为 true</span></div>
+<div align="left"><span class="Apple-style-span">&lt;</span><span class="Apple-style-span">html</span><span class="Apple-style-span">&gt;</span></div>
+<div align="left"><span class="Apple-style-span">&lt;</span><span class="Apple-style-span">head</span><span class="Apple-style-span">&gt;</span></div>
+<div align="left"><span class="Apple-style-span">&lt;</span><span class="Apple-style-span">script</span> <span class="Apple-style-span">type</span> <span class="Apple-style-span">=</span><span class="Apple-style-span">"text/javascript"</span><span class="Apple-style-span">&gt;</span></div>
+<div align="left"><span class="Apple-style-span">   </span> <span class="Apple-style-span">function</span> <span class="Apple-style-span">validate_required</span><span class="Apple-style-span">(field,alertxt){</span></div>
+<div align="left"><span class="Apple-style-span">       </span> <span class="Apple-style-span">with</span> <span class="Apple-style-span">(field){</span></div>
+<div align="left"><span class="Apple-style-span">           </span> <span class="Apple-style-span">if</span><span class="Apple-style-span">(value</span> <span class="Apple-style-span">==</span> <span class="Apple-style-span">null</span> <span class="Apple-style-span">||</span> <span class="Apple-style-span">value</span> <span class="Apple-style-span">==</span><span class="Apple-style-span">""</span><span class="Apple-style-span">){</span></div>
+<div align="left"><span class="Apple-style-span">                alert(alertxt);</span></div>
+<div align="left"><span class="Apple-style-span">               </span> <span class="Apple-style-span">return</span> <span class="Apple-style-span">false</span><span class="Apple-style-span">;</span></div>
+<div align="left"><span class="Apple-style-span">            }</span> <span class="Apple-style-span">else</span><span class="Apple-style-span">{</span></div>
+<div align="left"><span class="Apple-style-span">                alert(value);</span></div>
+<div align="left"><span class="Apple-style-span">               </span> <span class="Apple-style-span">return</span> <span class="Apple-style-span">true</span><span class="Apple-style-span">;</span></div>
+<div align="left"><span class="Apple-style-span">            }</span></div>
+<div align="left"><span class="Apple-style-span">        }</span></div>
+<div align="left"><span class="Apple-style-span"> </span></div>
+<div align="left"><span class="Apple-style-span">    }</span></div>
+<div align="left"><span class="Apple-style-span">   </span> <span class="Apple-style-span">function</span> <span class="Apple-style-span">validate_form</span><span class="Apple-style-span">(thisform) {</span></div>
+<div align="left"><span class="Apple-style-span">       </span> <span class="Apple-style-span">with</span> <span class="Apple-style-span">(thisform) {</span></div>
+<div align="left"><span class="Apple-style-span">           </span> <span class="Apple-style-span">if</span> <span class="Apple-style-span">(validate_required(email,</span> <span class="Apple-style-span">"Email must be filled out!"</span> <span class="Apple-style-span">)</span> <span class="Apple-style-span">==</span> <span class="Apple-style-span">false</span><span class="Apple-style-span">) {</span></div>
+<div align="left"><span class="Apple-style-span">                email.focus();</span></div>
+<div align="left"><span class="Apple-style-span">               </span> <span class="Apple-style-span">return</span> <span class="Apple-style-span">false</span></div>
+<div align="left"><span class="Apple-style-span">           </span> <span class="Apple-style-span">}</span></div>
+<div align="left"><span class="Apple-style-span">        }</span></div>
+<div align="left"><span class="Apple-style-span">    }</span></div>
+<div align="left"><span class="Apple-style-span">&lt;/</span><span class="Apple-style-span">script</span><span class="Apple-style-span">&gt;</span></div>
+<div align="left"><span class="Apple-style-span">&lt;/</span><span class="Apple-style-span">head</span><span class="Apple-style-span">&gt;</span></div>
+<div align="left"><span class="Apple-style-span">&lt;</span><span class="Apple-style-span">body</span><span class="Apple-style-span">&gt;</span></div>
+<div align="left"><span class="Apple-style-span">&lt;</span><span class="Apple-style-span">form</span> <span class="Apple-style-span">action</span> <span class="Apple-style-span">=</span><span class="Apple-style-span">"JS.php"</span> <span class="Apple-style-span">onsubmit</span> <span class="Apple-style-span">=</span><span class="Apple-style-span">"</span><span class="Apple-style-span">return</span> <span class="Apple-style-span">validate_form</span><span class="Apple-style-span">(this)</span><span class="Apple-style-span">"</span> <span class="Apple-style-span">method</span><span class="Apple-style-span">=</span><span class="Apple-style-span">"post"</span> <span class="Apple-style-span">&gt;</span></div>
+<div align="left"><span class="Apple-style-span">    Email:&lt;</span> <span class="Apple-style-span">input</span> <span class="Apple-style-span">type</span><span class="Apple-style-span">=</span> <span class="Apple-style-span">"text"</span> <span class="Apple-style-span">name</span><span class="Apple-style-span">=</span> <span class="Apple-style-span">"email"</span> <span class="Apple-style-span">size</span><span class="Apple-style-span">=</span> <span class="Apple-style-span">"30"</span><span class="Apple-style-span">&gt;</span></div>
+<div align="left"><span class="Apple-style-span">    &lt;</span> <span class="Apple-style-span">input</span> <span class="Apple-style-span">type</span><span class="Apple-style-span">=</span> <span class="Apple-style-span">"submit"</span> <span class="Apple-style-span">value</span><span class="Apple-style-span">=</span> <span class="Apple-style-span">"submit"</span><span class="Apple-style-span">&gt;</span></div>
+<div align="left"><span class="Apple-style-span">&lt;/</span><span class="Apple-style-span">form</span><span class="Apple-style-span">&gt;</span></div>
+<div align="left"><span class="Apple-style-span">&lt;/</span><span class="Apple-style-span">body</span><span class="Apple-style-span">&gt;</span></div>
+<div align="left"><span class="Apple-style-span">&lt;/</span><span class="Apple-style-span">html</span><span class="Apple-style-span">&gt;</span></div>
+<div><span class="Apple-style-span"> </span></div>
+<div>
+<h2><span class="Apple-style-span">E-mail 验证</span></h2>
+</div>
+<div>将上面的方法改为如下（<span class="Apple-style-span">输入的数据必须包含 @ 符号和点号(.)。同时，@ 不可以是邮件地址的首字符，并且 @ 之后需有至少一个点号</span>）：</div>
+<div align="left">
+<div align="left"><span class="Apple-style-span">  </span> <span class="Apple-style-span"> </span> <span class="Apple-style-span">function</span> <span class="Apple-style-span">validate_required</span> <span class="Apple-style-span">(field,alertxt){</span></div>
+<div align="left"><span class="Apple-style-span">       </span> <span class="Apple-style-span">with</span> <span class="Apple-style-span">(field){</span></div>
+<div align="left"><span class="Apple-style-span">           </span> <span class="Apple-style-span">var</span> <span class="Apple-style-span">apos</span> <span class="Apple-style-span">=</span> <span class="Apple-style-span">value.indexOf(</span><span class="Apple-style-span">"@"</span><span class="Apple-style-span">);</span></div>
+<div align="left"><span class="Apple-style-span">           </span> <span class="Apple-style-span">var</span> <span class="Apple-style-span">dotpos</span> <span class="Apple-style-span">=</span> <span class="Apple-style-span">value.indexOf(</span><span class="Apple-style-span">"."</span><span class="Apple-style-span">);</span></div>
+<div align="left"><span class="Apple-style-span">           </span> <span class="Apple-style-span">if</span><span class="Apple-style-span">(apos</span><span class="Apple-style-span">&lt;</span> <span class="Apple-style-span">1</span> <span class="Apple-style-span">||</span> <span class="Apple-style-span">dotpos</span> <span class="Apple-style-span">-</span><span class="Apple-style-span">apos</span><span class="Apple-style-span">&lt;</span> <span class="Apple-style-span">2</span><span class="Apple-style-span">){</span></div>
+<div align="left"><span class="Apple-style-span">                alert(alertxt);</span></div>
+<div align="left"><span class="Apple-style-span">               </span> <span class="Apple-style-span">return</span> <span class="Apple-style-span">false</span><span class="Apple-style-span">;</span></div>
+<div align="left"><span class="Apple-style-span">            }</span> <span class="Apple-style-span">else</span><span class="Apple-style-span">{</span></div>
+<div align="left"><span class="Apple-style-span">                alert(value);</span></div>
+<div align="left"><span class="Apple-style-span">               </span> <span class="Apple-style-span">return</span> <span class="Apple-style-span">true</span><span class="Apple-style-span">;</span></div>
+<div align="left"><span class="Apple-style-span">            }</span></div>
+<div align="left"><span class="Apple-style-span">        }</span></div>
+<div align="left"><span class="Apple-style-span">}</span></div>
+<div align="left"><span class="Apple-style-span"> </span></div>
+<div align="left">
+<h2><span class="Apple-style-span">HTML DOM （文档对象模型）</span></h2>
+<div><span class="Apple-style-span">当网页被加载时，浏览器会创建页面的文档对象模型（Document Object Model）</span></div>
+<div>
+<h3><span class="Apple-style-span">HTML DOM 树</span></h3>
+<img src="file:///C:/Users/YUANWA~1/AppData/Local/Temp/enhtmlclip/Image.gif" alt="DOM HTML 树" width="486" height="266" />
+
+</div>
+<div></div>
+<div>
+<h2><span class="Apple-style-span">查找 HTML 元素</span></h2>
+</div>
+<div>
+<ul>
+ 	<li>通过 id 找到 HTML 元素</li>
+ 	<li>通过标签名找到 HTML 元素</li>
+ 	<li>通过类名找到 HTML 元素</li>
+</ul>
+</div>
+<div></div>
+<div>&lt;p id="intro"&gt;Hello World!&lt;/p&gt;</div>
+<div>
+
+本例查找 id="intro" 元素：
+<pre>var x=document.getElementById("intro");
+</pre>
+</div>
+<div></div>
+<div>
+
+如果找到该元素，则该方法将以对象的形式返回该元素。
+<div>如果未找到该元素，则 x 将包含 null。</div>
+</div>
+<div>
+
+本例查找 id="main" 的元素，然后查找 "main" 中的所有 &lt;p&gt; 元素：
+<pre>var y= document.getElementsByTagName("p");
+</pre>
+</div>
+<div></div>
+<div>
+<ul>
+ 	<li>如何改变 HTML 元素的内容 (innerHTML)</li>
+ 	<li>如何改变 HTML 元素的样式 (CSS)</li>
+ 	<li>如何对 HTML DOM 事件对做出反应</li>
+ 	<li>如何添加或删除 HTML 元素</li>
+</ul>
+</div>
+<div></div>
+<div><span class="Apple-style-span">HTML DOM 允许 JavaScript 改变 HTML 元素的内容</span></div>
+<div><span class="Apple-style-span">document.write() 可用于直接向 HTML 输出流写内容</span></div>
+<div>
+<h2><span class="Apple-style-span">改变 HTML 内容</span></h2>
+</div>
+<div>
+
+改变 HTML 元素的内容，请使用这个语法：
+<pre>document.getElementById(id).innerHTML=new HTML</pre>
+</div>
+<div></div>
+<div align="left"><span class="Apple-style-span">            &lt;</span> <span class="Apple-style-span">p</span> <span class="Apple-style-span">id</span><span class="Apple-style-span">=</span> <span class="Apple-style-span">"p1"</span><span class="Apple-style-span">&gt;</span><span class="Apple-style-span">Hello World!</span><span class="Apple-style-span">&lt;/</span> <span class="Apple-style-span">p</span><span class="Apple-style-span">&gt;</span></div>
+<div align="left"><span class="Apple-style-span">            &lt;</span> <span class="Apple-style-span">script</span><span class="Apple-style-span">&gt;</span> <span class="Apple-style-span">document</span><span class="Apple-style-span">.getElementById(</span><span class="Apple-style-span">"p1"</span> <span class="Apple-style-span">).innerHTML</span> <span class="Apple-style-span">=</span> <span class="Apple-style-span">"&lt;h2&gt;Hello ken&lt;/h2&gt;"</span><span class="Apple-style-span">;</span><span class="Apple-style-span">&lt;/</span><span class="Apple-style-span">script</span><span class="Apple-style-span">&gt;</span></div>
+<div></div>
+<div>
+<h2><span class="Apple-style-span">改变 HTML 属性</span></h2>
+如需改变 HTML 元素的属性，请使用这个语法：
+<pre>document.getElementById(id).attribute=new value</pre>
+</div>
+<div><span class="Apple-style-span">改变了 &lt;img&gt; 元素的 src 属性</span></div>
+<div align="left"><span class="Apple-style-span">&lt;</span><span class="Apple-style-span">img</span> <span class="Apple-style-span">id</span> <span class="Apple-style-span">=</span><span class="Apple-style-span">"image"</span> <span class="Apple-style-span">src</span> <span class="Apple-style-span">=</span><span class="Apple-style-span">"/i/eg_tulip.jpg"</span> <span class="Apple-style-span">/&gt;</span></div>
+<div align="left"><span class="Apple-style-span">&lt;</span><span class="Apple-style-span">script</span><span class="Apple-style-span">&gt;</span> <span class="Apple-style-span">document</span><span class="Apple-style-span">.getElementById(</span><span class="Apple-style-span">"image"</span> <span class="Apple-style-span">).src</span><span class="Apple-style-span">=</span><span class="Apple-style-span">"/i/shanghai_lupu_bridge.jpg"</span> <span class="Apple-style-span">;</span><span class="Apple-style-span">&lt;/</span><span class="Apple-style-span">script</span> <span class="Apple-style-span">&gt;</span></div>
+</div>
+</div>
+<div><span class="Apple-style-span">Document</span></div>
+<div><span class="Apple-style-span"> </span></div>
+<div align="left"><span class="Apple-style-span">&lt;</span><span class="Apple-style-span">script</span> <span class="Apple-style-span">type</span> <span class="Apple-style-span">=</span><span class="Apple-style-span">"text/javascript"</span><span class="Apple-style-span">&gt;</span></div>
+<div align="left"><span class="Apple-style-span">function</span> <span class="Apple-style-span">createNewDoc</span><span class="Apple-style-span">()</span></div>
+<div align="left"><span class="Apple-style-span">  {</span></div>
+<div align="left"><span class="Apple-style-span"> </span> <span class="Apple-style-span">var</span> <span class="Apple-style-span">newDoc</span> <span class="Apple-style-span">=</span><span class="Apple-style-span">document</span><span class="Apple-style-span">.open(</span> <span class="Apple-style-span">"text/html"</span><span class="Apple-style-span">);</span></div>
+<div align="left"><span class="Apple-style-span"> </span> <span class="Apple-style-span">var</span> <span class="Apple-style-span">txt</span> <span class="Apple-style-span">=</span><span class="Apple-style-span">"&lt;html&gt;&lt;body&gt;Learning about the DOM is FUN!&lt;/body&gt;&lt;/html&gt;"</span> <span class="Apple-style-span">;</span></div>
+<div align="left"><span class="Apple-style-span">  newDoc.write(txt);</span></div>
+<div align="left"><span class="Apple-style-span">  newDoc.close();</span></div>
+<div align="left"><span class="Apple-style-span">  }</span></div>
+<div align="left"><span class="Apple-style-span"> </span></div>
+<div align="left"><span class="Apple-style-span">&lt;/</span><span class="Apple-style-span">script</span><span class="Apple-style-span">&gt;</span></div>
+<div align="left"><span class="Apple-style-span"> HTML DOM - 改变 CSS</span></div>
+<div></div>
+<div>
+<h2><span class="Apple-style-span">改变 HTML 样式</span></h2>
+</div>
+<div>
+
+改变 &lt;p&gt; 元素的样式：
+<pre>&lt;p id="p2"&gt;Hello World!&lt;/p&gt;
+
+&lt;script&gt;
+document.getElementById("p2").style.color="blue";
+&lt;/script&gt;
+</pre>
+</div>
+<div></div>
+<div><span class="Apple-style-span">对 HTML 事件做出反应</span></div>
+<div>
+
+HTML 事件的例子：
+<ul>
+ 	<li>当用户点击鼠标时</li>
+ 	<li>当网页已加载时</li>
+ 	<li>当图像已加载时</li>
+ 	<li>当鼠标移动到元素上时</li>
+ 	<li>当输入字段被改变时</li>
+ 	<li>当提交 HTML 表单时</li>
+ 	<li>当用户触发按键时</li>
+</ul>
+</div>
+<div>
+<h3><span class="Apple-style-span">例子 1</span></h3>
+</div>
+<div>
+<pre>&lt;h1 <code>onclick="this.innerHTML='谢谢!'"</code>&gt;请点击该文本&lt;/h1&gt;</pre>
+</div>
+<div>
+<h3><span class="Apple-style-span">例子 2</span></h3>
+</div>
+<div></div>
+<div>
+<pre>&lt;script&gt;
+function changetext(id)
+{
+id.innerHTML="谢谢!";
+}
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1 <code>onclick="changetext(this)"</code>&gt;请点击该文本&lt;/h1&gt; &lt;/body&gt;</pre>
+</div>
+<div></div>
+<div>
+<h2><span class="Apple-style-span">HTML 事件属性</span></h2>
+</div>
+<div><span class="Apple-style-span">如需向 HTML 元素分配 事件，您可以使用事件属性</span></div>
+<div>
+
+向 button 元素分配 onclick 事件：
+<pre>&lt;button onclick="displayDate()"&gt;点击这里&lt;/button&gt;
+</pre>
+</div>
+<div></div>
+<div>
+<h2><span class="Apple-style-span">使用 HTML DOM 来分配事件</span></h2>
+</div>
+<div><span class="Apple-style-span">通过使用 JavaScript 来向 HTML 元素分配事件：</span></div>
+<div>
+<pre>&lt;script&gt;
+document.getElementById("myBtn").onclick=function(){displayDate()};
+&lt;/script&gt;
+</pre>
+</div>
+<div></div>
+<div>
+<h2><span class="Apple-style-span">onload 和 onunload 事件</span></h2>
+</div>
+<div>
+
+1.onload 和 onunload 事件会在用户<span class="Apple-style-span">进入或离开页面时被触发</span>。
+
+2.onload 事件可用于检测访问者的<span class="Apple-style-span">浏览器类型和浏览器版</span>本，并基于这些信息来加载网页的正确版本。
+
+3.onload 和 onunload 事件可用于<span class="Apple-style-span">处理 cookie</span>。
+
+</div>
+<div></div>
+<div>
+<h2><span class="Apple-style-span">onchange 事件</span></h2>
+</div>
+<div><span class="Apple-style-span">常结合对输入字段的验证来使用</span></div>
+<div><span class="Apple-style-span">下面是一个如何使用 onchange 的例子。当用户改变输入字段的内容时，会调用 upperCase() 函数。</span></div>
+<div>
+<pre>&lt;input type="text" id="fname" onchange="upperCase()"&gt;
+</pre>
+</div>
+<div></div>
+<div>
+<h2><span class="Apple-style-span">onmouseover 和 onmouseout 事件</span></h2>
+</div>
+<div><span class="Apple-style-span">onmouseover 和 onmouseout 事件可用于在用户的鼠标移至 HTML 元素上方或移出元素时触发函数</span></div>
+<div align="left"><span class="Apple-style-span">&lt;</span><span class="Apple-style-span">div</span> <span class="Apple-style-span">onmouseover</span> <span class="Apple-style-span">=</span><span class="Apple-style-span">"</span><span class="Apple-style-span">mOver</span> <span class="Apple-style-span">(this)</span><span class="Apple-style-span">"</span> <span class="Apple-style-span">onmouseout</span> <span class="Apple-style-span">=</span><span class="Apple-style-span">"</span><span class="Apple-style-span">mOut</span> <span class="Apple-style-span">(this)</span><span class="Apple-style-span">"</span><span class="Apple-style-span">&gt;把鼠标移到上面&lt;/</span> <span class="Apple-style-span">div</span><span class="Apple-style-span">&gt;</span></div>
+<div align="left"><span class="Apple-style-span">&lt;</span> <span class="Apple-style-span">script</span><span class="Apple-style-span">&gt;</span></div>
+<div align="left"><span class="Apple-style-span">    </span><span class="Apple-style-span">function</span> <span class="Apple-style-span">mOver</span><span class="Apple-style-span">(obj) {</span><span class="Apple-style-span">}</span></div>
+<div align="left"><span class="Apple-style-span">    </span><span class="Apple-style-span">function</span> <span class="Apple-style-span">mOut</span><span class="Apple-style-span">(obj) {</span><span class="Apple-style-span">}</span></div>
+<div align="left"> <span class="Apple-style-span">&lt;/</span><span class="Apple-style-span">script</span><span class="Apple-style-span">&gt;</span></div>
+<div></div>
+<div>
+<h2><span class="Apple-style-span">onmousedown、onmouseup 以及 onclick 事件</span></h2>
+onmousedown, onmouseup 以及 onclick 构成了鼠标点击事件的所有部分。首先当点击鼠标按钮时，会触发 onmousedown 事件，当释放鼠标按钮时，会触发 onmouseup 事件，最后，当完成鼠标点击时，会触发 onclick 事件
+
+</div>
+<div>
+<h1><span class="Apple-style-span">DOM 元素</span></h1>
+</div>
+<div>
+<h2><span class="Apple-style-span">创建新的 HTML 元素</span></h2>
+</div>
+<div><span class="Apple-style-span">向 HTML DOM 添加新元素，您必须首先创建该元素（元素节点），然后向一个已存在的元素追加该元素</span></div>
+<div align="left"><span class="Apple-style-span">&lt;</span><span class="Apple-style-span">body</span><span class="Apple-style-span">&gt;</span></div>
+<div align="left"><span class="Apple-style-span">&lt;</span><span class="Apple-style-span">div</span> <span class="Apple-style-span">id</span> <span class="Apple-style-span">=</span><span class="Apple-style-span">"div_name"</span><span class="Apple-style-span">&gt;</span></div>
+<div align="left"><span class="Apple-style-span">    &lt;</span> <span class="Apple-style-span">p</span> <span class="Apple-style-span">id</span><span class="Apple-style-span">=</span> <span class="Apple-style-span">"p1"</span><span class="Apple-style-span">&gt;one text&lt;/</span><span class="Apple-style-span">p</span> <span class="Apple-style-span">&gt;</span></div>
+<div align="left"><span class="Apple-style-span"> </span></div>
+<div align="left"><span class="Apple-style-span">&lt;/</span><span class="Apple-style-span">div</span><span class="Apple-style-span">&gt;</span></div>
+<div align="left"><span class="Apple-style-span">   &lt;</span> <span class="Apple-style-span">script</span> <span class="Apple-style-span">type</span><span class="Apple-style-span">=</span> <span class="Apple-style-span">"text/javascript"</span><span class="Apple-style-span">&gt;</span></div>
+<div align="left"><span class="Apple-style-span">    </span> <span class="Apple-style-span"> </span> <span class="Apple-style-span">var</span> <span class="Apple-style-span">para</span> <span class="Apple-style-span">= </span> <span class="Apple-style-span">document</span><span class="Apple-style-span">.createElement(</span> <span class="Apple-style-span">"p"</span><span class="Apple-style-span">);  创建元素</span></div>
+<div align="left"><span class="Apple-style-span">     </span> <span class="Apple-style-span">var</span> <span class="Apple-style-span">node</span> <span class="Apple-style-span">= </span> <span class="Apple-style-span">document</span><span class="Apple-style-span">.createTextNode(</span><span class="Apple-style-span">"add subText Node"</span> <span class="Apple-style-span">); 创建节点</span></div>
+<div align="left"><span class="Apple-style-span">      para.appendChild(</span> <span class="Apple-style-span">node</span><span class="Apple-style-span">); 添加节点-&gt;元素</span></div>
+<div align="left"><span class="Apple-style-span">     </span></div>
+<div align="left"><span class="Apple-style-span">     </span> <span class="Apple-style-span">var</span> <span class="Apple-style-span">ele</span> <span class="Apple-style-span">=</span> <span class="Apple-style-span">document</span><span class="Apple-style-span">.getElementById(</span><span class="Apple-style-span">"div_name"</span> <span class="Apple-style-span">);  取得元素</span></div>
+<div align="left"><span class="Apple-style-span">      ele.appendChild(para);  添加元素</span></div>
+<div align="left"><span class="Apple-style-span">   </span> <span class="Apple-style-span">&lt;/</span><span class="Apple-style-span">script</span><span class="Apple-style-span">&gt;</span></div>
+<div align="left"><span class="Apple-style-span">&lt;/</span><span class="Apple-style-span">body</span><span class="Apple-style-span">&gt;</span></div>
+<div></div>
+<div>
+<h2><span class="Apple-style-span">删除已有的 HTML 元素</span></h2>
+</div>
+<div><span class="Apple-style-span">删除 HTML 元素，您必须首先获得该元素的父元素</span></div>
+<div>
+<pre>var child=document.getElementById("p1");
+child.parentNode.removeChild(child);
+</pre>
+</div>
+<div></div>
+<div>
+<h2><span class="Apple-style-span">Window 对象</span></h2>
+</div>
+<div><span class="Apple-style-span">它表示浏览器窗口</span></div>
+<div>
+
+所有 JavaScript 全局对象、函数以及变量均自动成为 window 对象的成员。
+
+全局变量是 window 对象的属性。
+<div>全局函数是 window 对象的方法。</div>
+</div>
+<div><span class="Apple-style-span">document 也是 window 对象的属性之一：</span></div>
+<div>
+<pre>window.document.getElementById("header");
+</pre>
+与此相同：
+<pre>document.getElementById("header");
+</pre>
+</div>
+<div></div>
+<div>
+<h2><span class="Apple-style-span">Window 尺寸</span></h2>
+</div>
+<div>
+<pre>var w=window.innerWidth
+|| document.documentElement.clientWidth
+|| document.body.clientWidth;
+
+var h=window.innerHeight
+|| document.documentElement.clientHeight
+|| document.body.clientHeight;
+</pre>
+</div>
+<div>
+
+一些其他方法：
+<ul>
+ 	<li>window.open() - 打开新窗口</li>
+ 	<li>window.close() - 关闭当前窗口</li>
+ 	<li>window.moveTo() - 移动当前窗口</li>
+ 	<li>window.resizeTo() - 调整当前窗口的尺寸</li>
+</ul>
+</div>
+<div></div>
+<div>
+<h2><span class="Apple-style-span">Window Screen</span></h2>
+window.screen 对象在编写时可以不使用 window 这个前缀。
+
+一些属性：
+<ul>
+ 	<li>screen.availWidth - 可用的屏幕宽度</li>
+ 	<li>screen.availHeight - 可用的屏幕高度</li>
+</ul>
+<div><span class="Apple-style-span"> </span></div>
+</div>
+<div>
+<h2><span class="Apple-style-span">Window Location</span></h2>
+window.location 对象在编写时可不使用 window 这个前缀。
+
+一些例子：
+<ul>
+ 	<li>location.hostname 返回 web 主机的域名</li>
+ 	<li>location.pathname 返回当前页面的路径和文件名</li>
+ 	<li>location.port 返回 web 主机的端口 （80 或 443）</li>
+ 	<li>location.protocol 返回所使用的 web 协议（http:// 或 https://）</li>
+</ul>
+</div>
+<div></div>
+<div><span class="Apple-style-span">location.href 属性返回当前页面的 URL</span></div>
+<div>
+<pre>document.write(<code>location.href</code>);</pre>
+</div>
+<div><span class="Apple-style-span">location.pathname 属性返回 URL 的路径名</span></div>
+<div>
+<pre>document.write(<code>location.pathname</code>);</pre>
+</div>
+<div></div>
+<div><span class="Apple-style-span">location.assign() 方法加载新的文档</span></div>
+<div>
+<pre><code>window.location.assign("http://www.w3school.com.cn")</code></pre>
+</div>
+<div></div>
+<div></div>
+<div>
+<h2><span class="Apple-style-span">Window History</span></h2>
+</div>
+<div>
+<ul>
+ 	<li>history.back() - 与在浏览器点击后退按钮相同, 加载历史列表中的前一个 URL</li>
+ 	<li>history.forward() - 与在浏览器中点击按钮向前相同, 加载 历史列表中的下一个 URL</li>
+</ul>
+</div>
+<div></div>
+<div>
+<h2><span class="Apple-style-span">Window Navigator</span></h2>
+</div>
+<div><span class="Apple-style-span">包含有关访问者浏览器的信息</span></div>
+<pre>&lt;div id="example"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+
+txt = "&lt;p&gt;Browser CodeName: " + navigator.appCodeName + "&lt;/p&gt;";
+txt+= "&lt;p&gt;Browser Name: " + navigator.appName + "&lt;/p&gt;";
+txt+= "&lt;p&gt;Browser Version: " + navigator.appVersion + "&lt;/p&gt;";
+txt+= "&lt;p&gt;Cookies Enabled: " + navigator.cookieEnabled + "&lt;/p&gt;";
+txt+= "&lt;p&gt;Platform: " + navigator.platform + "&lt;/p&gt;";
+txt+= "&lt;p&gt;User-agent header: " + navigator.userAgent + "&lt;/p&gt;";
+txt+= "&lt;p&gt;User-agent language: " + navigator.systemLanguage + "&lt;/p&gt;";
+
+document.getElementById("example").innerHTML=txt;
+
+&lt;/script&gt;
+</pre>
+<h2><span class="Apple-style-span">浏览器检测</span></h2>
+<div><span class="Apple-style-span">由于不同的浏览器支持不同的对象，您可以使用对象来检测浏览器。例如，由于只有 Opera 支持属性 "window.opera"，您可以据此识别出 Opera。</span></div>
+<pre><span class="Apple-style-span">三种消息框：警告框、确认框、提示框</span></pre>
+<h2><span class="Apple-style-span">警告框</span></h2>
+<pre>警告框经常用于确保用户可以得到某些信息。
+</pre>
+<h3><span class="Apple-style-span">语法：</span></h3>
+<pre><span class="Apple-style-span">alert("文本")</span></pre>
+<h2><span class="Apple-style-span"> </span></h2>
+<h2><span class="Apple-style-span">确认框</span></h2>
+<div>
+
+<span class="Apple-style-span">确认框用于使用户可以验证或者接受某些信息。</span>
+
+<span class="Apple-style-span">当确认框出现后，用户需要点击确定或者取消按钮才能继续进行操作。</span>
+
+<span class="Apple-style-span">如果用户点击确认，那么返回值为 true。如果用户点击取消，那么返回值为 false。</span>
+<h3><span class="Apple-style-span">语法：</span></h3>
+<pre><span class="Apple-style-span">confirm("文本")</span></pre>
+</div>
+<h2><span class="Apple-style-span"> </span></h2>
+<h2><span class="Apple-style-span">提示框</span></h2>
+<div><span class="Apple-style-span">用于提示用户在进入页面前输入某个值</span></div>
+<div>
+
+<span class="Apple-style-span">当提示框出现后，用户需要输入某个值，然后点击确认或取消按钮才能继续操纵。</span>
+<div><span class="Apple-style-span">如果用户点击确认，那么返回值为输入的值。如果用户点击取消，那么返回值为 null</span></div>
+</div>
+<div>
+<h3><span class="Apple-style-span">语法：</span></h3>
+<pre><span class="Apple-style-span">prompt("文本","默认值")</span></pre>
+</div>
+<pre><span class="Apple-style-span">计时事件</span></pre>
+<pre><span class="Apple-style-span">在一个设定的时间间隔之后来执行代码，而不是在函数被调用后立即执行。我们称之为计时事件。</span></pre>
+<pre><span class="Apple-style-span">两个关键方法是: setTimeout() //</span><span class="Apple-style-span">未来的某时执行代码</span></pre>
+<dl>
+ 	<dt><span class="Apple-style-span">clearTimeout()      </span><span class="Apple-style-span">//取消setTimeout()</span></dt>
+</dl>
+<h3><span class="Apple-style-span">语法</span></h3>
+<pre><span class="Apple-style-span">var t=setTimeout("javascript语句",毫秒)</span></pre>
+<pre><span class="Apple-style-span">setTimeout() 方法会返回某个值。在上面的语句中，值被储存在名为 t 的变量中。假如你希望取消这个 setTimeout()，你可以使用这个变量名来指定它。 setTimeout() 的第一个参数是含有 JavaScript 语句的字符串。这个语句可能诸如 "alert('5 seconds!')"，或者对函数的调用，诸如 alertMsg()"。</span></pre>
+<div><span class="Apple-style-span">第二个参数指示从当前起多少毫秒后执行第一个参数</span></div>
+<div><span class="Apple-style-span">实例</span></div>
+<div><span class="Apple-style-span">当下面这个例子中的按钮被点击时，一个提示框会在5秒中后弹出</span></div>
+<div>
+<pre><span class="Apple-style-span"><code>var t=setTimeout("alert('5 seconds!')",5000)</code></span></pre>
+</div>
+<h3><span class="Apple-style-span">实例 - 无穷循环</span></h3>
+<div><span class="Apple-style-span">创建一个运行于无穷循环中的计时器，我们需要编写一个函数来调用其自身,达到递归调用的作用</span></div>
+<div>
+<pre><span class="Apple-style-span">&lt;script type="text/javascript"&gt; var c=0 var t function timedCount() { document.getElementById('txt').value=c c=c+1 <code>t=setTimeout("timedCount()",1000)</code> } &lt;/script&gt;</span></pre>
+</div>
+<h2><span class="Apple-style-span">clearTimeout()</span></h2>
+<h3><span class="Apple-style-span">语法</span></h3>
+<pre><span class="Apple-style-span">clearTimeout(setTimeout_variable)</span></pre>
+<h3><span class="Apple-style-span">实例</span></h3>
+<pre>和上面的无穷循环的例子相似。唯一的不同是，现在我们添加了一个 "Stop Count!" 按钮来停止这个计数器
+</pre>
+<pre><span class="Apple-style-span">&lt;script type="text/javascript"&gt; var c=0 var t function timedCount() { document.getElementById('txt').value=c c=c+1 <code>t=setTimeout("timedCount()",1000)</code> } function stopCount() { <code>clearTimeout(t)</code> } &lt;/script&gt;</span></pre>
+<pre><span class="Apple-style-span">cookie 用来识别用户</span></pre>
+<pre><span class="Apple-style-span">cookie 是存储于访问者的计算机中的变量。每当同一台计算机通过浏览器请求某个页面时，就会发送这个 cookie。你可以使用 JS 来创建和取回 cookie 的值。</span></pre>
+<h2><span class="Apple-style-span">创建和存储 cookie</span></h2>
+<div></div>
+<div><span class="Apple-style-span">在这个例子中我们要创建一个存储访问者名字的 cookie。当访问者首次访问网站时，他们会被要求填写姓名。名字会存储于 cookie 中。当访问者再次访问网站时，他们就会收到欢迎词。</span></div>
+<div><span class="Apple-style-span">&lt;html&gt;
+&lt;head&gt;
+&lt;script type="text/javascript"&gt;
+//建一个可在 cookie 变量中存储访问者姓名的函数
+function setCookie(c_name, value, expiredays) {
+var exdate = new Date()
+exdate.setDate(exdate.getDate() + expiredays)
+document.cookie = c_name + "=" + escape(value) +
+((expiredays == null) ? "" : ";expires=" + exdate.toString())
+}</span></div>
+<div><span class="Apple-style-span">
+//先会检查 document.cookie 对象中是否存有 cookie,继续检查我们指定的 cookie 是否已储存。如果找到了我们要的 cookie，就返回值，否则返回空字符串
+function getCookie(c_name) {
+if (document.cookie.length &gt; 0) {
+document.write(document.cookie);
+var c_start = document.cookie.indexOf(c_name + "=")
+if (c_start != -1) {
+c_start = c_start + c_name.length + 1
+var c_end = document.cookie.indexOf(";", c_start)
+if (c_end == -1) c_end = document.cookie.length
+return unescape(document.cookie.substring(c_start, c_end))
+}
+}
+return "";
+}
+//如果 cookie 已设置，则显示欢迎词，否则显示提示框来要求用户输入名字
+function checkCookie() {
+var username = getCookie('username')
+if (username != null &amp;&amp; username != "") {
+alert('Welcome again ' + username + '!')
+}
+else {
+username = prompt('Please enter your name:', "")
+if (username != null &amp;&amp; username != "") {
+setCookie('username', username, 365)
+}
+}
+}
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body onLoad="checkCookie()"&gt;
+&lt;/body&gt;
+&lt;/html&gt;</span></div>
+<div>
+<h2><span class="Apple-style-span"> </span></h2>
+<h2><span class="Apple-style-span">框架（库）</span></h2>
+</div>
+<div>
+
+广受欢迎的 JavaScript 框架：
+<ul>
+ 	<li>jQuery</li>
+ 	<li>Prototype</li>
+ 	<li>MooTools</li>
+</ul>
+</div>
+<pre><span class="Apple-style-span">所有这些框架都提供针对常见 JavaScript 任务的函数，包括动画、DOM 操作以及 Ajax 处理</span></pre>
+<h2><span class="Apple-style-span">jQuery</span></h2>
+<div><span class="Apple-style-span">使用 CSS 选择器来访问和操作网页上的 HTML 元素（DOM 对象）</span></div>
+<div><span class="Apple-style-span">jQuery 同时提供 companion UI（用户界面）和插件</span></div>
+<div>
+<h2><span class="Apple-style-span">Prototype</span></h2>
+<div></div>
+<div>Prototype 是一种库，提供用于执行常见 web 任务的简单 API</div>
+</div>
+<div><span class="Apple-style-span">Prototype 通过提供类和继承，实现了对 JavaScript 的增强</span></div>
+<div>
+<h2><span class="Apple-style-span">MooTools</span></h2>
+提供了可使常见的 JavaScript 编程更为简单的 API。
+
+也含有一些轻量级的效果和动画函数
+
+</div>
+<h3><span class="Apple-style-span">引用 jQuery</span></h3>
+<pre>&lt;script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"&gt;
+&lt;/script&gt;
+</pre>
+<pre><span class="Apple-style-span">测试 JavaScript 框架库 - jQuery</span></pre>
+<h2><span class="Apple-style-span">jQuery 描述</span></h2>
+<pre>主要的 jQuery 函数是 $() 函数（jQuery 函数）,如果您向该函数传递 DOM 对象，它会返回 jQuery 对象，带有向其添加的 jQuery 功能。
+</pre>
+<pre><span class="Apple-style-span">jQuery 允许您通过 CSS 选择器来选取元素。</span></pre>
+<h3><span class="Apple-style-span">JavaScript 方式：</span></h3>
+<pre>function myFunction()
+{
+     var obj=document.getElementById("h01");
+     obj.innerHTML="Hello jQuery";
+}
+onload=myFunction;
+</pre>
+<pre>等价的 jQuery 是：
+</pre>
+<h3><span class="Apple-style-span">jQuery 方式：</span></h3>
+<pre>function myFunction()
+{
+     $("#h01").html("Hello jQuery");
+}
+$(document).ready(myFunction);
+</pre>
+<pre><span class="Apple-style-span">在 JavaScript 中函数就是变量，因此可以把 myFunction 作为变量传递给 jQuery 的 ready 方法</span></pre>
+<pre><span class="Apple-style-span">提示：</span><span class="Apple-style-span">jQuery 返回 jQuery 对象，与已传递的 DOM 对象不同</span></pre>
+<pre><span class="Apple-style-span">jQuery 对象拥有的属性和方法，与 DOM 对象的不同</span></pre>
+<pre><span class="Apple-style-span">不能在 jQuery 对象上使用 HTML DOM 的属性和方法</span></pre>
+<h2><span class="Apple-style-span">测试 jQuery</span></h2>
+<div><span class="Apple-style-span"><span class="Apple-style-span">&lt;html&gt;
+&lt;head&gt;
+&lt;script src="http://www.w3school.com.cn/jquery/jquery-1.11.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+function myFunction() {
+$("#h01").attr("style", "color:red").html("Hello jQuery");
+$("#h01").append("hello 2jquery");
+}</span></span>$(document).ready(myFunction);
+&lt;/script&gt;
+&lt;/head&gt;</div>
+<div><span class="Apple-style-span">
+&lt;body&gt;
+&lt;h1 id="h01"&gt;&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</span></div>
+<h2><span class="Apple-style-span">Prototype 描述</span></h2>
+<pre>Prototype 提供的函数可使 HTML DOM 编程更容易。
+ 也有自己的 $() 函数。$() 函数接受 HTML DOM 元素的 id 值（或 DOM 元素），并会向 DOM 对象添加新的功能。
+与 jQuery 不同，Prototype 没有用以取代 window.onload() 的 ready() 方法。相反，Prototype 会向浏览器及 HTML DOM 添加扩展。
+</pre>
+<pre>分配一个函数以处理窗口加载事件：
+</pre>
+<h3><span class="Apple-style-span">JavaScript 方式：</span></h3>
+<pre>function myFunction()
+{
+var obj=document.getElementById("h01");
+obj.innerHTML="Hello Prototype";
+}
+onload=myFunction;
+</pre>
+<pre>等价的 Prototype 是不同的：
+</pre>
+<h3><span class="Apple-style-span">Prototype 方式：</span></h3>
+<pre>function myFunction()
+{
+$("h01").insert("Hello Prototype!");
+}
+Event.observe(window,"load",myFunction);
+</pre>
+<pre>Event.observe() 接受三个参数：
+</pre>
+<ul>
+ 	<li>您希望处理的 HTML DOM 或 BOM（浏览器对象模型）对象</li>
+ 	<li>您希望处理的事件</li>
+ 	<li>您希望调用的函数</li>
+</ul>
+<h1><span class="Apple-style-span"> </span></h1>
+<h1><span class="Apple-style-span">总结</span></h1>
+<h3><span class="Apple-style-span">jQuery</span></h3>
+<pre>jQuery 是一个 JavaScript 库
+jQuery 极大地简化了 JavaScript 编程
+</pre>
+<div>
+<h3><span class="Apple-style-span">HTML DOM</span></h3>
+HTML DOM 定义了访问和操作 HTML 文档的标准方法。
+<div>HTML DOM 独立于平台和语言，可被任何编程语言使用，比如 Java、JavaScript 和 VBscript</div>
+</div>
+<div>
+<h3><span class="Apple-style-span">AJAX</span></h3>
+AJAX = 异步 JavaScript 和 XML。
+
+AJAX 不是一种新的编程语言，而是一种使用现有标准的新方法。
+
+通过与服务器进行数据交换，AJAX 可以在不重新加载整个网页的情况下，对网页的某部分进行更新
+
+</div>
+<h3><span class="Apple-style-span">JSON</span></h3>
+<pre>JSON：JavaScript 对象表示法（JavaScript Object Notation）。
+JSON 是存储和交换文本信息的语法。类似 XML。
+</pre>
+<div>JSON 比 XML 更小、更快，更易解析</div>
+<div>
+<h3><span class="Apple-style-span">PHP</span></h3>
+</div>
+<div><span class="Apple-style-span">脚本在服务器上运行</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
