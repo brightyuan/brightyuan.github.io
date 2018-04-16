@@ -1,0 +1,88 @@
+## 环境搭建
+
+```
+idea配置tomcat
+http://www.cnblogs.com/sweetie/archive/2011/05/17/2049078.html
+```
+
+## 常见配置文件
+```
+1.web.xml,structs.xml,spring.xml
+```
+## Struts2基于注解的Action配置 
+```
+package com.tjcyjd.web.action;    
+    
+import org.apache.struts2.convention.annotation.Action;    
+import org.apache.struts2.convention.annotation.ExceptionMapping;    
+import org.apache.struts2.convention.annotation.ExceptionMappings;    
+import org.apache.struts2.convention.annotation.Namespace;    
+import org.apache.struts2.convention.annotation.ParentPackage;    
+import org.apache.struts2.convention.annotation.Result;    
+import org.apache.struts2.convention.annotation.Results;    
+    
+import com.opensymphony.xwork2.ActionSupport;    
+    
+/**  
+ * Struts2基于注解的Action配置 
+ *   
+ */    
+@ParentPackage("struts-default")    
+@Namespace("/annotation_test")  
+@Results( { @Result(name = "success", location = "/main.jsp"),  
+        @Result(name = "error", location = "/error.jsp") })  
+@ExceptionMappings( { @ExceptionMapping(exception = "java.lange.RuntimeException", result = "error") })  
+public class LoginAction extends ActionSupport {  
+    private static final long serialVersionUID = 2730268055700929183L;   
+    private String loginName;    
+    private String password;    
+    
+    @Action("login") //或者写成  @Action(value = "login")   
+    public String login() throws Exception {    
+    
+        if ("yjd".equals(loginName) && "yjd".equals(password)) {    
+            return SUCCESS;    
+        } else {    
+            return ERROR;    
+        }    
+    }    
+    @Action(value = "add", results = { @Result(name = "success", location = "/index.jsp") })    
+    public String add() throws Exception {    
+        return SUCCESS;    
+    }    
+    public String getLoginName() {    
+        return loginName;    
+    }    
+    public void setLoginName(String loginName) {    
+        this.loginName = loginName;    
+    }    
+    public String getPassword() {    
+        return password;    
+    }    
+    public void setPassword(String password) {    
+        this.password= password;    
+    }    
+}  
+```
+>- 总结常用的注解
+```
+Namespace：指定命名空间。
+ParentPackage：指定父包。
+Result：提供了Action结果的映射。（一个结果的映射）
+Results：“Result”注解列表
+ResultPath：指定结果页面的基路径。
+Action：指定Action的访问URL。
+Actions：“Action”注解列表。
+ExceptionMapping：指定异常映射。（映射一个声明异常）
+ExceptionMappings：一级声明异常的数组。
+InterceptorRef：拦截器引用。
+InterceptorRefs：拦截器引用组。
+@Autowired 可以对类成员变量，方法，构造函数进行标注，完成自动注入，自动装配的工作，按type注入
+@Resource 相当于autowired，但按name自动注入
+
+@Resource      //自动注入类型为car的bean
+private Car car;
+
+@Resource(name="office") //自动注入名称为office的bean
+private Office office;
+```
