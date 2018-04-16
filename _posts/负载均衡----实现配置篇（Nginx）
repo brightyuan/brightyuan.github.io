@@ -1,0 +1,135 @@
+首先我们来回顾下上篇的概念： 负载均衡 == 分身的能力。
+
+既然要有分身的能力嘛，这好办，多弄几台服务器就搞定了。
+今天我们讲的实例嘛…..我们还是先看图比较好:
+
+<img src="http://images.cnitblog.com/blog/124819/201409/031111563131941.png" alt="" />
+
+还是图比较清晰，以下我都用别名称呼：
+<div class="cnblogs_code">
+<pre>　　PA ： 负载均衡服务器/WEB入口服务器/www.mydomain.com
+　　P1 ： WEB服务器/分身1/192.168.2.3
+　　P2 ： WEB服务器/分身2/192.168.2.4
+　　P3 ： WEB服务器/分身3/192.168.2.5</pre>
+</div>
+&nbsp;
+
+PS：首先我们学这个的开始之前吧，不懂防火墙的童鞋们，建议你们把PA、P1、P2、P3的防火墙关闭，尽量不要引起不必要的麻烦。
+
+首先 ：PA、P1、P2、P3都安装了Nginx,不会安装的可以去官网查看教程：<a href="http://www.nginx.cn/install%20" target="_blank" rel="noopener">http://www.nginx.cn/install </a>（中文版教程、非常的牛X）
+
+1. 装完之后哈，我们先找到 PA 的nginx.conf配置文件：
+在http段加入以下代码:
+<div class="cnblogs_code">
+<pre>upstream servers.mydomain.com { 
+    server 192.168.2.3:80<span class="Apple-style-span">;</span> 
+    server 192.168.2.4:80<span class="Apple-style-span">;</span> 
+    server 192.168.2.5:80<span class="Apple-style-span">;
+</span>}</pre>
+</div>
+当然嘛,这servers.mydomain.com随便取的。
+
+那么PA的server配置如下:
+在http段加入以下代码：
+<div class="cnblogs_code">
+<pre>server{ 
+    listen 80<span class="Apple-style-span">;</span> 
+    server_name www.mydomain.com<span class="Apple-style-span">;</span> 
+    location / { 
+        proxy_pass http://servers.mydomain.com<span class="Apple-style-span">;</span> 
+        proxy_set_header Host $host<span class="Apple-style-span">;</span> 
+        proxy_set_header X-Real-IP $remote_addr<span class="Apple-style-span">;</span> 
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for<span class="Apple-style-span">;</span> 
+    } 
+}</pre>
+</div>
+那么P1、P2、P3的配置如下：
+<div class="cnblogs_code">
+<pre>server{ 
+    listen 80<span class="Apple-style-span">;</span> 
+    server_name www.mydomain.com<span class="Apple-style-span">;</span> 
+    index index.html<span class="Apple-style-span">;</span> 
+    root /data/htdocs/www<span class="Apple-style-span">;</span> 
+}</pre>
+</div>
+&nbsp;
+
+2. 有人就问了，我用其它端口行不行啊，当然也是可以的，假设PA的nginx.conf配置文件：
+<div class="cnblogs_code">
+<pre>upstream servers2.mydomain.com { 
+    server 192.168.2.3:8080<span class="Apple-style-span">;</span> 
+    server 192.168.2.4:8081<span class="Apple-style-span">;</span> 
+    server 192.168.2.5:8082<span class="Apple-style-span">;
+</span>}
+
+server{ 
+    listen 80<span class="Apple-style-span">;</span> 
+    server_name www.mydomain.com<span class="Apple-style-span">;</span> 
+    location / { 
+        proxy_pass http://servers2.mydomain.com<span class="Apple-style-span">;</span> 
+        proxy_set_header Host $host<span class="Apple-style-span">;</span> 
+        proxy_set_header X-Real-IP $remote_addr<span class="Apple-style-span">;</span> 
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for<span class="Apple-style-span">;</span> 
+    } 
+}</pre>
+</div>
+那么P1的配置如下：
+<div class="cnblogs_code">
+<pre>server{ 
+    listen 8080<span class="Apple-style-span">;</span> 
+    server_name www.mydomain.com<span class="Apple-style-span">;</span> 
+    index index.html<span class="Apple-style-span">;</span> 
+    root /data/htdocs/www<span class="Apple-style-span">;</span> 
+}</pre>
+</div>
+&nbsp;
+
+P2配置：
+<div class="cnblogs_code">
+<pre>server{ 
+    listen 8081<span class="Apple-style-span">;</span> 
+    server_name www.mydomain.com<span class="Apple-style-span">;</span> 
+    index index.html<span class="Apple-style-span">;</span> 
+    root /data/htdocs/www<span class="Apple-style-span">;</span> 
+}</pre>
+</div>
+&nbsp;
+
+P3配置：
+<div class="cnblogs_code">
+<pre>server{ 
+    listen 8082<span class="Apple-style-span">;</span> 
+    server_name www.mydomain.com<span class="Apple-style-span">;</span> 
+    index index.html<span class="Apple-style-span">;</span> 
+    root /data/htdocs/www<span class="Apple-style-span">;</span> 
+}</pre>
+</div>
+&nbsp;
+
+<span id="__mceDel">重启之后，我们访问下，恩不错，确实很厉害。
+当我们把一台服务器给关闭了后。
+访问网址，还是OK的。说明：负载均衡还要懂得修理他（T出泡妞队营）</span>
+
+&nbsp;
+
+3. 那么负载均衡如何保持通话呢？
+当然现在有好几种方案，我们这次只是讲一种。
+IP哈希策略
+优点：能较好地把同一个客户端的多次请求分配到同一台服务器处理，避免了加权轮询无法适用会话保持的需求。
+缺点：当某个时刻来自某个IP地址的请求特别多，那么将导致某台后端服务器的压力可能非常大，而其他后端服务器却空闲的不均衡情况。
+
+nginx的配置也很简单，代码如下：
+<div class="cnblogs_code">
+<pre>upstream servers2.mydomain.com { 
+    server 192.168.2.3:8080<span class="Apple-style-span">;</span> 
+    server 192.168.2.4:8081<span class="Apple-style-span">;</span> 
+    server 192.168.2.5:8082<span class="Apple-style-span">;
+</span>    ip_hash<span class="Apple-style-span">;
+</span>}</pre>
+</div>
+&nbsp;
+
+其实一切就这么简单，来赶快试试吧！
+
+4. 说了这么多,其实你有没有发现一个问题的所在，就是这么多服务器，他们共同需要的文件从哪里来？
+想知道如何解决，请继续关注：负载均衡 ---- 文件服务策略
