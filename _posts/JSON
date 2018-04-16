@@ -1,0 +1,115 @@
+<span class="Apple-style-span">JSON：JavaScript 对象表示法（JavaScript Object Notation）。</span>
+
+<span class="Apple-style-span">JSON 是存储和交换文本信息的语法。类似 XML。</span>
+
+<span class="Apple-style-span">JSON 比 XML 更小、更快，更易解析</span>
+<div><span class="Apple-style-span"> </span></div>
+<div>
+<h2><span class="Apple-style-span">JSON - 转换为 JavaScript 对象</span></h2>
+</div>
+<div><span class="Apple-style-span">无需解析器，JavaScript 程序能够使用内建的 <a title="JavaScript eval() 函数" href="http://www.w3school.com.cn/jsref/jsref_eval2.asp" target="_blank" rel="noopener">eval() 函数</a>(用 JSON 数据来生成原生的 JavaScript 对象)</span></div>
+<div>
+<h2><span class="Apple-style-span">实例</span></h2>
+</div>
+<div>
+<pre><span class="Apple-style-span">&lt;script type="text/javascript"&gt;
+<code>var JSONObject= {
+"name":"Bill Gates",
+"street":"Fifth Avenue New York 666",
+"age":56,
+"phone":"555 1234567"};</code> document.getElementById("jname").innerHTML=JSONObject.name document.getElementById("jage").innerHTML=JSONObject.age document.getElementById("jstreet").innerHTML=JSONObject.street document.getElementById("jphone").innerHTML=JSONObject.phone &lt;/script&gt;</span></pre>
+</div>
+<div>
+<h4><span class="Apple-style-span">使用 JSON</span></h4>
+<ul>
+ 	<li><span class="Apple-style-span">读取 JSON 字符串</span></li>
+ 	<li><span class="Apple-style-span">用 eval() 处理 JSON 字符串</span></li>
+</ul>
+</div>
+<div><span class="Apple-style-span"> </span></div>
+<div>
+<h2><span class="Apple-style-span">JSON 语法规则</span></h2>
+<span class="Apple-style-span">JSON 语法是 JavaScript 对象表示法语法的子集。</span>
+<ul>
+ 	<li><span class="Apple-style-span">数据在key/value对中</span></li>
+ 	<li><span class="Apple-style-span">数据由逗号分隔</span></li>
+ 	<li><span class="Apple-style-span">花括号保存对象</span></li>
+ 	<li><span class="Apple-style-span">方括号保存数组</span></li>
+</ul>
+</div>
+<!--more-->
+<div><span class="Apple-style-span"> </span></div>
+<div>
+<h2><span class="Apple-style-span">JSON 对象</span></h2>
+</div>
+<div>
+
+<span class="Apple-style-span">JSON 对象在花括号中书写：</span>
+
+<span class="Apple-style-span">对象可以包含多个名称/值对：</span>
+<pre><span class="Apple-style-span">{ "firstName":"John" , "lastName":"Doe" }
+</span></pre>
+<span class="Apple-style-span">这一点也容易理解，与这条 JavaScript 语句等价：</span>
+<pre><span class="Apple-style-span">firstName = "John"
+lastName = "Doe"
+</span></pre>
+</div>
+<div><span class="Apple-style-span"> </span></div>
+<div>
+<h2><span class="Apple-style-span">JSON 数组</span></h2>
+<span class="Apple-style-span">JSON 数组在方括号中书写(</span><span class="Apple-style-span">数组可包含多个对象</span>)：
+<pre><span class="Apple-style-span">{
+"employees": [
+               { "firstName":"John" , "lastName":"Doe" },
+               { "firstName":"Anna" , "lastName":"Smith" },
+               { "firstName":"Peter" , "lastName":"Jones" }
+             ]
+}
+</span></pre>
+</div>
+<div><span class="Apple-style-span"> </span></div>
+<div><span class="Apple-style-span">对象 "employees" 是包含三个对象的数组。每个对象代表一条关于某人（有姓和名）的记录</span></div>
+<div><span class="Apple-style-span"> </span></div>
+<div>
+<h2><span class="Apple-style-span">JSON 使用 JavaScript 语法</span></h2>
+</div>
+<div>
+
+<span class="Apple-style-span">像这样访问 JavaScript 对象数组中的第一项：</span>
+<pre><span class="Apple-style-span">employees[0].lastName;
+</span></pre>
+<span class="Apple-style-span">返回的内容是：</span>
+<pre><span class="Apple-style-span">Doe</span></pre>
+</div>
+<div>
+
+<span class="Apple-style-span">这样修改数据：</span>
+<pre><span class="Apple-style-span">employees[0].lastName = "Jobs";
+</span></pre>
+</div>
+<div><span class="Apple-style-span"> </span></div>
+<div>
+<h2><span class="Apple-style-span">把 JSON 文本转换为 JavaScript 对象</span></h2>
+</div>
+<div><span class="Apple-style-span"> 最常见的用法之一:从 web 服务器上</span></div>
+<div><span class="Apple-style-span">                     --&gt;读取 JSON 数据（作为文件或作为 HttpRequest）</span></div>
+<div><span class="Apple-style-span">                          --&gt; 将 JSON 数据转换为 JavaScript 对象 </span></div>
+<div><span class="Apple-style-span">                               --&gt; 然后在网页中使用该数据</span></div>
+<div><span class="Apple-style-span"> </span></div>
+<div>
+<h2><span class="Apple-style-span">JSON 实例 - 来自字符串的对象</span></h2>
+</div>
+<div>
+
+<span class="Apple-style-span">包含 JSON 语法的 JavaScript 字符串：</span>
+<pre><span class="Apple-style-span">var json_txt = '{ "employees" : [' +
+'{ "firstName":"Bill" , "lastName":"Gates" },' +
+'{ "firstName":"George" , "lastName":"Bush" },' +
+'{ "firstName":"Thomas" , "lastName":"Carter" } ]}';</span></pre>
+</div>
+<div>
+
+<span class="Apple-style-span">eval()可解析 JSON 文本，然后生成 JavaScript 对象。必须把文本包围在括号中，这样才能避免语法错误：</span>
+<pre><span class="Apple-style-span">var obj = eval ("(" + json_txt + ")");
+</span></pre>
+</div>
