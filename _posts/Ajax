@@ -1,0 +1,251 @@
+<div>
+<h2>AJAX</h2>
+</div>
+<span class="Apple-style-span">AJAX = Asynchronous JavaScript and XML（异步的 JavaScript 和 XML）</span>
+<div><span class="Apple-style-span">与服务器交换数据并更新部分网页的艺术，在不重新加载整个页面的情况下</span></div>
+<div><span class="Apple-style-span">是一种用于创建快速动态网页的技术。</span></div>
+<div>
+
+通过在后台与服务器进行少量数据交换， 可以使网页实现异步更新。这意味着可以在不重新加载整个网页的情况下，对网页的某部分进行更新。
+
+有很多使用 AJAX 的应用程序案例：新浪微博、Google 地图、开心网等等。
+
+</div>
+<div>
+
+Google 通过其 Google Suggest 使 AJAX 变得流行起来。
+
+Google Suggest 使用 AJAX 创造出动态性极强的 web 界面：当您在谷歌的搜索框输入关键字时，JavaScript 会把这些字符发送到服务器，然后服务器会返回一个搜索建议的列表
+
+</div>
+<!--more-->
+<div><span class="Apple-style-span"> </span></div>
+<div><span class="Apple-style-span">AJAX 的工作原理</span></div>
+<div>
+<h2><span class="Apple-style-span">XMLHttpRequest 对象</span></h2>
+<div><span class="Apple-style-span">XMLHttpRequest 用于在后台与服务器交换数据。这意味着可以在不重新加载整个网页的情况下，对网页的某部分进行更新</span></div>
+<div><span class="Apple-style-span"> </span></div>
+<div>
+<h2><span class="Apple-style-span">创建 XMLHttpRequest 对象</span></h2>
+</div>
+<div>
+<h3><span class="Apple-style-span">语法：</span></h3>
+<pre><span class="Apple-style-span">variable=new XMLHttpRequest();
+</span></pre>
+</div>
+</div>
+<div>
+
+请检查浏览器是否支持 XMLHttpRequest 对象。如果支持，则创建 XMLHttpRequest 对象。如果不支持，则创建 ActiveXObject ：
+<pre>var xmlhttp;
+if (window.XMLHttpRequest)
+  {<span class="Apple-style-span">// code for IE7+, Firefox, Chrome, Opera, Safari</span>
+  xmlhttp=new XMLHttpRequest();
+  }
+else
+  {<span class="Apple-style-span">// code for IE6, IE5</span>
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+</pre>
+</div>
+<div><span class="Apple-style-span">XMLHttpRequest 对象用于和服务器交换数据。</span></div>
+<div>
+<h2><span class="Apple-style-span">向服务器发送请求</span></h2>
+<span class="Apple-style-span">如需将请求发送到服务器，我们使用 XMLHttpRequest 对象的 open() 和 send() 方法：</span>
+<pre><span class="Apple-style-span">xmlhttp.open("GET","test1.txt",true);
+xmlhttp.send(); </span></pre>
+</div>
+<div>
+
+<span class="Apple-style-span">与 POST 相比，GET 更简单也更快，并且在大部分情况下都能用,</span>在以下情况中，<span class="Apple-style-span">请使用 POST 请求</span>：
+<ul>
+ 	<li>无法使用缓存文件（更新服务器上的文件或数据库）</li>
+ 	<li>向服务器发送大量数据（POST 没有数据量限制）</li>
+ 	<li>发送包含未知字符的用户输入时，POST 比 GET 更稳定也更可靠</li>
+</ul>
+</div>
+<div><span class="Apple-style-span"> </span></div>
+<div>
+
+使用 XMLHttpRequest 对象的 open() 和 send() 方法：
+<pre>xmlhttp.open("GET","test1.txt",true);  //get方法，异步传输，url=test1.txt
+xmlhttp.send();
+</pre>
+</div>
+<div>
+<h2>POST 请求</h2>
+</div>
+<div>
+
+请使用 setRequestHeader() 来添加 HTTP 头。然后在 send() 方法中规定您希望发送的数据：
+<pre>xmlhttp.open("POST","ajax_test.asp",true);
+xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+xmlhttp.send("fname=Bill&amp;lname=Gates");
+</pre>
+</div>
+<div><span class="Apple-style-span"> </span></div>
+<div>
+
+通过 AJAX，JavaScript 无需等待服务器的响应，而是：
+<ul>
+ 	<li>在等待服务器响应时执行其他脚本</li>
+ 	<li>当响应就绪后对响应进行处理</li>
+</ul>
+</div>
+<div><span class="Apple-style-span">实例：</span></div>
+<div>&lt;head&gt;
+&lt;script type="text/javascript"&gt;
+function loadXMLDoc() {
+var xmlhttp;
+//判定浏览器
+if(window.XMLHttpRequest){
+xmlhttp = new XMLHttpRequest();
+}else{
+xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+}
+//执行
+xmlhttp.onreadystatechange = function(){
+if(xmlhttp.readyState == 4 &amp;&amp; xmlhttp.status == 200){
+document.getElementById("myDiv").innerHTML = xmlhttp.responseText;
+}
+}
+xmlhttp.open("GET","/ajax/test1.php",true);
+xmlhttp.send();
+// document.getElementById("myDiv").innerHTML = xmlhttp.responseText;
+}
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;button type="button" onclick="loadXMLDoc()"&gt;请求数据&lt;/button&gt;
+&lt;div id="myDiv"&gt;&lt;/div&gt;
+&lt;/body&gt;</div>
+<div>
+<h2>Async = true</h2>
+当使用 async=true 时，请规定在响应处于 onreadystatechange 事件中的就绪状态时执行的函数：
+<pre>xmlhttp.onreadystatechange=function()
+  {
+  if (xmlhttp.readyState==4 &amp;&amp; xmlhttp.status==200)
+    {
+    document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+    }
+  }
+xmlhttp.open("GET","test1.txt",true);
+xmlhttp.send();
+</pre>
+</div>
+<div>
+<div></div>
+<div></div>
+<div>注释：当您使用 <span class="Apple-style-span">async=false</span> 时，请不要编写 onreadystatechange 函数 - 把代码放到 send() 语句后面即可：</div>
+<pre>xmlhttp.open("GET","test1.txt",false);
+xmlhttp.send();
+document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+</pre>
+</div>
+<div><span class="Apple-style-span"> </span></div>
+<div>
+<h2>服务器响应</h2>
+<div><span class="Apple-style-span">获得来自服务器的响应，请使用 XMLHttpRequest 对象的 responseText 或 responseXML 属性</span></div>
+<div>
+<h2>responseText 属性</h2>
+</div>
+<div>
+
+responseText 属性返回字符串形式的响应可以这样使用：
+<pre>document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+</pre>
+</div>
+</div>
+<div>
+<h2>responseXML 属性</h2>
+<div><span class="Apple-style-span">来自服务器的响应是 XML，而且需要作为 XML 对象进行解析</span></div>
+<div>
+<pre>xmlDoc=xmlhttp.responseXML;
+txt="";
+x=xmlDoc.getElementsByTagName("ARTIST");
+for (i=0;i&lt;x.length;i++)
+  {
+  txt=txt + x[i].childNodes[0].nodeValue + "&lt;br /&gt;";
+  }
+document.getElementById("myDiv").innerHTML=txt;
+</pre>
+</div>
+</div>
+<div>
+<h2>onreadystatechange 事件</h2>
+<div>
+
+当请求被发送到服务器时，我们需要执行一些基于响应的任务。
+
+每当 readyState 改变时，就会触发 onreadystatechange 事件。
+
+readyState 属性存有 XMLHttpRequest 的状态信息
+
+</div>
+<div></div>
+</div>
+<div>
+
+XMLHttpRequest 对象的三个重要的属性：
+<table class=" xhe-border">
+<tbody>
+<tr>
+<th>属性</th>
+<th>描述</th>
+</tr>
+<tr>
+<td>onreadystatechange</td>
+<td>存储函数（或函数名），每当 readyState 属性改变时，就会调用该函数。</td>
+</tr>
+<tr>
+<td>readyState</td>
+<td>存有 XMLHttpRequest 的状态。从 0 到 4 发生变化。
+<ul>
+ 	<li>0: 请求未初始化</li>
+ 	<li>1: 服务器连接已建立</li>
+ 	<li>2: 请求已接收</li>
+ 	<li>3: 请求处理中</li>
+ 	<li>4: 请求已完成，且响应已就绪</li>
+</ul>
+</td>
+</tr>
+<tr>
+<td>status</td>
+<td>200: "OK"
+
+404: 未找到页面</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div><span class="Apple-style-span"> </span></div>
+<div>
+<h2>使用 Callback 函数</h2>
+</div>
+<div><span class="Apple-style-span">callback 函数是一种以参数形式传递给另一个函数的函数</span></div>
+<div>
+<pre>function myFunction()
+{
+loadXMLDoc("ajax_info.txt",function()
+  {
+  if (xmlhttp.readyState==4 &amp;&amp; xmlhttp.status==200)
+    {
+    document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+    }
+  });
+}
+</pre>
+</div>
+<div><span class="Apple-style-span"> </span></div>
+<div><span class="Apple-style-span">AJAX 可用来与 XML 文件进行交互式通信</span></div>
+<div><span class="Apple-style-span"> </span></div>
+<div><span class="Apple-style-span"> </span></div>
+<div><span class="Apple-style-span"> </span></div>
+<div><span class="Apple-style-span"> </span></div>
+<div><span class="Apple-style-span"> </span></div>
+<div><span class="Apple-style-span"> </span></div>
+<div><span class="Apple-style-span"> </span></div>
+<div><span class="Apple-style-span"> </span></div>
+<div><span class="Apple-style-span"> </span></div>
+<div><span class="Apple-style-span"> </span></div>
+<div></div>
