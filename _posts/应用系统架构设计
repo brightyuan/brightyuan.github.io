@@ -1,0 +1,44 @@
+<p class="artcon"><span class="Apple-style-span">我们在做着表面上看似是对于各种不同应用的开发，其实背后所对应的架构设计都是相对稳定的。在一个好的架构下编程，不仅对于开发人员是一件赏心悦目的事情，更重要的是软件能够表现出一个健康的姿态；而架构设计的不合理，不仅让开发人员受苦受难，软件本身的生命周期更是受到严重威胁。这里我将针对在微软dotNet平台上做应用开发系统的一般架构流程设计做一个粗浅的讨论。</span></p>
+<p class="artcon"><span class="Apple-style-span">总体设计图</span></p>
+<p class="artcon" align="center"><span class="Apple-style-span"><img src="http://www.uml.org.cn/zjjs/images/201210254.jpg" alt="" /></span></p>
+<p class="artdir1"><span class="Apple-style-span">表示层</span></p>
+<p class="artcon"><span class="Apple-style-span">表示层由UI（User Interface）和UI控制逻辑组成。</span></p>
+<p class="artcon"><span class="Apple-style-span">UI（User Interface）</span></p>
+<p class="artcon"><span class="Apple-style-span">UI是客户端的用户界面，负责从用户方接收命令，请求，数据，传递给业务层处理，然后将结果呈现出来。根据客户端的不同我们大体将应用程序分为BS（Browser-Server） 浏览器结构，CS（Client-Server）桌面客户端结构。</span></p>
+<p class="artcon"><span class="Apple-style-span">BS的优点是无需操心客户端，只需要部署维护好服务器即可。CS的优点在于强大的界面交互表达能力。RIA（Rich Internet Application）是为了融合这两种结构优点的一种技术，它依赖在客户端一次性安装一个通用解释器之后即获得强大的界面交互表达能力和无需部署具体客户端的方便性。具体的实现技术很多，例如微软的SmartClient， Avalon； Macromedia的Flex；以JS为基础的Bindows；Ajax等等很多。</span></p>
+<p class="artcon"><span class="Apple-style-span">UI控制逻辑</span></p>
+<p class="artcon"><span class="Apple-style-span">UI控制逻辑负责处理UI和业务层之间的数据交互，UI之间状态流程的控制，同时负责简单的数据验证和格式化等功能。具体的说在dotNet事件驱动的编程模型下，UI控制逻辑被自然的实现在了事件函数中，例如PageLoad事件函数，ButtonClick事件函数。在这些事件函数中，主要任务就是做UI控件与业务实体的数据交换与业务调用，但面对大量的数据交换工作量与维护量就成了最大的问题。而在复杂应用的系统中，状态与流程的管理是必须要考虑的因素，它们同样是业务逻辑的一部分，如果不加以封装的直接写在事件函数中将导致业务依赖表示层。下面分别讨论这两个问题。</span></p>
+<p class="artcon"><span class="Apple-style-span">1. 1.UI与业务实体之间的数据交互</span></p>
+<p class="artcon"><span class="Apple-style-span">此阶段负责数据交换的业务实体称为DTO（Data Transfer Object），处理输入时我们从UI控件的获得数据填入DTO再向下传播，处理输出时用户发出请求业务层会将数据以DTO的形式返出再赋给UI控件展现。因此需要一种方式来自动解决这样的来回赋值问题。遗憾的是dotNet下的不少控件虽然支持数据绑定但仍然没有一个现成完整的解决办法。我们可以自己设计一个Adapter按照某种映射关系来自动处理这样的绑定，这样的映射关系最好是UI控件与DTO属性的事先命名约定，以此种方式的约定作为映射关系无需增加任何配置文件和配置工作即可实现。</span></p>
+<p class="artcon"><span class="Apple-style-span">2. 2.状态与流程的管理</span></p>
+<p class="artcon"><span class="Apple-style-span">既然是业务逻辑的一部分就不应该耦合再表示层当中。MVC（Model-View-Controller）模式提供了实现这一目标的方法。Controller是整个方案的核心，它是一个流程管理器，来自UI所有的命令与数据经过Controller分发给业务层或其他UI，这样我们可以把流程，权限等逻辑单独封装，例如配置文件中，达到最大化的业务重用。dotNet下MVC的方案并不像Java下有那么多选择，目前有以下几种选择：</span></p>
+<p class="artcon"><span class="Apple-style-span">微软的UIPAB，它可以处理bs，cs下的流程跳转，可以使得相同的业务系统有webform和winform不同的展现方式。</span></p>
+<p class="artcon"><span class="Apple-style-span">开源的Mavrick.Net，它只适用于Asp.Net应用程序，它对流程，国际化，页面包装，xslt页面转换提供了很好的支持。</span></p>
+<p class="artcon"><span class="Apple-style-span">开源的Lattis，同样只适用于Asp.Net应用程序。</span></p>
+<p class="artdir1"><span class="Apple-style-span">业务层</span></p>
+<p class="artcon"><span class="Apple-style-span">业务层封装了实际业务逻辑，包含数据验证，事物处理，权限处理等业务相关操作，是整个应用系统的核心。因此设计一个能够真实反映实际需要的业务层是非常必要的，我们将实际业务具体分为业务数据与业务操作两部分。</span></p>
+<p class="artcon"><span class="Apple-style-span">业务数据</span></p>
+<p class="artcon"><span class="Apple-style-span">业务数据又是业务逻辑的核心，最终业务数据将以一种固定的格式表现于内存中，在系统的各个层次间传输，充当DTO角色。表达业务数据的方式一般分为两种Table Model和Domain Model。</span></p>
+<p class="artcon"><span class="Apple-style-span">Table Model是将数据库中的表直接映射成为业务数据对象，这样的优点是适合于机器操作。只适合于业务需求与数据表对应关系很直接的需要快速开发的情况。通常我们选用Dataset或者强类型Dataset（Strong Typed Dataset），强类型Dataset支持编译时的类型检查，效率上要略高于普通Dataset。Dataset有很多方便的特性：无需自己编写维护类，支持序列化，数据副本保存，支持数据集合，对控件绑定支持效果好。但缺点也是明显，复杂数据表现不直观，做为DTO在各个层次间传输，尤其是分布式环境，庞大的体积，相对缓慢的实例化对于性能造成很大压力。</span></p>
+<p class="artcon"><span class="Apple-style-span">Domain Model则是根据实际业务按照现实方式用OO思想建模，这样很适合业务复杂的系统。通常采用自定义数据实体（Custom Data Entity）方式表达。自定义数据实体，有着良好的性能，编译时的类型检查，数据表现方式非常直观符合实际业务的操作方式等优点，但需要自己定义维护类，在分布式环境下需要自己编写序列化方法。</span></p>
+<p class="artcon"><span class="Apple-style-span">综合各种因素考虑，虽然业务简单对应直接的系统我们以Table Model建模开发效率很高但难免保证系统日后不会变的复杂，因此出于复用性，扩展性，性能等方面选用Domain Model建模为佳。</span></p>
+<p class="artcon"><span class="Apple-style-span">业务操作</span></p>
+<p class="artcon"><span class="Apple-style-span">业务操作负责对业务数据进行各种业务相关的处理，例如验证，流向，整合，事物，权限等，但它不负责有关对数据源的操作。它与业务数据的关系设计有2种方式。</span></p>
+<p class="artcon"><span class="Apple-style-span">分离业务数据与业务操作，将业务数据单独封装到只有数据get，set的数据类中，这个数据类只充当DTO(注：DTO 数据传输对象，DAO数据访问对象)。将业务操作封装到独立的service类中与业务数据一起充当业务层。这样当系统不复杂的时候显的简单直观，而随着系统日益复杂，service类会变的杂乱，而将本身耦合紧密的数据与操作分离对于复用也是不利的因素。具体可参考Martin Fowler 的贫血的Domain Model一文，但我并不倾向于业务层直接访问数据源。</span></p>
+<p class="artcon"><span class="Apple-style-span">整合业务数据与业务操作，将业务数据与相关的业务操作封装在一起称为业务实体，业务实体作为统一的业务层为表示层提供服务，同时也负责作为DTO在各个层次间传输，我倾向于这样完整的Domain Model设计方式，每个业务实体都可以做为一个单独组件形式存在，对于组件化复用有着莫大的好处。</span></p>
+<p class="artcon"><span class="Apple-style-span">业务模块间的依赖</span></p>
+<p class="artcon"><span class="Apple-style-span">各个业务模块之间的依赖，有时候会是难以解决的问题，尤其是一些可以重复利用的业务组件，例如权限管理，邮件发送等等。管理好这些各种不同的业务组件是我们的目标，IoC容器为我们提供了最完美的方案，通过它将不同的模块注入到系统中我们可以在不知道这个组件存在的情况下调用它。但目前只有不成熟的Spring.Net一个选择，我们只有一声叹息，因此也就不多讨论了。</span></p>
+<p class="artdir1"><span class="Apple-style-span">业务数据访问层</span></p>
+<p class="artcon"><span class="Apple-style-span">业务数据访问层是一个针对具体应用系统的专属层，它为业务层提供与数据源交互的最小操作方式，仅仅是业务层需要的数据访问接口，业务层完全依赖业务数据访问层所提供的服务。这些服务负责从业务层接收数据或返回业务实体，它屏蔽了实际业务数据与机器存储方式的差别。当然，数据层选用抽象的解决方案同样可以达到这个效果，但业务数据访问层最大的特点就是针对具体业务做抽象，而抽象的数据层访问方案是针对通用做抽象。往往业务中针对具体的设计生命力会变的更强，这样我们可以最大限度的保持了上层代码的复用性，当需要更换存储策略如果数据层访问差别太大，通过更换数据层无法解决问题的时候我们最多只需要更换业务数据访问层，而无需改变业务层。</span></p>
+<p class="artcon"><span class="Apple-style-span">业务数据访问层由DAO（Data Access Object）层和系统服务层两部分组成。DAO层为每个业务实体提供最基本的数据访问服务，系统服务层为系统全局提供与业务关系不大的通用数据访问服务，这两层处于系统中的同一个层次位置。</span></p>
+<p class="artcon"><span class="Apple-style-span">业务层与业务数据访问层关系图</span></p>
+<p class="artcon" align="center"><span class="Apple-style-span"><img src="http://www.uml.org.cn/zjjs/images/2012102541.jpg" alt="" /></span></p>
+<p class="artdir1"><span class="Apple-style-span">数据层</span></p>
+<p class="artcon"><span class="Apple-style-span">数据层的宗旨就是为数据源提供一个可供外界访问的接口，我们应该选用一种能够提供数据源无关的抽象数据访问接口并通过在其下挂接各种不同的DataProviador来访问数据源的数据层组件，这样做便于移植到不同的数据源上。目前有以下3种数据层方案：</span></p>
+<p class="artcon"><span class="Apple-style-span">1. 1. 封装ADO.Net</span></p>
+<p class="artcon"><span class="Apple-style-span">这些数据访问组件都是基于ADO.Net的浅封装，它的优点在于封装层次低所以速度最快，我们可以手动组织sql语句用来适应复杂的操作以及个性的优化等。缺点是无法直接处理自定义数据实体方式的业务实体对象，需要将业务实体中的数据属性以参数形式传入传出。这样的方式虽然最为保险，但随着系统规模增大，开发效率，质量，，后期的维护，二次开发都变成尤为突出的问题，对开发人员的要求会变的越来越高。另外对于事物操作封装不是很好，无法提供声明性事物，经常会在业务层出现访问数据层的需要。这样的组件目前应用的很广泛，例如微软在EnterpriseLibrary中提供的DAAB（Data Access Application Block），还有以前的DAAB3.1。EnterpriseLibrary是个成熟的产品，包括了数据访问，异常，日志，缓存，加密，配置,安全等组件做为通用服务非常适合。</span></p>
+<p class="artcon"><span class="Apple-style-span">2. 2. OR-Mapping组件</span></p>
+<p class="artcon"><span class="Apple-style-span">ORM是最好的数据持久解决方案，它的优点在于能够以面向对象的方式操纵数据，因此可以直接处理自定义数据实体的业务对象，我们根本不用操心sql语句以及底层存储方式，这样极大的简化的代码提高了开发效率，对于日后维护扩展都带来极大的便利。缺点在于屏蔽了底层使得我们无法针对具体数据源做优化，而且对于复杂关联的sql操作有些力不从心，同时性能也差一些但辅助以缓存情况会好很多，而在dotNet下最大的问题就是没有一个成熟便宜的ORM产品供我们使用，全部都是beta版本和商业版本。这些版本或多或少都存在一些问题，以至于真正应用中需要经过仔细考察。例如NHibernate，Gentle.Net，XPO，Grove.Net等等非常多。</span></p>
+<p class="artcon"><span class="Apple-style-span">3. 3. DataMapper（SqlMapper）</span></p>
+<p class="artcon"><span class="Apple-style-span">SqlMapper为以上两种方式提供了一个折中的选择，它可以以面向对象的方式直接处理自定义数据实体的业务对象，同时可以根据与数据源与业务实体的映射关系执行手写的sql语句，这样完全使得我们可以针对具体数据源做优化，对于复杂操作同样可以胜任。目前只有iBatis.Net一个产品，它是一个java移至的开源项目，已经比较成熟，可以在无需编译的情况下随意替换DAO。</span></p>
+<p class="artcon"><span class="Apple-style-span">至此，整个架构方案的讨论已经完成，我们可以看出dotNet下可供选择的解决方案是那么的有限，反看Java世界，有那么多成熟可供利用的组件框架，流口水中...不过dotNet也正在走向成熟，我们需要时间等待。这个架构设计的思路只代表了我个人的理解，而且也并不是说所有的开发都是这么一套方案，在具体环境中需要做具体的调整。希望能起到一个抛砖引玉的作用。我的邮箱是i-simon AT msn.com，由于我经验尚浅，有不正确或不足的地方欢迎指正讨论，另外本文将根据技术的最新进展持续更新。</span></p>
