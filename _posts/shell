@@ -1,3 +1,9 @@
+##  substr
+```
+tmp_date=`echo $data_date | awk '{print substr($1,1,8)}'`
+tmp_hour=`echo $data_date | awk '{print substr($1,9,2)}'`
+```
+
 ## 内核
 ```
 uname -a
