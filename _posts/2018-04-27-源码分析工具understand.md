@@ -30,13 +30,13 @@ tags:
 
 >- show？
 
-类声明图：
+1.类声明图：
 ![](https://raw.githubusercontent.com/brightyuan/brightyuan.github.io/master/img/declare.png)
 
-函数控制流程图：
+2.函数控制流程图：
 ![](https://github.com/brightyuan/brightyuan.github.io/blob/master/img/control_flow.png?raw=true)
 
-redis类图：
+3.CCache类图：
 ![](https://github.com/brightyuan/brightyuan.github.io/blob/master/img/cache.png?raw=true)
 
 
