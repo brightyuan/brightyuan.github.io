@@ -10,14 +10,14 @@ tags:
 - 编程语言
 ---
 
->- understand：
+### understand：
 
 ```
 静态代码阅读分析工具，界面用Qt开发的，支持多语言、多平台，内置的目录和文件比较器。
 ```
 
 
->- what？
+### what？
 
 ```
 功能：
@@ -28,7 +28,7 @@ tags:
 在图上点击节点可以跳转到对应的源代码位置。
 ```
 
->- show？
+### show？
 
 1.类声明图：
 ![](https://raw.githubusercontent.com/brightyuan/brightyuan.github.io/master/img/declare.png)
@@ -40,7 +40,7 @@ tags:
 ![](https://github.com/brightyuan/brightyuan.github.io/blob/master/img/cache.png?raw=true)
 
 
->- how？
+### how？
 
 ```
 配置PHP支持
@@ -48,7 +48,7 @@ tags:
 ```
 
 
->- 参考：
+### 参考：
 
 ```
 一、软件下载&激活：
