@@ -31,6 +31,7 @@ control flow graph、UML class graph等），在图上点击节点可以跳转�
 
 
 >- how？
+
 ```
 配置PHP支持
 设置项目代码php版本：Project > Configure Project ->PHP Version
@@ -38,6 +39,7 @@ control flow graph、UML class graph等），在图上点击节点可以跳转�
 
 
 >- 参考：
+
 ```
 一、软件下载&激活：
 http://xclient.info/s/understand.html?t=680034e137bc7cc9b41bad81241e03e932425016
