@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      源码分析工具understand
-subtitle:   源码分析工具understand
+subtitle:   源码分析工具
 date:       2018-04-27
 author:     bright
 header-img: img/post-bg-coffee.jpeg
