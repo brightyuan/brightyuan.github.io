@@ -23,11 +23,13 @@ tags:
 功能：
 1.代码语法高亮、代码折迭、交叉跳转、书签等基本阅读功能。
 2.可以对整个project的architecture、metrics进行分析并输出报表。
-3.可以对代码生成多种图：蝴蝶图，调用图，由图，控制流图，UML类图（butterfly graph、call graph、called by graph、
-control flow graph、UML class graph等），在图上点击节点可以跳转到对应的源代码位置。
+3.可以对代码生成多种图：蝴蝶图，调用图，由图，控制流图，UML类图
+（butterfly graph、call graph、called by graph、control flow graph、UML class graph等），
+在图上点击节点可以跳转到对应的源代码位置。
 ```
 
 >- show？
+
 
 
 >- how？
