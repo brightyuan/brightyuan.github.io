@@ -1,10 +1,23 @@
-##  substr
+---
+layout:     post
+title:      shell
+subtitle:   常用shell
+date:       2018-05-19
+author:     bright
+header-img: img/post-bg-coffee.jpeg
+catalog: true
+tags:
+- 编程
+- shell
+---
+
+###  substr
 ```
 tmp_date=`echo $data_date | awk '{print substr($1,1,8)}'`
 tmp_hour=`echo $data_date | awk '{print substr($1,9,2)}'`
 ```
 
-## 内核
+### 内核
 ```
 uname -a
 lsb_release -a
@@ -12,7 +25,7 @@ lsb_release -a
 
 <!--more-->
 
-## 查看目录/文件大小
+### 查看目录/文件大小
 ```
 查看目录大小：
 du -x -sh /*
@@ -27,7 +40,7 @@ df -h | tail -n 1 | awk '{print $4}'
 
 ```
 
-## log.rate
+### log.rate
 
 ```
 #!/bin/bash
@@ -44,7 +57,7 @@ done
 ```
 
 
-## 倒序du -h
+### 倒序du -h
 
 ```
 for i in $(ls -l |grep '^d' |du -s * |sort -nr|awk '{print $2}');do du -sh $i;done
@@ -53,7 +66,7 @@ for i in $(ls -l |grep '^d' |du -s * |sort -nr|awk '{print $2}');do du -sh $i;do
 
 
 
-## nohup & supervise
+### nohup & supervise
 ```
 nohup和supervise的区别
 supervise是daemontools工具集的一部分，负责监控服务的运行状态并重启意外结束的服务,nohup不能重启。
@@ -62,7 +75,7 @@ supervise是daemontools工具集的一部分，负责监控服务的运行状态
 nohup supervise test/  > /dev/null 2>&1 &
 
 ```
->- 参考
+### 参考
 
 ```
 http://www.voidcn.com/article/p-fmtwrfpz-ew.html
